@@ -1,0 +1,33 @@
+
+
+.mt-6{
+    margin-top: 5rem !important;
+}
+
+.font-bold{
+    font-weight: bold !important;
+}
+/* Navbar */
+nav{
+    font-weight: bold;
+}
+
+
+
+/* Dropdown menu*/
+.dropdown-menu .dropdown-item:hover{
+    background: #d3a005;
+}
+.dropdown-menu .dropdown-divider{
+    border-color: black;
+}
+/* Carousel Items */
+.carousel-item img{
+    height: 350px;
+}
+
+/* Footer */
+footer .copyright{
+    background-color: #000;
+    color: #fff;
+}
