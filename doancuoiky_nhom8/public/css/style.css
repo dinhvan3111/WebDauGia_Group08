@@ -15,8 +15,27 @@
 nav {
     font-weight: bold;
     position: absolute;
+    padding: 0 16px !important;
+    margin: 0!important;
+    line-height:38px;
+    display:inline-block;
+    height:56px;
+
 }
 
+.navbar-nav > li:hover >a {
+    /*background-color: #e5c766;*/
+    /*background-color: #fff;*/
+    background: #ffd66c;
+    color: #000;
+    height: 56px;
+    /*line-height:38px;*/
+}
+
+.dropdown-menu {
+    margin-top: 0!important;
+    padding: 0!important;
+}
 nav .search-for-lg {
     display: none;
 }
@@ -30,9 +49,12 @@ nav .search-for-lg {
         display: block;
     }
 }
-
+.seach_form{
+    padding:8px!important;
+}
 .navbar-nav li:hover .dropdown-menu {
     display: inline-block;
+    box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 }
 
 /* Dropdown menu*/
