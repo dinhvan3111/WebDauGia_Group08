@@ -19,7 +19,7 @@ nav {
     margin: 0!important;
     line-height:38px;
     display:inline-block;
-    height:56px;
+    /*height:56px;*/
 
 }
 
@@ -70,6 +70,13 @@ nav .search-for-lg {
 /* Carousel Items */
 .carousel-item img {
     height: 350px;
+}
+
+/* Top product */
+@media (max-width: 1200px) {
+    .top-product  .top-product-item:nth-child(5){
+        display: none;
+    }
 }
 
 /* Footer */

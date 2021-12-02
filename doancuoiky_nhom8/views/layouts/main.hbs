@@ -78,60 +78,26 @@
                         Danh mục
                     </h4>
                     <div class="list-group list-group-flush">
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample1"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample1">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample2"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample2">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample3"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample3">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample4"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample4">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample5"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample5">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
-                        <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample6"
-                           role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            A third link item
-                        </a>
-                        <div class="collapse" id="collapseExample6">
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 1</a>
-                            <a href="#" class="list-group-item list-group-item-action">Sub link 2</a>
-                        </div>
+                        {{#each lcCategories}}
+                            <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
+                               role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                {{name}}
+                            </a>
+                                <div class="collapse" id="collapseExample{{id}}">
+                                    {{#if subCate.length}}
+
+                                        {{#each subCate}}
+
+                                            <a href="/category/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+
+                                        {{/each}}
+
+                                    {{else}}
+                                        <a href="javascript:;" class="list-group-item list-group-item-action">Chưa có</a>
+                                    {{/if}}
+                                </div>
+                        {{/each}}
                     </div>
                 </div>
             </div>
