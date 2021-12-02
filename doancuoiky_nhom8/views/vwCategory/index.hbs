@@ -1,0 +1,14 @@
+<div class="card">
+	<h4 class="card-header">
+		Sửa lại cái QQ này
+	</h4>
+	<div class="card-body">
+		{{#each this.categories}}
+			<p><a href="/id/{{id}}">{{name}}
+				{{#if parentN}}
+					- {{parentN}}
+				{{/if}}
+			</a></p>
+		{{/each}}
+	</div>
+</div>

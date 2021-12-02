@@ -2,7 +2,12 @@ import express from 'express'
 import morgan from 'morgan';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { engine } from 'express-handlebars';
+
+import viewMdw from './middlewares/view.mdw.js';
+import localMdw from './middlewares/locals.mdw.js';
+
+import categoryRoute from './routes/category.route.js';
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -10,19 +15,13 @@ const app = express();
 const port = 3000
 
 app.use(morgan('dev'));
-
-app.engine('hbs', engine({
-    defaultLayout: 'main.hbs'
-}))
-
-app.set('view engine', 'hbs');
-app.set('views', './views');
-
 app.use(express.static(__dirname + '/public'));
+
+viewMdw(app);
+localMdw(app);
 
 
 app.get('/', function (req, res) {
-    // res.send('Hello World!')
     res.render('home');
 });
 
@@ -31,5 +30,7 @@ app.get('/bs4', function (req, res) {
 })
 
 app.listen(port, function () {
-    console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Web app listening at http://localhost:${port}`)
 })
+
+app.use('/category', categoryRoute);

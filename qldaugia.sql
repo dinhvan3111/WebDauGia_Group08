@@ -3,27 +3,12 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2021 at 04:19 PM
+-- Generation Time: Dec 02, 2021 at 02:27 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
-
-
-
-
-
-
-
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
-
-
-
-
-
-
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -32,30 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `qldaugia`;
-
-
-
-
-
-
-
-
-
 --
 -- Database: `qldaugia`
 --
@@ -65,18 +28,6 @@ USE `qldaugia`;
 --
 -- Table structure for table `accounts`
 --
-
-
-
-
-
-
-
-
-
-
-
-
 
 CREATE TABLE IF NOT EXISTS `accounts` (
 `id` int(10) unsigned zerofill NOT NULL,
@@ -89,19 +40,6 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `addr` varchar(100) NOT NULL,
   `is_locked` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- --------------------------------------------------------
 
@@ -118,23 +56,6 @@ CREATE TABLE IF NOT EXISTS `bid_history` (
   `max_bid_price` decimal(10,0) unsigned NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -145,22 +66,17 @@ CREATE TABLE IF NOT EXISTS `categories` (
 `id` int(10) unsigned zerofill NOT NULL,
   `name` varchar(100) NOT NULL,
   `parent_id` int(10) unsigned zerofill DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `categories`
+--
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
+(0000000001, 'Điện tử', NULL),
+(0000000002, 'Điện thoại di động', 0000000001),
+(0000000003, 'Máy tính xách tay', 0000000001),
+(0000000004, 'Nội thất', NULL);
 
 -- --------------------------------------------------------
 
@@ -183,27 +99,6 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id_seller` int(10) unsigned zerofill NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -219,24 +114,6 @@ CREATE TABLE IF NOT EXISTS `rate_history` (
   `comment` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- --------------------------------------------------------
 
 --
@@ -246,24 +123,6 @@ CREATE TABLE IF NOT EXISTS `rate_history` (
 CREATE TABLE IF NOT EXISTS `request_upgrade` (
   `id_acc` int(10) unsigned zerofill NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 -- --------------------------------------------------------
 
@@ -275,25 +134,6 @@ CREATE TABLE IF NOT EXISTS `watch_list` (
   `id_acc` int(10) unsigned zerofill NOT NULL,
   `id_product` int(10) unsigned zerofill NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --
 -- Indexes for dumped tables
@@ -345,77 +185,34 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for dumped tables
 --
 
-
-
 --
 -- AUTO_INCREMENT for table `accounts`
 --
-
-
-
-
-
 ALTER TABLE `accounts`
 MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
-
-
-
-
-
-
 ALTER TABLE `bid_history`
 MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `categories`
 --
-
-
-
-
-
-
-
 ALTER TABLE `categories`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `products`
 --
-
-
-
-
-
-
 ALTER TABLE `products`
 MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `rate_history`
 --
-
-
-
-
-
-
-
 ALTER TABLE `rate_history`
 MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
-
-
-
-
-
-
-
-
-
-
 
 --
 -- Constraints for table `bid_history`
@@ -424,28 +221,11 @@ ALTER TABLE `bid_history`
 ADD CONSTRAINT `FK_BidHis_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_BidHis_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
-
-
-
-
-
-
-
-
-
-
 --
 -- Constraints for table `categories`
 --
 ALTER TABLE `categories`
 ADD CONSTRAINT `FK_cate_parentCate` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
-
-
-
-
-
-
-
 
 --
 -- Constraints for table `products`
@@ -455,13 +235,6 @@ ADD CONSTRAINT `FK_products_accBidder` FOREIGN KEY (`id_win_bidder`) REFERENCES 
 ADD CONSTRAINT `FK_products_accSeller` FOREIGN KEY (`id_seller`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_products_cate` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id`);
 
-
-
-
-
-
-
-
 --
 -- Constraints for table `rate_history`
 --
@@ -469,25 +242,11 @@ ALTER TABLE `rate_history`
 ADD CONSTRAINT `FK_RateHis_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_RateHis_AccAssessor` FOREIGN KEY (`id_assessor`) REFERENCES `accounts` (`id`);
 
-
-
-
-
-
-
 --
 -- Constraints for table `request_upgrade`
 --
 ALTER TABLE `request_upgrade`
 ADD CONSTRAINT `FK_RequestUp_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
-
-
-
-
-
-
-
-
 
 --
 -- Constraints for table `watch_list`
@@ -495,11 +254,6 @@ ADD CONSTRAINT `FK_RequestUp_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (
 ALTER TABLE `watch_list`
 ADD CONSTRAINT `FK_WatchList_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_WatchList_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
-
-
-
-
-
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
