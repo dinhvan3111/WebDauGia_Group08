@@ -1,0 +1,56 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/style.css">
+
+{{/section}}
+<div class="card">
+    <h4 class="card-header bg-warning">
+        Danh mục
+    </h4>
+    <table class="table table-hover">
+        <thead>
+        </thead>
+        <tbody>
+        {{#each this.categories}}
+            {{#if this.categories.length}}
+                <tr>
+                    <td>Chưa có danh mục con</td>
+                </tr>
+            {{else}}
+                <tr>
+                    <!--                <th scope="row">{{id}}</th>-->
+                    <td>{{name}}</td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-success font-bold" href="#" role="button">
+                            Xem thêm
+                        </a>
+                        <a class="btn btn-sm btn-primary" href="#" role="button">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-sm btn-danger" href="#" role="button">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            {{/if}}
+        {{/each}}
+        </tbody>
+    </table>
+    <div class="card-footer text-muted">
+        <a class="btn btn-outline-success" href="/admin/categories" role="button">
+            <i class="fa fa-backward" aria-hidden="true"></i>
+            Quay lại
+        </a>
+    </div>
+<!--	<h4 class="card-header">-->
+<!--		Sửa lại cái QQ này-->
+<!--	</h4>-->
+<!--	<div class="card-body">-->
+<!--		{{#each this.categories}}-->
+<!--			<p><a href="/id/{{id}}">{{name}}-->
+<!--				{{#if parentN}}-->
+<!--					- {{parentN}}-->
+<!--				{{/if}}-->
+<!--			</a></p>-->
+<!--		{{/each}}-->
+<!--	</div>-->
+</div>

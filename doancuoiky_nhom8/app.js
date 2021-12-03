@@ -33,5 +33,5 @@ app.listen(port, function () {
     console.log(`Web app listening at http://localhost:${port}`)
 })
 
-app.use('/category', categoryRoute);
+app.use('/admin/categories', categoryRoute);
 app.use('/account', accountRoute);

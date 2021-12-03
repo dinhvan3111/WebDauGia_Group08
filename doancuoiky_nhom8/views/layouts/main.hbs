@@ -14,7 +14,7 @@
 <!-- Navbar -->
 
 <nav id = "nav" class="navbar navbar-expand-lg  bg-warning navbar-light shadow fixed-top">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
             <i class="fa fa-home fa-lg fa-md" aria-hidden="true"></i>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Trang chủ<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Danh sách sản phẩm</a>
@@ -55,7 +55,7 @@
                     <a class="nav-link" href="#">Đăng nhập</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Đăng kí</a>
+                    <a class="nav-link" href="/account/register">Đăng kí</a>
                 </li>
                 <form class="search-for-md form-inline my-2 my-lg-0 mr-lg-5">
                     <input class="form-control col-sm-8 col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"
@@ -105,7 +105,9 @@
             <!-- End Sidebar (Categories menu) -->
 
             <!-- Main content -->
-            {{{body}}}
+            <div class="col-sm-12 col-md-10 col-xl-10 mt-3">
+                {{{body}}}
+            </div>
             <!-- End Main content -->
         </div>
         <div class="row">
