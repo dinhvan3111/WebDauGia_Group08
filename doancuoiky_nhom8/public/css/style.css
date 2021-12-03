@@ -57,6 +57,12 @@ nav .search-for-lg {
     box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 }
 
+/* Sidebar */
+#sidebar {
+    width: 15%;
+    position: fixed;
+}
+
 /* Dropdown menu*/
 .dropdown-menu .dropdown-item:hover {
     background: #ffe9b4;
