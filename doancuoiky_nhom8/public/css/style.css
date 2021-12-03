@@ -78,6 +78,11 @@ nav .search-for-lg {
     height: 350px;
 }
 
+/*resigter*/
+#frmRegister{
+
+}
+
 /* Top product */
 @media (max-width: 1200px) {
     .top-product  .top-product-item:nth-child(5){

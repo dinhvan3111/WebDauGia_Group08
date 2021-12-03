@@ -1,4 +1,5 @@
 import { engine } from 'express-handlebars';
+import hbs_sections from 'express-handlebars-sections';
 import express from 'express';
 export default function(app){
 	app.use(express.urlencoded({
@@ -13,7 +14,8 @@ export default function(app){
 	                num = num.slice(0, i) + ',' + num.slice(i);
 	            }
 	            return num;
-	        }
+	        },
+			section: hbs_sections()
 	    }
 	}));
 

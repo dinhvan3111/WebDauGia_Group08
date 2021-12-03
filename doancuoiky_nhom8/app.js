@@ -7,7 +7,7 @@ import viewMdw from './middlewares/view.mdw.js';
 import localMdw from './middlewares/locals.mdw.js';
 
 import categoryRoute from './routes/category.route.js';
-
+import accountRoute from './routes/account.route.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -34,3 +34,4 @@ app.listen(port, function () {
 })
 
 app.use('/category', categoryRoute);
+app.use('/account', accountRoute);
