@@ -73,31 +73,31 @@
         <div class="row">
 
             <!-- Sidebar (Categories menu) -->
-            <div class="col-sm-12 mt-3 col-md-2">
+            <div class="side-bar col-sm-12 mt-3 col-md-2">
                 <div class="card" id="sidebar">
                     <h4 class="card-header bg-warning">
                         Danh mục
                     </h4>
                     <div class="list-group list-group-flush">
                         {{#each lcCategories}}
-                            <a class="list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
+                            <a class="collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
                                role="button" aria-expanded="false" aria-controls="collapseExample">
                                 <i class="fa fa-caret-right" aria-hidden="true"></i>
                                 {{name}}
                             </a>
-                                <div class="collapse" id="collapseExample{{id}}">
-                                    {{#if subCate.length}}
+                            <div class="collapse-content collapse" id="collapseExample{{id}}">
+                                {{#if subCate.length}}
 
-                                        {{#each subCate}}
+                                    {{#each subCate}}
 
-                                            <a href="/category/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                        <a href="/category/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
 
-                                        {{/each}}
+                                    {{/each}}
 
-                                    {{else}}
-                                        <a href="javascript:;" class="list-group-item list-group-item-action">Chưa có</a>
-                                    {{/if}}
-                                </div>
+                                {{else}}
+                                    <a href="javascript:;" class="list-group-item list-group-item-action">Chưa có</a>
+                                {{/if}}
+                            </div>
                         {{/each}}
                     </div>
                 </div>
@@ -206,9 +206,29 @@
         </div>
         <!-- Copyright -->
     </footer>
-    <!-- Footer -->
+    <!-- End Footer -->
 
+    <script>
+        const collapse_items = document.querySelectorAll('.side-bar .collapse-items');
+        const collapse_content = document.querySelectorAll('.collapse-content');
+        collapse_items.forEach((item,index)=>{
+            var content = collapse_content[index];
+            item.onclick = function (){
+                var temp = document.querySelector('.collapse-items.list-group-item.list-group-item-action:not(.collapsed)');
+                var temp_content = document.querySelector('.collapse-content.collapse.show');
+                if(temp != item){
 
+                    temp.classList.add('collapsed');
+                    temp.ariaExpanded = false;
+                    temp_content.classList.remove('show');
+
+                    item.classList.remove('collapsed');
+                    item.ariaExpanded = true;
+                    // content.classList.add('show');
+                }
+            }
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>
