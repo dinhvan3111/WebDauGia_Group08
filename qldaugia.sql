@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2021 at 02:27 PM
+-- Generation Time: Dec 04, 2021 at 08:36 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -15,6 +15,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+
 
 
 CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
@@ -32,14 +33,23 @@ USE `qldaugia`;
 CREATE TABLE IF NOT EXISTS `accounts` (
 `id` int(10) unsigned zerofill NOT NULL,
   `username` varchar(50) CHARACTER SET ascii NOT NULL,
-  `pwd` varchar(500) CHARACTER SET ascii NOT NULL,
+  `pwd` varchar(100) CHARACTER SET ascii NOT NULL,
   `id_permission` int(10) unsigned NOT NULL DEFAULT '3',
   `name` varchar(100) NOT NULL,
   `email` varchar(100) CHARACTER SET ascii NOT NULL,
   `dob` date NOT NULL,
   `addr` varchar(100) NOT NULL,
-  `is_locked` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `is_locked` int(11) NOT NULL DEFAULT '0',
+  `time` datetime DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`, `time`) VALUES
+(0000000001, 'a', '$2b$10$QnaEsYX73oRjKoZY4GL01ebpXfwuPHaa6Q.BbcZA5b5LCHAH/527a', 3, 'addr', 'a@a', '2021-11-30', 'a', 0, NULL),
+(0000000002, 'ab', '$2b$10$u1HmCCSto8xQg4Rf1.BG/OuYTbhh0WtdGy0J0l9ukeHbnA0aFJb7G', 3, 'addr', 'aa@a', '2021-11-30', 'a', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -77,6 +87,17 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
 (0000000002, 'Điện thoại di động', 0000000001),
 (0000000003, 'Máy tính xách tay', 0000000001),
 (0000000004, 'Nội thất', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ignore_bidder`
+--
+
+CREATE TABLE IF NOT EXISTS `ignore_bidder` (
+  `id_product` int(10) unsigned zerofill NOT NULL,
+  `id_acc` int(10) unsigned zerofill NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -155,7 +176,13 @@ ALTER TABLE `bid_history`
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
- ADD PRIMARY KEY (`id`), ADD KEY `FK_cate_parentCate` (`parent_id`);
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`), ADD KEY `FK_cate_parentCate` (`parent_id`);
+
+--
+-- Indexes for table `ignore_bidder`
+--
+ALTER TABLE `ignore_bidder`
+ ADD PRIMARY KEY (`id_product`,`id_acc`), ADD KEY `FK_IgnoreBidder_Account` (`id_acc`);
 
 --
 -- Indexes for table `products`
@@ -189,7 +216,7 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
@@ -226,6 +253,13 @@ ADD CONSTRAINT `FK_BidHis_Product` FOREIGN KEY (`id_product`) REFERENCES `produc
 --
 ALTER TABLE `categories`
 ADD CONSTRAINT `FK_cate_parentCate` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
+
+--
+-- Constraints for table `ignore_bidder`
+--
+ALTER TABLE `ignore_bidder`
+ADD CONSTRAINT `FK_IgnoreBidder_Account` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
+ADD CONSTRAINT `FK_IgnoreBidder_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `products`
