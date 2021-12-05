@@ -1,5 +1,6 @@
 import categoryRoute from '../routes/category.route.js';
 import accountRoute from '../routes/account.route.js';
+import productUserRoute from '../routes/product-user.route.js';
 
 export default function(app){
 	app.get('/', function (req, res) {
@@ -12,6 +13,7 @@ export default function(app){
 
 	app.use('/admin/categories', categoryRoute);
 	app.use('/', accountRoute);
+	app.use('/products',productUserRoute);
 
 
 
