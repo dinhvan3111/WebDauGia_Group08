@@ -95,7 +95,7 @@
         </h4>
         <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertMsg"  style="display: none;">
             <span id="err" name="err"></span>
-            <button type="button" class="close" aria-label="Close" onclick="hideAlert()">
+            <button type="button" class="close"  aria-label="Close" onclick="hideAlert()">
                 <p aria-hidden="true">x</p>
             </button>
         </div>
@@ -104,15 +104,15 @@
                 <h5>Thông tin tài khoản</h5>
                 <div class="form-group">
                     <label for="txtUsername">Tên đăng nhập</label>
-                    <input type="text" class="form-control" id="txtUsername" name="username" autofocus required/>
+                    <input type="text" class="form-control" id="txtUsername" placeholder="Vui lòng nhập username..." name="username" autofocus required/>
                 </div>
                 <div class="form-group">
                     <label for="txtPassword">Mật khẩu</label>
-                    <input type="password" class="form-control" id="txtPassword" name="pwd" required/>
+                    <input type="password" class="form-control" id="txtPassword" placeholder="Vui lòng nhập mật khẩu..." name="pwd" required/>
                 </div>
                 <div class="form-group mb-5">
                     <label for="txtConfirm">Nhập lại mật khẩu</label>
-                    <input type="password" class="form-control" id="txtConfirm" required/>
+                    <input type="password" class="form-control" id="txtConfirm" placeholder="Nhập lại mật khẩu..." required/>
                 </div>
                  
                 <div class="g-recaptcha" data-sitekey="6LeVB3gdAAAAAGFY-qgPsT8dTnkOFqbeFfPvmg-I"></div>
@@ -122,19 +122,19 @@
             <h5>Thông tin cá nhân</h5>
             <div class="form-group">
                 <label for="txtName">Họ và tên</label>
-                <input type="text" class="form-control" id="txtName" name="name" required/>
+                <input type="text" class="form-control" id="txtName" placeholder="Vui lòng nhập họ và tên..." name="name" required/>
             </div>
             <div class="form-group">
                 <label for="txtEmail">Email</label>
-                <input type="email" class="form-control" id="txtEmail" name="email" required/>
+                <input type="email" class="form-control" id="txtEmail" placeholder="Vui lòng nhập email..." name="email" required/>
             </div>
             <div class="form-group">
                 <label for="txtEmail">Ngày sinh</label>
-                <input type="text" class="form-control" id="txtDOB" name="dob" required/>
+                <input type="text" class="form-control" id="txtDOB" name="dob" placeholder="Vui lòng nhập ngày sinh..." required/>
             </div>
             <div class="form-group">
                 <label for="txtAddress">Địa chỉ</label>
-                <input type="text" class="form-control" id="txtAddr" name="addr" required/>
+                <input type="text" class="form-control" id="txtAddr" name="addr" placeholder="Vui lòng nhập địa chỉ..." required/>
             </div>
             </div>
         </div>

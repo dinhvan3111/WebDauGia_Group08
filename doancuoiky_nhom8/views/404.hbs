@@ -1,15 +1,102 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+    <meta charset="utf-8">
 
-<title>Page not found</title>
+    <title>Page not found</title>
+    <style>
+        html,body{
+            margin: 0;
+        }
+        #notfound .notfound-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url(../img/back-ground/404-2.jpg);
+            background-size: 100%;
+        }
+        .notfound .notfound-404 h1 {
+            font-family: 'Montserrat', sans-serif;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 220px;
+            font-weight: bolder;
+            margin: 0px;
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+        }
+        h1 {
+            display: block;
+            margin-block-start: 0.67em;
+            margin-block-end: 0.67em;
+            margin-inline-start: 0px;
+            margin-inline-end: 0px;
+        }
+        .notfound {
+            max-width: 910px;
+            width: 100%;
+            line-height: 1.4;
+            text-align: center;
+        }
+        .notfound h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #000;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .notfound .home-btn {
+            color: rgba(38, 30, 31, 0.7);
+            background: #ccc;
 
+        }
+        .notfound .home-btn:hover {
+            color: rgba(63, 52, 53, 0.7);
+            background: #b9b7b7;
+
+        }
+        #notfound .notfound {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+        .notfound .home-btn, .notfound{
+            font-family: 'Montserrat', sans-serif;
+            display: inline-block;
+            font-weight: 700;
+            text-decoration: none;
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            padding: 13px 25px;
+            font-size: 18px;
+            border-radius: 40px;
+            margin: 7px;
+            transition: 0.2s all;
+        }
+        .notfound .notfound-404 {
+            position: relative;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
-  <h1>404</h1>
-  <h2>Chỉnh lại trang qq này</h2>
-  <a href="/">Về trang chủ</a>
+<div id="notfound">
+    <div class="notfound-bg"></div>
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>404</h1>
+        </div>
+        <h2>THE PAGE NOT FOUND</h2>
+        <a href="/" class="home-btn">Về trang chủ</a>
+    </div>
+</div>
 </body>
 </html>
