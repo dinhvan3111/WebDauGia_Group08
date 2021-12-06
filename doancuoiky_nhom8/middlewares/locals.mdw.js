@@ -1,4 +1,6 @@
 import categoryModel from '../models/category.model.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default function(app){
 
@@ -27,6 +29,7 @@ export default function(app){
 	        }
 	    }
 	    res.locals.lcCategories = result;
+	    res.locals.lcCaptchaPublicKey = process.env.CAPTCHA_PUBLIC_KEY;
 	    next();
 	});
 }

@@ -3,6 +3,8 @@ import accountModel from '../models/account.model.js';
 import fetch from 'node-fetch';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const router = express.Router();
 
@@ -23,7 +25,7 @@ router.post('/register', async function(req, res){
 		return res.json({"success": false, "msg": "Email này đã dùng để đăng kí cho một tài khoản. Vui lòng chọn email khác"});
 	}
 
-	const secretKey = '6LeVB3gdAAAAAO5OCdQX_auMA3uM7TI6bhNBab_Q';
+	const secretKey = process.env.CAPTCHA_PRIVATE_KEY;
 	const verifyCaptcha = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
 	const verified = await fetch(verifyCaptcha, {method: "POST"})
 		.then(_res => _res.json());

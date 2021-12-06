@@ -3,6 +3,8 @@ import morgan from 'morgan';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
+import dotenv from 'dotenv';
+dotenv.config();
 
 import viewMdw from './middlewares/view.mdw.js';
 import localMdw from './middlewares/locals.mdw.js';
@@ -12,7 +14,7 @@ import routeMdw from './middlewares/routes.mdw.js'
 
 const app = express();
 
-const port = 3000
+const port = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({
