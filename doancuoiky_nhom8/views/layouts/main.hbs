@@ -51,12 +51,26 @@
                            aria-label="Search">
                     <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>
                 </form>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Đăng nhập</a>
+                {{#if lcAuthUser}}
+                    <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Hi, {{lcAuthUser.user.displayName}}
+                    </a>
+                    <div class="dropdown-menu bg-light-yellow" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item font-bold" href="#">Profile</a>
+                        <form action="/logout" id="frmLogout" method="post"></form>
+                        <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();">Sign out</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Đăng kí</a>
-                </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Đăng kí</a>
+                    </li>
+                {{/if}}
                 <form class="search-for-md form-inline my-2 my-lg-0 mr-lg-5">
                     <input class="form-control col-sm-8 col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"
                            aria-label="Search">

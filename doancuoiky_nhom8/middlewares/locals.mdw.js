@@ -1,6 +1,5 @@
 import categoryModel from '../models/category.model.js';
-import dotenv from 'dotenv';
-dotenv.config();
+import envVar from '../utils/envVar.js';
 
 export default function(app){
 
@@ -30,6 +29,22 @@ export default function(app){
 	    }
 	    res.locals.lcCategories = result;
 	    res.locals.lcCaptchaPublicKey = process.env.CAPTCHA_PUBLIC_KEY;
+	    next();
+	});
+
+	app.use(async function (req, res, next){
+	    res.locals.lcCaptchaPublicKey = envVar.CAPTCHA_PUBLIC_KEY;
+	    next();
+	});
+	app.use(async function (req, res, next){
+		// console.log(req.session.passport);
+		var authUser = req.session.passport;
+		if(typeof (req.user) === 'undefined'){
+			authUser = false;
+		}
+		// console.log(req.session);
+		// console.log(req.user);
+	    res.locals.lcAuthUser = authUser;
 	    next();
 	});
 }

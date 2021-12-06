@@ -1,6 +1,7 @@
 import categoryRoute from '../routes/category.route.js';
 import accountRoute from '../routes/account.route.js';
 import productUserRoute from '../routes/product-user.route.js';
+import authRoute from '../routes/auth.route.js';
 
 export default function(app){
 	app.get('/', function (req, res) {
@@ -11,10 +12,11 @@ export default function(app){
 	    res.sendFile( __dirname + '/bs4.html');
 	})
 
+
+	app.use('/', authRoute);
 	app.use('/admin/categories', categoryRoute);
 	app.use('/', accountRoute);
 	app.use('/products',productUserRoute);
-
 
 
 

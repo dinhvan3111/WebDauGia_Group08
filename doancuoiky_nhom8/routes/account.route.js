@@ -3,8 +3,7 @@ import accountModel from '../models/account.model.js';
 import fetch from 'node-fetch';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
-import dotenv from 'dotenv';
-dotenv.config();
+import envVar from '../utils/envVar.js';
 
 const router = express.Router();
 
@@ -25,7 +24,7 @@ router.post('/register', async function(req, res){
 		return res.json({"success": false, "msg": "Email này đã dùng để đăng kí cho một tài khoản. Vui lòng chọn email khác"});
 	}
 
-	const secretKey = process.env.CAPTCHA_PRIVATE_KEY;
+	const secretKey = envVar.CAPTCHA_PRIVATE_KEY;
 	const verifyCaptcha = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
 	const verified = await fetch(verifyCaptcha, {method: "POST"})
 		.then(_res => _res.json());
@@ -46,9 +45,9 @@ router.post('/register', async function(req, res){
 	return res.json({"success": true, "msg": "Đăng kí thành công"});
 });
 
-// router.get('/login', function(req, res){
-// 	res.render('vwAccount/login');
-// });
+router.get('/login', function(req, res){
+	res.render('vwAccount/login', {layout: false});
+});
 
 // router.get('/profile', function(req, res){
 // 	res.render('vwAccount/profile');
