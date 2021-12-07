@@ -7,11 +7,28 @@ import envVar from '../utils/envVar.js';
 
 const router = express.Router();
 
-router.get('/register', function(req, res){
+function isLogon(req, res, next){
+	if(typeof (req.user) !== 'undefined'){
+		const url = '/';
+		return res.redirect(url);
+	}
+	next();
+};
+
+function notLogin(req, res, next){
+	if(typeof (req.user) === 'undefined'){
+		req.session.retUrl = req.originalUrl;
+		const url = '/login';
+		return res.redirect(url);
+	}
+	next();
+};
+
+router.get('/register', isLogon, function(req, res){
 	res.render('vwAccount/register');
 });
 
-router.post('/register', async function(req, res){
+router.post('/register', isLogon, async function(req, res){
 	const username = req.body.user;
 	const isNull = await accountModel.findUsername(username);
 	if(isNull !== null){
@@ -40,17 +57,33 @@ router.post('/register', async function(req, res){
 	const salt = bcrypt.genSaltSync(10);
 	const hashedPwd = bcrypt.hashSync(pwd, salt);
 
-	await accountModel.createAcc(username, hashedPwd, name, email, dob, addr);
+	const usrObj = {
+		username: username, 
+		pwd: hashedPwd,
+		name: name, 
+		email: email, 
+		dob: dob, 
+		addr: addr
+	};
+
+	await accountModel.createAcc(usrObj);
 
 	return res.json({"success": true, "msg": "Đăng kí thành công"});
 });
 
-router.get('/login', function(req, res){
+router.get('/login', isLogon, function(req, res){
 	res.render('vwAccount/login', {layout: false});
 });
 
-// router.get('/profile', function(req, res){
-// 	res.render('vwAccount/profile');
-// });
+router.get('/profile', notLogin, function(req, res){
+	res.render('vwAccount/profile');
+});
+
+router.post('/logout', function(req, res){
+    req.logout();
+    const url = req.headers.referer || '/';
+    res.redirect(url);
+});
+
 
 export default router;

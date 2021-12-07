@@ -3,17 +3,23 @@ import express from 'express';
 
 const router = express.Router();
 
-router.post('/auth/facebook', passport.authenticate('facebook',{scope:'email'}));
+router.post('/auth/facebook', passport.authenticate('facebook',{scope: ['email']}));
 
 router.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { successRedirect : '/', failureRedirect: '/login' }),
+    passport.authenticate('facebook', {failureRedirect: '/login' }),
     function(req, res) {
-    res.redirect('/');
+        const url = req.session.retUrl || '/';
+        res.redirect(url);
 });
 
-router.post('/logout', function(req, res){
-    req.logout();
-    res.redirect('/');
-});
+router.post('/auth/google', 
+  passport.authenticate('google', { scope : ['profile', 'email'] }));
+ 
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    const url = req.session.retUrl || '/';
+    res.redirect(url);
+}); 
 
 export default router;

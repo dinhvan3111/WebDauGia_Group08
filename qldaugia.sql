@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 04, 2021 at 08:36 AM
+-- Generation Time: Dec 07, 2021 at 12:10 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -15,8 +15,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
-
 
 CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `qldaugia`;
@@ -32,24 +30,23 @@ USE `qldaugia`;
 
 CREATE TABLE IF NOT EXISTS `accounts` (
 `id` int(10) unsigned zerofill NOT NULL,
-  `username` varchar(50) CHARACTER SET ascii NOT NULL,
-  `pwd` varchar(100) CHARACTER SET ascii NOT NULL,
+  `username` varchar(150) CHARACTER SET ascii DEFAULT NULL,
+  `pwd` varchar(100) CHARACTER SET ascii DEFAULT NULL,
   `id_permission` int(10) unsigned NOT NULL DEFAULT '3',
   `name` varchar(100) NOT NULL,
-  `email` varchar(100) CHARACTER SET ascii NOT NULL,
-  `dob` date NOT NULL,
-  `addr` varchar(100) NOT NULL,
-  `is_locked` int(11) NOT NULL DEFAULT '0',
-  `time` datetime DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `email` varchar(100) CHARACTER SET ascii DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `addr` varchar(100) DEFAULT NULL,
+  `is_locked` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`, `time`) VALUES
-(0000000001, 'a', '$2b$10$QnaEsYX73oRjKoZY4GL01ebpXfwuPHaa6Q.BbcZA5b5LCHAH/527a', 3, 'addr', 'a@a', '2021-11-30', 'a', 0, NULL),
-(0000000002, 'ab', '$2b$10$u1HmCCSto8xQg4Rf1.BG/OuYTbhh0WtdGy0J0l9ukeHbnA0aFJb7G', 3, 'addr', 'aa@a', '2021-11-30', 'a', 0, NULL);
+INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`) VALUES
+(0000000015, '110452804810387facebook', NULL, 3, 'Elizabeth Algecgkdeheg Chengsen', 'ixnxqhmhoj_1638799299@tfbnw.net', NULL, NULL, 0),
+(0000000017, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -148,6 +145,56 @@ CREATE TABLE IF NOT EXISTS `request_upgrade` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `seller_expired_day`
+--
+
+CREATE TABLE IF NOT EXISTS `seller_expired_day` (
+  `id` int(10) unsigned zerofill NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
+('TwtrvtwJdVXYBdAjZzR4d1sS9N8SoXEn', 1638961683, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":16,"email":"vutuanhaigk123@gmail.com","name":"Hai VuTuan","id_in_third_party":"104913772676972067806","provider":"google"}}}');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `third_party_account`
+--
+
+CREATE TABLE IF NOT EXISTS `third_party_account` (
+  `id` int(10) unsigned zerofill NOT NULL,
+  `id_in_third_party` varchar(100) DEFAULT NULL,
+  `provider` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `third_party_account`
+--
+
+INSERT INTO `third_party_account` (`id`, `id_in_third_party`, `provider`) VALUES
+(0000000015, '110452804810387', 'facebook'),
+(0000000017, '108130178380491', 'facebook');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `watch_list`
 --
 
@@ -203,6 +250,24 @@ ALTER TABLE `request_upgrade`
  ADD PRIMARY KEY (`id_acc`);
 
 --
+-- Indexes for table `seller_expired_day`
+--
+ALTER TABLE `seller_expired_day`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+ ADD PRIMARY KEY (`session_id`);
+
+--
+-- Indexes for table `third_party_account`
+--
+ALTER TABLE `third_party_account`
+ ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `watch_list`
 --
 ALTER TABLE `watch_list`
@@ -216,7 +281,7 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
@@ -281,6 +346,18 @@ ADD CONSTRAINT `FK_RateHis_AccAssessor` FOREIGN KEY (`id_assessor`) REFERENCES `
 --
 ALTER TABLE `request_upgrade`
 ADD CONSTRAINT `FK_RequestUp_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
+
+--
+-- Constraints for table `seller_expired_day`
+--
+ALTER TABLE `seller_expired_day`
+ADD CONSTRAINT `FK_SellerExpDay_Acc` FOREIGN KEY (`id`) REFERENCES `accounts` (`id`);
+
+--
+-- Constraints for table `third_party_account`
+--
+ALTER TABLE `third_party_account`
+ADD CONSTRAINT `FK_ThirdPartyAcc_Acc` FOREIGN KEY (`id`) REFERENCES `accounts` (`id`);
 
 --
 -- Constraints for table `watch_list`

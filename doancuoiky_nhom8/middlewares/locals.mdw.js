@@ -42,6 +42,14 @@ export default function(app){
 		if(typeof (req.user) === 'undefined'){
 			authUser = false;
 		}
+		// if(typeof (req.session.passport.user) === 'undefined'){
+		// 	authUser = false;
+		// }
+		// else{
+		// 	// console.log(req.session.passport.user.emails[0].value);
+		// }
+		// req.session.authUser = authUser;
+		
 		// console.log(req.session);
 		// console.log(req.user);
 	    res.locals.lcAuthUser = authUser;

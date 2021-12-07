@@ -30,5 +30,6 @@ export default function(app){
 
 	app.use(function (err, req, res, next){
 	    res.render('500', {layout: false});
+	    console.log(err);
 	});
 }
