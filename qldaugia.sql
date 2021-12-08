@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2021 at 12:10 PM
+-- Generation Time: Dec 08, 2021 at 01:35 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -15,6 +15,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+
 
 CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `qldaugia`;
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `dob` date DEFAULT NULL,
   `addr` varchar(100) DEFAULT NULL,
   `is_locked` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
@@ -46,7 +47,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 
 INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`) VALUES
 (0000000015, '110452804810387facebook', NULL, 3, 'Elizabeth Algecgkdeheg Chengsen', 'ixnxqhmhoj_1638799299@tfbnw.net', NULL, NULL, 0),
-(0000000017, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0);
+(0000000019, 'a', NULL, 3, 'aaaaa', 'a@gmail.com', NULL, NULL, 0),
+(0000000020, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -88,12 +90,36 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `change_pwd`
+--
+
+CREATE TABLE IF NOT EXISTS `change_pwd` (
+  `id_acc` int(10) unsigned zerofill NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `expired_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ignore_bidder`
 --
 
 CREATE TABLE IF NOT EXISTS `ignore_bidder` (
   `id_product` int(10) unsigned zerofill NOT NULL,
   `id_acc` int(10) unsigned zerofill NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `not_verified_email`
+--
+
+CREATE TABLE IF NOT EXISTS `not_verified_email` (
+  `id_acc` int(10) unsigned zerofill NOT NULL,
+  `token` varchar(100) NOT NULL,
+  `expired_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -170,7 +196,10 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('TwtrvtwJdVXYBdAjZzR4d1sS9N8SoXEn', 1638961683, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":16,"email":"vutuanhaigk123@gmail.com","name":"Hai VuTuan","id_in_third_party":"104913772676972067806","provider":"google"}}}');
+('8Fk5YyqShKRUjy6kZF6BRK793qJF9Odz', 1639053299, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}'),
+('8oejZHqn0tEAbD33TGxzT0MpwuTJU37e', 1638980444, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}'),
+('JKSn6_I6f_F0_iuvsY93EWtgivN81TPa', 1639046874, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{},"idAcc":29}'),
+('Rv8qKTrTpSnUQaN-TtTG7v6QCy7B2Cz2', 1639035852, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"flash":{"error":["Email trung"],"info":["Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống"]},"isLogging":true,"passport":{"user":{"id":20,"email":"open_hjrryuc_user@tfbnw.net","name":"Open Graph Test User","idThirdPartyAcc":"108130178380491","provider":"facebook","username":"108130178380491facebook"}}}');
 
 -- --------------------------------------------------------
 
@@ -190,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `third_party_account` (
 
 INSERT INTO `third_party_account` (`id`, `id_in_third_party`, `provider`) VALUES
 (0000000015, '110452804810387', 'facebook'),
-(0000000017, '108130178380491', 'facebook');
+(0000000020, '108130178380491', 'facebook');
 
 -- --------------------------------------------------------
 
@@ -226,10 +255,22 @@ ALTER TABLE `categories`
  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `name` (`name`), ADD KEY `FK_cate_parentCate` (`parent_id`);
 
 --
+-- Indexes for table `change_pwd`
+--
+ALTER TABLE `change_pwd`
+ ADD PRIMARY KEY (`id_acc`);
+
+--
 -- Indexes for table `ignore_bidder`
 --
 ALTER TABLE `ignore_bidder`
  ADD PRIMARY KEY (`id_product`,`id_acc`), ADD KEY `FK_IgnoreBidder_Account` (`id_acc`);
+
+--
+-- Indexes for table `not_verified_email`
+--
+ALTER TABLE `not_verified_email`
+ ADD PRIMARY KEY (`id_acc`);
 
 --
 -- Indexes for table `products`
@@ -281,7 +322,7 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
@@ -320,11 +361,23 @@ ALTER TABLE `categories`
 ADD CONSTRAINT `FK_cate_parentCate` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
 
 --
+-- Constraints for table `change_pwd`
+--
+ALTER TABLE `change_pwd`
+ADD CONSTRAINT `FK_ChangePwd_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
+
+--
 -- Constraints for table `ignore_bidder`
 --
 ALTER TABLE `ignore_bidder`
 ADD CONSTRAINT `FK_IgnoreBidder_Account` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_IgnoreBidder_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `not_verified_email`
+--
+ALTER TABLE `not_verified_email`
+ADD CONSTRAINT `FK_NotVerifiedEmail_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
 
 --
 -- Constraints for table `products`

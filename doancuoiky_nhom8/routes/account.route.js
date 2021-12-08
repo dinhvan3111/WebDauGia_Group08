@@ -3,7 +3,9 @@ import accountModel from '../models/account.model.js';
 import fetch from 'node-fetch';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
+import cryptoRandomString from 'crypto-random-string';
 import envVar from '../utils/envVar.js';
+import mailingModel from '../models/mailing.model.js';
 
 const router = express.Router();
 
@@ -67,12 +69,30 @@ router.post('/register', isLogon, async function(req, res){
 	};
 
 	await accountModel.createAcc(usrObj);
+	const newUsr = await accountModel.findEmail(email);
+	var newId = newUsr.id;
+	console.log(newId);
+	const token = cryptoRandomString({length: 100});
+	
+	var exprD = await mailingModel.getNewExpiredDate();
+	await accountModel.addToNotVerifiedEmail({id_acc: newId, token: token, expired_date: exprD});
 
+	const host = req.headers.host;
+	await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, newId, token, 24);
+
+	req.session.idAcc = newId;
 	return res.json({"success": true, "msg": "Đăng kí thành công"});
 });
 
 router.get('/login', isLogon, function(req, res){
-	res.render('vwAccount/login', {layout: false});
+	var loginFailed = false;
+	var provider = '';
+	if(typeof(req.session.loginInfo) !== 'undefined'){
+		loginFailed = req.session.loginInfo.isLogging;
+		provider = req.session.loginInfo.provider;
+		delete req.session.loginInfo;
+	}
+	res.render('vwAccount/login', {layout: false, loginFailed: loginFailed, provider: provider});
 });
 
 router.get('/profile', notLogin, function(req, res){
@@ -80,6 +100,9 @@ router.get('/profile', notLogin, function(req, res){
 });
 
 router.post('/logout', function(req, res){
+	if(typeof(req.session.idAcc) !== 'undefined'){
+      	delete req.session.idAcc;
+    }
     req.logout();
     const url = req.headers.referer || '/';
     res.redirect(url);

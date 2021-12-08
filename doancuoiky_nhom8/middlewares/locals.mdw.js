@@ -28,7 +28,6 @@ export default function(app){
 	        }
 	    }
 	    res.locals.lcCategories = result;
-	    res.locals.lcCaptchaPublicKey = process.env.CAPTCHA_PUBLIC_KEY;
 	    next();
 	});
 

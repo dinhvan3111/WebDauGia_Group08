@@ -6,7 +6,10 @@
 	<title>Login with...</title>
 </head>
 <body>
-	<div style="width:500px;height:180px;">
+	{{#if loginFailed}}
+		<span>Email được liên kết với tài khoản {{provider}} của bạn đã dùng để đăng nhập với một tài khoản đã có trong hệ thống. Vui lòng sử dụng tài khoản khác</span>
+	{{/if}}
+	<div style="width:500px;height:180px;">		
       <h2 style="font-size:40px;">Welcome! Please log in.</h2>
       <div>
       	<form action="/auth/facebook" method="post">

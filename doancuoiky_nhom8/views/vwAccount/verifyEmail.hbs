@@ -1,0 +1,24 @@
+{{#if this.msg.length}}
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  {{msg}}
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	    <span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	{{#if this.isLogon}}
+		<div><button>Ok</button></div>
+	{{else}}
+		<div><br><br><a href="/login">Go to login</a></div>
+
+	{{/if}}
+	{{#if this.verified}}
+
+	{{else}}
+		<form action="/mailing/resending-verify-email" method="post">
+			<input type="hidden" name="id_acc" value="{{id_acc}}"/>
+			<button>Gửi lại link xác nhận mới</button>
+		</form>
+	{{/if}}
+
+	
+{{/if}}

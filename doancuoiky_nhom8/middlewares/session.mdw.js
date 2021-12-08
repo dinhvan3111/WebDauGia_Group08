@@ -62,6 +62,9 @@ export default function (app){
 	      // profile = findOrCreate(profile);
 	      const info = await findOrCreate(profile);
 	      console.log(info);
+	      if(info === null){
+	      	return done(null, false);
+	      }
 	      return done(null, info);
 	    // });
 	  }
@@ -78,6 +81,9 @@ export default function (app){
 	    	console.log(profile);
 		    const info = await findOrCreate(profile);
 		    console.log(info);
+			if(info === null){
+		      	return done(null, false);
+		    }
 		    return done(null, info);
 	    // });
 	  }

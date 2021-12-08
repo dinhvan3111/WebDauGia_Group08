@@ -1,6 +1,7 @@
 import { engine } from 'express-handlebars';
 import hbs_sections from 'express-handlebars-sections';
 import express from 'express';
+
 export default function(app){
 	app.use(express.urlencoded({
 	    extended: true

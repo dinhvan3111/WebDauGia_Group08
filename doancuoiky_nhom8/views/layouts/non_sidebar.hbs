@@ -36,7 +36,7 @@
                         Dropdown
                     </a>
                     <div class="dropdown-menu bg-light-yellow" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item font-bold" href="#">Action</a>
+                        <a class="dropdown-item font-bold" href="#">Test mail</a>
                         <a class="dropdown-item font-bold" href="#">Another action</a>
                         <a class="dropdown-item font-bold" href="#">Something else here</a>
                     </div>
@@ -55,10 +55,10 @@
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        Hi, {{lcAuthUser.user.displayName}}
+                        Hi, {{lcAuthUser.user.name}}
                     </a>
                     <div class="dropdown-menu bg-light-yellow" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item font-bold" href="#">Profile</a>
+                        <a class="dropdown-item font-bold" href="/profile">Profile</a>
                         <form action="/logout" id="frmLogout" method="post"></form>
                         <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();">Sign out</a>
                     </div>

@@ -1,6 +1,14 @@
 import db from '../utils/database.js';
 
 export default{
+	async findID(id_acc){
+		const usr = await db('accounts')
+								.where('id', id_acc);
+		if(usr.length == 0){
+			return null;
+		}
+		return usr[0];
+	},
 	async findUsername(username){
 		const usrname = await db('accounts')
 								.where('username', username);
@@ -35,6 +43,9 @@ export default{
 	},
 	async findOrCreateByThirdPartyAcc(idThirdPartyAcc, displayName, email, provider){
 		var info = await this.findByThirdPartyAcc(idThirdPartyAcc, provider);
+		if(await this.findEmail(email) !== null){
+			return null;
+		}
 		// console.log('findOrCreateByThirdPartyAcc line 37', info);
 		console.log('line 38: ', idThirdPartyAcc, displayName, provider);
 		if(info === null){
@@ -66,5 +77,8 @@ export default{
 			}
 		}
 		return info;
+	},
+	async addToNotVerifiedEmail(obj){
+		return await db('not_verified_email').insert(obj);
 	}
 }
