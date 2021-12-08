@@ -94,7 +94,34 @@ router.get('/login', isLogon, function(req, res){
 	}
 	res.render('vwAccount/login', {layout: false, loginFailed: loginFailed, provider: provider});
 });
-
+router.post('/login', async function (req, res) {
+	if(req.body.password.length < 8){
+		return res.render('vwAccount/login',{
+			layout: false,
+			username: req.body.username,
+			err_message: "Mật khẩu phải trên 8 kí tự"
+		})
+	}
+	const user = await accountModel.findUsername(req.body.username);
+	if(user === null){
+		return res.render('vwAccount/login',{
+			layout: false,
+			err_message: "Tài khoản hoặc mật khẩu không chính xác!"
+		})
+	}
+	const ret = bcrypt.compareSync(req.body.password,user.pwd);
+	console.log(ret);
+	if(ret === false){
+		return res.render('vwAccount/login',{
+			layout: false,
+			err_message: "Tài khoản hoặc mật khẩu không chính xác!"
+		})
+	}
+	console.log(user);
+	req.session.passport.user = user;
+	const url = '/';
+	res.redirect(url);
+});
 router.get('/profile', notLogin, function(req, res){
 	res.render('vwAccount/profile');
 });
