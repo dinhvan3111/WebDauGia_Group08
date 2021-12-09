@@ -58,9 +58,10 @@
                         Hi, {{lcAuthUser.user.name}}
                     </a>
                     <div class="dropdown-menu bg-light-yellow" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item font-bold" href="/profile">Profile</a>
+                        <a class="dropdown-item font-bold" href="/profile">Thông tin tài khoản</a>
+                        <a class="dropdown-item font-bold" href="/reset_password">Đổi mật khẩu</a>
                         <form action="/logout" id="frmLogout" method="post"></form>
-                        <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();">Sign out</a>
+                        <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();">Đăng xuất</a>
                     </div>
                 </li>
                 {{else}}

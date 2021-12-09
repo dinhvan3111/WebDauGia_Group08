@@ -159,6 +159,7 @@
         }
 
         .login-form .seperator b {
+            color: var(--color-word);
             width: 40px;
             height: 40px;
             font-size: 12px;
@@ -205,9 +206,7 @@
 <body>
 
 <div class="login-form align-items-center">
-    {{#if loginFailed}}
-        <span>Email được liên kết với tài khoản {{provider}} của bạn đã dùng để đăng nhập với một tài khoản đã có trong hệ thống. Vui lòng sử dụng tài khoản khác</span>
-    {{/if}}
+
     <!--    <form>-->
     <h1>Đăng nhập</h1>
     <form action="/login" method="post">
@@ -227,9 +226,15 @@
                 <p><i class="fa fa-user-times" aria-hidden="true"></i> {{err_message}}</p>
             </div>
         {{/if}}
+        {{#if loginFailed}}
+
+            <div class="err_login">
+                <p><i class="fa fa-user-times" aria-hidden="true"></i> Email được liên kết với tài khoản {{provider}} của bạn đã dùng để đăng nhập với một tài khoản đã có trong hệ thống. Vui lòng sử dụng tài khoản khác</p>
+            </div>
+        {{/if}}
         <button class="login-btn">Đăng nhập</button>
 
-        <a class="reset-psw" href="#">Quên mật khẩu?</a>
+        <a class="reset-psw" href="/forget_password">Quên mật khẩu?</a>
         <div class="seperator"><b>hoặc</b></div>
         <!--        <p style="color: var(--color-word); font-style: italic">Đăng nhập bằng phương thức khác</p>-->
     </form>
@@ -248,46 +253,6 @@
 
     <!--    </form>-->
 </div>
-<!--<script>-->
-<!--    $('#frmRegister').on('submit',function (e){-->
-<!--        e.preventDefault();-->
 
-<!--        const password = $('#txtPassword').val();-->
-<!--        const confirm = $('#txtConfirm').val();-->
-<!--        if(password.length < 8){-->
-<!--            alert('Mật khẩu quá ngắn!');-->
-<!--            return;-->
-<!--        }-->
-<!--        else {-->
-<!--            if (password !== confirm) {-->
-<!--                alert("Mật khẩu không khớp");-->
-<!--                return;-->
-<!--            }-->
-
-<!--        }-->
-<!--        const username = $('#txtUsername').val();-->
-<!--        $.getJSON(`is-available?user=${username}`,function (data){-->
-<!--            if(data === true){-->
-<!--                $('#frmRegister').off('submit').submit();-->
-<!--            }-->
-<!--            else {-->
-<!--                alert("OOPS!username đã tồn tại!!!")-->
-<!--            }-->
-<!--        })-->
-
-
-<!--    });-->
-
-
-<!--    function showAlert(alertMsg) {-->
-<!--        $('#alertMsg').show();-->
-<!--        $("#err").text(alertMsg);-->
-<!--    };-->
-
-<!--    function hideAlert() {-->
-<!--        $('#alertMsg').hide();-->
-<!--    };-->
-<!--    $("#txtUsername").focus();-->
-<!--</script>-->
 </body>
 </html>

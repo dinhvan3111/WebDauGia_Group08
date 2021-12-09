@@ -106,6 +106,7 @@ router.post('/login', async function (req, res) {
 	if(user === null){
 		return res.render('vwAccount/login',{
 			layout: false,
+			username: req.body.username,
 			err_message: "Tài khoản hoặc mật khẩu không chính xác!"
 		})
 	}
@@ -114,6 +115,7 @@ router.post('/login', async function (req, res) {
 	if(ret === false){
 		return res.render('vwAccount/login',{
 			layout: false,
+			username: req.body.username,
 			err_message: "Tài khoản hoặc mật khẩu không chính xác!"
 		})
 	}
@@ -123,9 +125,20 @@ router.post('/login', async function (req, res) {
 	res.redirect(url);
 });
 router.get('/profile', notLogin, function(req, res){
-	res.render('vwAccount/profile');
+	res.render('vwAccount/profile',{
+		layout: 'non_sidebar.hbs'
+	});
 });
-
+router.get('/reset_password', notLogin, function(req, res){
+	res.render('vwAccount/resetPassword',{
+		layout: 'non_sidebar.hbs'
+	});
+});
+router.get('/forget_password', function(req, res){
+	res.render('vwAccount/forget_password',{
+		layout: false,
+	});
+});
 router.post('/logout', function(req, res){
 	if(typeof(req.session.idAcc) !== 'undefined'){
       	delete req.session.idAcc;
