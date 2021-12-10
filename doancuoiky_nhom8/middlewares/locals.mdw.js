@@ -38,8 +38,14 @@ export default function(app){
 	app.use(async function (req, res, next){
 		// console.log(req.session.passport);
 		var authUser = req.session.passport;
+		res.locals.canChangePwd = false;
 		if(typeof (req.user) === 'undefined'){
 			authUser = false;
+		}
+		else{
+			if(typeof(req.user.provider) === 'undefined'){
+				res.locals.canChangePwd = true;
+			}
 		}
 		// if(typeof (req.session.passport.user) === 'undefined'){
 		// 	authUser = false;
@@ -51,6 +57,7 @@ export default function(app){
 		
 		// console.log(req.session);
 		// console.log(req.user);
+
 	    res.locals.lcAuthUser = authUser;
 	    next();
 	});

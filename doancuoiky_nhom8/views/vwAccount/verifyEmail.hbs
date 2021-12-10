@@ -14,7 +14,7 @@
 	{{#if this.verified}}
 
 	{{else}}
-		<form action="/mailing/resending-verify-email" method="post">
+		<form action="{{action}}" method="post">
 			<input type="hidden" name="id_acc" value="{{id_acc}}"/>
 			<button>Gửi lại link xác nhận mới</button>
 		</form>

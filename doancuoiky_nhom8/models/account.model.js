@@ -43,7 +43,8 @@ export default{
 	},
 	async findOrCreateByThirdPartyAcc(idThirdPartyAcc, displayName, email, provider){
 		var info = await this.findByThirdPartyAcc(idThirdPartyAcc, provider);
-		if(await this.findEmail(email) !== null){
+		const isExisted = await this.findEmail(email);
+		if(isExisted !== null && isExisted.pwd !== null){
 			return null;
 		}
 		// console.log('findOrCreateByThirdPartyAcc line 37', info);
@@ -80,5 +81,31 @@ export default{
 	},
 	async addToNotVerifiedEmail(obj){
 		return await db('not_verified_email').insert(obj);
-	}
+	},
+	async addToForgotPwd(obj){
+		const isExisted = await this.findInForgotPwd({ id_acc: obj.id_acc });
+		// console.log(obj);
+		if(isExisted === null){
+			return await db('change_pwd').insert(obj);
+		}
+		else{
+			return await this.updateForgotPwd(isExisted, obj);
+		}
+	},
+	async findInForgotPwd(obj){
+		const record = await db('change_pwd').where(obj);
+		if(record.length == 0){
+			return null;
+		}
+		return record[0];
+	},
+	async updateForgotPwd(obj, newObj){
+		return await db('change_pwd').update(newObj).where({id_acc: obj.id_acc});
+	},
+	async deleteForgotPwd(id_acc){
+		return await db('change_pwd').where('id_acc', id_acc).del();
+	},
+	async updatePwd(hashedPwd, id_acc){
+		return await db('accounts').update({pwd: hashedPwd}).where({id: id_acc})
+	},
 }

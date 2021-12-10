@@ -20,6 +20,9 @@ router.get('/auth/facebook/callback',
         }
         delete req.session.loginInfo;
         const url = req.session.retUrl || '/';
+        if(typeof(req.session.retUrl) !== 'undefined'){
+          delete req.session.retUrl;
+        }
         res.redirect(url);
 });
 
@@ -40,6 +43,9 @@ router.get('/auth/google/callback',
     }
     delete req.session.loginInfo;
     const url = req.session.retUrl || '/';
+    if(typeof(req.session.retUrl) !== 'undefined'){
+        delete req.session.retUrl;
+      }
     res.redirect(url);
 }); 
 
