@@ -4,6 +4,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 import envVar from './utils/envVar.js';
+import timers from './models/timers.model.js';
 import sessionMdw from './middlewares/session.mdw.js';
 
 
@@ -32,7 +33,9 @@ viewMdw(app);
 localMdw(app);
 routeMdw(app);
 
-app.listen(port, function () {
-    console.log(`Web app listening at http://localhost:${port}`)
-})
+app.listen(port, async function () {
+    console.log(`Web app listening at http://localhost:${port}`);
+    // console.log('Timer is starting check ... at here');
+    // await timers.run();
+});
 
