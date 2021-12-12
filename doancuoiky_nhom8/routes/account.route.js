@@ -141,6 +141,12 @@ router.get('/profile', notLogin, async function(req, res){
 	});
 });
 
+router.get('/addProduct', notLogin, async function(req, res){
+	res.render('vwAccount/add_product',{
+		layout: 'non_sidebar.hbs'
+	});
+});
+
 router.get('/change-password', notLogin, async function(req, res){
 	if(res.locals.canChangePwd == false){
 		return res.redirect(req.headers.referer || '/');
