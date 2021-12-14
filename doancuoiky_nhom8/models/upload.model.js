@@ -71,5 +71,8 @@ export default{
 			thumb: thumb,
 			imgsExtra: imgsExtra
 		};
+	},
+	deletePath(path){
+		deleteDir(path);
 	}
 }

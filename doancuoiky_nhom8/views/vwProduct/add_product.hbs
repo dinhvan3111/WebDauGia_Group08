@@ -95,6 +95,8 @@
         
         $('#formAddPro').on('submit', function (e) {
             e.preventDefault();
+            var numFilesThumb = $('#imgThumbnail')[0].files.length;
+            var numFilesExtra = $('#imgsExta')[0].files.length;
             var startTime = $('#textTimeStart').datetimepicker('getValue');
             var endTime = $('#textTimeEnd').datetimepicker('getValue');
             var d = new Date()
@@ -164,6 +166,27 @@
               
               $('#dangerPrice').html('');
               
+            }
+            if(numFilesThumb === 0){
+                $('#dangerThumb').html('Chưa có hình ảnh thumbnail cho sản phẩm!');
+                alert('Chưa có hình ảnh thumbnail cho sản phẩm!');
+                return;
+            }
+            else{
+                $('#dangerThumb').html('');
+            }
+            if(numFilesExtra === 0){
+                $('#dangerExtra').html('Chưa có hình ảnh phụ cho sản phẩm!');
+                alert('Chưa có hình ảnh phụ cho sản phẩm!');
+                return;
+            }
+            else if(numFilesExtra < 3){
+                $('#dangerExtra').html('Chưa đủ hình ảnh phụ cho sản phẩm!!');
+                alert('Chưa đủ hình ảnh phụ cho sản phẩm! Tối thiểu 3 hình');
+                return;
+            }
+            else{
+                $('#dangerExtra').html('');
             }
             // if(typeof thumbImg === 'undefined' || thumbImg.length === 0 ){
             //     // console.log(thumbImg);
@@ -240,12 +263,12 @@
     </script>
 {{/section}}
 {{#if msg.length}}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  {{msg}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
+    <div class="container alert alert-warning alert-dismissible fade show" role="alert" style="width: 1108px;">
+        {{msg}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 {{/if}}
 <form id="formAddPro" class="container justify-content-center" method="post" enctype="multipart/form-data">
     <div>
@@ -261,14 +284,14 @@
                            autofocus required>
                     <p id="dangerProName" style="color: red"></p>
                 </div>
-                <div class="form-group col-md-4">
-                    <label class="font-bold" for="textCate">Thuộc danh mục</label>
-                    <select class="combo" id="textCate" name="id_category">
-                      {{#each cate}}
-                      <option value="{{this.id}}">{{this.name}}</option>
-                      {{/each}}
-                    </select>
-                </div>
+                  <div class="form-group col-md-4 ml-5">
+                      <label class="font-bold" for="textCate">Thuộc danh mục</label>
+                      <select class="form-control" class="combo" id="textCate" name="id_category">
+                          {{#each cate}}
+                              <option value="{{this.id}}">{{this.name}}</option>
+                          {{/each}}
+                      </select>
+                  </div>
               </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">

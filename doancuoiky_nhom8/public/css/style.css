@@ -95,9 +95,24 @@ nav .search-for-lg {
         display: none;
     }
 }
+
 .top-product-item .card:hover{
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     cursor: pointer;
+}
+
+.top-product-item .card .card-body .product-img-5-sidebar {
+    width: 163px;
+    height: 163px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.top-product-item .card .card-body .product-img-4-sidebar {
+    width: 223px;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 /* Footer */

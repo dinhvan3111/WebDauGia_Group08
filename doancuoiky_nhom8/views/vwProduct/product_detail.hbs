@@ -1,6 +1,6 @@
 {{#section 'css'}}
     <link rel="stylesheet" href="/css/style.css">
-    <link rel='stylesheet' href='https://sachinchoolur.github.io/lightslider/dist/css/lightslider.css'>
+    <link rel="stylesheet" href="/css/lightslider.css">
     <link rel="stylesheet" href="/css/product_detail.css">
 {{/section}}
 <div class="container-fluid mt-2 mb-3">
@@ -24,10 +24,10 @@
             <div class="card">
                 
                 <div class="about">
-                    <h2><span class="font-weight-bold">{{product.name}}</span></h1>
-                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-danger">{{format_number product.price}} VNĐ</span></h4>
+                    <h2><span class="font-weight-bold">{{product.name}}</span></h2>
+                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-danger">{{format_number product.price}} VNĐ</span></h5>
                     {{#if product.buy_now_price}}
-                    <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span></h4>
+                    <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span></h5>
                     {{/if}}
                 </div>
                 <div class="buttons">

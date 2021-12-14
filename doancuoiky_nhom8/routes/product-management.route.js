@@ -39,6 +39,7 @@ router.post('/add', async function(req, res){
 	}
 	else{
 		const cate = await cateModel.getAllChildCate();
+		upload.deletePath(path);
 		console.log(cate);
 		res.render('vwProduct/add_product', {
 			layout: 'non_sidebar.hbs',
