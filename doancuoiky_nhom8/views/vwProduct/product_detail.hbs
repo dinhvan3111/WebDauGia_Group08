@@ -9,30 +9,36 @@
             <div class="card">
                 <div class="demo">
                     <ul id="lightSlider">
-                        <li data-thumb="https://i.imgur.com/KZpuufK.jpg"> <img src="https://i.imgur.com/KZpuufK.jpg" /> </li>
-                        <li data-thumb="https://i.imgur.com/GwiUmQA.jpg"> <img src="https://i.imgur.com/GwiUmQA.jpg" /> </li>
-                        <li data-thumb="https://i.imgur.com/DhKkTrG.jpg"> <img src="https://i.imgur.com/DhKkTrG.jpg" /> </li>
-                        <li data-thumb="https://i.imgur.com/kYWqL7k.jpg"> <img src="https://i.imgur.com/kYWqL7k.jpg" /> </li>
-                        <li data-thumb="https://i.imgur.com/c9uUysL.jpg"> <img src="https://i.imgur.com/c9uUysL.jpg" /> </li>
+                        {{#if product.img}}
+                        <li data-thumb="../img/products/{{product.id}}/thumb/{{product.img.thumb}}"> <img src="../img/products/{{product.id}}/thumb/{{product.img.thumb}}" /> </li>
+                        {{#each product.img.imgsExtra}}
+                        <li data-thumb="../img/products/{{this}}"> <img src="../img/products/{{this}}" /> </li>
+                        
+                        {{/each}}
+                        {{/if}}
                     </ul>
                 </div>
             </div>
         </div>
         <div class="col-md-7">
             <div class="card">
-                <div class="d-flex flex-row align-items-center">
-                    <div class="p-ratings"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="ml-1">5.0</span>
-                </div>
+                
                 <div class="about">
-                    <h1><span class="font-weight-bold">Sản phẩm mẫu </span></h1>
-                    <h4 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-danger">100.000vnđ</span></h4>
-                    <h4 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">1.000.000vnđ</span></h4>
+                    <h2><span class="font-weight-bold">{{product.name}}</span></h1>
+                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-danger">{{format_number product.price}} VNĐ</span></h4>
+                    {{#if product.buy_now_price}}
+                    <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span></h4>
+                    {{/if}}
                 </div>
                 <div class="buttons">
-                    <button class="btn bg-warning btn-long">Mua ngay</button>
+                    {{#if product.not_sold}}
+                        {{#if product.buy_now_price}}
+                        <button class="btn bg-warning btn-long">Mua ngay</button>
+                        {{/if}}
                     <button class="btn bg-success btn-long text-white">Đấu giá</button>
+                    {{/if}}
                     <button class="btn btn-outline-danger">
-                        <i class="fa fa-heart"></i>
+                        <i class="fa fa-heart"></i> Yêu thích
                     </button>
                 </div>
                 <hr>
@@ -40,46 +46,66 @@
                     <div class="d-flex flex-row align-items-center">
                         <h5 class="card-title">
                             <i class="fa fa-calendar-check-o"></i>
-                            Đăng vào lúc: <span class="text-info">11/03/2021 1:01 PM EST</span>
+                            Đăng vào lúc: <span class="text-info">{{product.time_start}}</span>
                         </h5>
                     </div>
                     <div class="d-flex flex-row align-items-center">
                         <h5 class="card-title">
                             <i class="fa fa-calendar-times-o" aria-hidden="true"></i></i>
-                            Đóng vào lúc: <span class="text-danger">12/03/2021 12:01 PM EST</span>
+                            Đóng vào lúc: <span class="text-danger">{{product.time_end}}</span>
                         </h5>
                     </div>
-                    <div class="mt-2"> <span class="font-weight-bold">Mô tả</span>
-                        <p>The minimalist collaboration features chairs, lightening, Shelves, Sofas, Desks and various home accessories, all offering form and function at the same point.We use high-strength clamps and joinery techniques specially designed for engineered wood beds. Ergo, no irksome creaks - and you can sleep like a baby, well into adulthood!</p>
-                    </div>
+                    <br>
                     <div class="mt-2"> <span class="font-weight-bold">Người bán</span> </div>
-                    <div class="d-flex flex-row align-items-center"> <img src="https://i.imgur.com/N2fYgvD.png" class="rounded-circle store-image">
+                    <div class="d-flex flex-row align-items-center">
+                        <a href="/profile/{{seller.id}}">
+                        <img src="https://i.imgur.com/N2fYgvD.png" class="rounded-circle store-image"></a>
+                        
                         <div class="d-flex flex-column ml-1 comment-profile">
-                            <div class="comment-ratings"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> </div> <span class="username">Rare Boutique</span> <small class="followers">25K Followers</small>
+                            <div class="comment-ratings">
+                             <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+                            </div>
+                            <a href="/profile/{{seller.id}}"><span class="username">{{seller.name}}</span><div> <small class="followers">{{seller.des}}</small></div></a>
                         </div>
+                    </div><br>
+                    <div class="mt-2"> <span class="font-weight-bold">Mô tả</span>
+                        <p>{{{product.description}}}</p>
                     </div>
                     <div class="card mt-5">
                         <div class="card-header bg-dark text-white">
-                            <h5>Người ra giá cao nhất hiện tại</h5>
+                            <h5>Lịch sử đấu giá của sản phẩm</h5>
                         </div>
+                        {{#if bidHistory}}
                         <table class="table table-hover border">
                             <thead>
                             <tr>
-                                <th scope="col">Tên người dùng</th>
-                                <th scope="col">Email</th>
+                                <th scope="col">Thời gian</th>
+                                <th scope="col">Người ra giá</th>
+                                <th scope="col">Giá</th>
                                 <th scope="col">Điểm đánh giá</th>
                             </tr>
                             </thead>
                             <tbody>
+                            
+                            
+                            {{#each bidHistory}}
                             <tr>
-                                <td>Do Dinh Van</td>
-                                <td>dinhvan3111@gmail.com</td>
+                                <td>{{this.time}}</td>
+                                <td>{{this.bidder_name}}</td>
+                                <td>{{format_number this.in_bid_price}} VNĐ</td>
                                 <td>
-                                    <div class="stars"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="ml-1 font-bold">4.7</span></div>
+                                    <div class="stars"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="ml-1 font-bold">{{this.ratio}}</span></div>
                                 </td>
                             </tr>
+                            {{/each}}
+                            
                             </tbody>
                         </table>
+                        {{else}}
+                        <div class="card-header bg-gray text-black">
+                            <span style="font-size: 14px">Chưa có ai ra giá cho sản phẩm này</span>
+                        </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>

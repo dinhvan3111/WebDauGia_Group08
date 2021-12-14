@@ -3,9 +3,11 @@ import accountRoute from '../routes/account.route.js';
 import productUserRoute from '../routes/product-user.route.js';
 import authRoute from '../routes/auth.route.js';
 import mailingRoute from '../routes/mailing.route.js';
+import productManagementRoute from '../routes/product-management.route.js';
+
 
 export default function(app){
-	app.get('/', function (req, res) {
+	app.get('/', async function (req, res) {
 	    res.render('home');
 	});
 
@@ -18,6 +20,7 @@ export default function(app){
 	app.use('/admin/categories', categoryRoute);
 	app.use('/', accountRoute);
 	app.use('/products',productUserRoute);
+	app.use('/products', productManagementRoute);
 	app.use('/mailing', mailingRoute);
 
 

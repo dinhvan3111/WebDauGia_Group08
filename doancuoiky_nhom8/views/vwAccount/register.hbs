@@ -12,60 +12,52 @@
 
             // captcha
             const captcha = $('#g-recaptcha-response').val();
-            
             if(captcha === undefined || captcha === null || captcha === ''){
                 showAlert('Vui lòng xác nhận captcha');
                 return;
             }
             
+
             const username = $('#txtUsername').val();
             const name = $('#txtName').val().trim().replace('  ', ' ');
             const email = $('#txtEmail').val().trim().toLowerCase();
-            const dob = $('#txtDOB').val();
             const addr = $('#txtAddr').val().trim().replace('  ', ' ');
             const password = $('#txtPassword').val();
             const confirm = $('#txtConfirm').val();
             // Khi nào nộp đồ án thì uncomment đoạn ktra này đi
 
-            // if(password.length < 8){
-            //     showAlert('Mật khẩu quá ngắn!');
-            //     return;
-            // }
-            // else {
-            //     if (password !== confirm) {
-            //         showAlert("Mật khẩu không khớp");
-            //         return;
-            //     }
+            if(password.length < 8){
+                showAlert('Mật khẩu quá ngắn!');
+                return;
+            }
+            else {
+                if (password !== confirm) {
+                    showAlert("Mật khẩu không khớp");
+                    return;
+                }
 
-            // }
-            // if(password.includes(' ') || username.includes(' ') || email.includes(' ')){
-            //     showAlert('Vui lòng không dùng khoảng cách trong mật khẩu, tên đăng nhập và email');
-            //     return;
-            // }
-            // if(!isNameValid(name)){
-            //     showAlert('Tên của bạn không hợp lệ. Tên hợp lệ chỉ gồm kí tự và khoảng trắng');
-            //     return;
-            // }
-            // if(!isEmailValid(email)){
-            //     showAlert('Email không hợp lệ');
-            //     return;
-            // }
+            }
+            if(password.includes(' ') || username.includes(' ') || email.includes(' ')){
+                showAlert('Vui lòng không dùng khoảng cách trong mật khẩu, tên đăng nhập và email');
+                return;
+            }
+            if(!isNameValid(name)){
+                showAlert('Tên của bạn không hợp lệ. Tên hợp lệ chỉ gồm kí tự và khoảng trắng');
+                return;
+            }
+            if(!isEmailValid(email)){
+                showAlert('Email không hợp lệ');
+                return;
+            }
 
-            fetch("/register", {
-                method: 'POST',
-                body: JSON.stringify({captcha: captcha, user: username,
-                    pwd: password, email: email, dob: dob, addr: addr, name: name}),
-                headers: {'Content-Type': 'application/json'}
-            }).then((res) => res.json())
-                .then((data) => {
-                    if(data.success){
-                        document.location.href="/login";
-                    }
-                    else{
-                        showAlert(data.msg);
-                    }
-                });
-            // $('#frmRegister').off('submit').submit();
+            
+            $('#txtUsername').val(username);
+            $('#txtName').val(name);
+            $('#txtEmail').val(email);
+            $('#txtAddr').val(addr);
+            $('#txtPassword').val(password);
+            
+            $('#frmRegister').off('submit').submit();
         });
         $('#txtDOB').datetimepicker({
             timepicker:false,
@@ -79,11 +71,12 @@
             return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
         };
         function showAlert(alertMsg){
-            $('#alertMsg').show();
-            $("#err").text(alertMsg);
+            
+            $("#warning").text(alertMsg);
+            $('#warningMsg').show();
         };
         function hideAlert(){
-            $('#alertMsg').hide();
+            $('#warningMsg').hide();
         };
         $("#txtUsername").focus();
     </script>
@@ -94,18 +87,26 @@
         <h4 class="card-header bg-warning">
             Đăng ký tài khoản
         </h4>
-        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertMsg"  style="display: none;">
-            <span id="err" name="err"></span>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="warningMsg"  style="display:none">
+            <span id="warning" name="warning"></span>
             <button type="button" class="close"  aria-label="Close" onclick="hideAlert()">
                 <p aria-hidden="true">x</p>
             </button>
         </div>
+        {{#if user.msg.length}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" id="alertMsg">
+            <span id="err" name="err">{{user.msg}}</span>
+            <button type="button" class="close"  aria-label="Close" onclick="hideAlert()">
+                <p aria-hidden="true">x</p>
+            </button>
+        </div>
+        {{/if}}
         <div class="row card-body">
             <div class="col-md-5" >
                 <h5>Thông tin tài khoản</h5>
                 <div class="form-group">
                     <label for="txtUsername">Tên đăng nhập</label>
-                    <input type="text" class="form-control" id="txtUsername" placeholder="Vui lòng nhập username..." name="username" autofocus required/>
+                    <input type="text" class="form-control" id="txtUsername" placeholder="Vui lòng nhập username..." name="username" value="{{user.username}}" autofocus required/>
                 </div>
                 <div class="form-group">
                     <label for="txtPassword">Mật khẩu</label>
@@ -123,19 +124,19 @@
             <h5>Thông tin cá nhân</h5>
             <div class="form-group">
                 <label for="txtName">Họ và tên</label>
-                <input type="text" class="form-control" id="txtName" placeholder="Vui lòng nhập họ và tên..." name="name" required/>
+                <input type="text" class="form-control" id="txtName" placeholder="Vui lòng nhập họ và tên..." name="name" value="{{user.name}}" required/>
             </div>
             <div class="form-group">
                 <label for="txtEmail">Email</label>
-                <input type="email" class="form-control" id="txtEmail" placeholder="Vui lòng nhập email..." name="email" required/>
+                <input type="email" class="form-control" id="txtEmail" placeholder="Vui lòng nhập email..." name="email" value="{{user.email}}" required/>
             </div>
             <div class="form-group">
                 <label for="txtEmail">Ngày sinh</label>
-                <input type="text" class="form-control" id="txtDOB" name="dob" placeholder="Vui lòng nhập ngày sinh..." required/>
+                <input type="text" class="form-control" id="txtDOB" name="dob" placeholder="Vui lòng nhập ngày sinh..." value="{{user.dob}}" required/>
             </div>
             <div class="form-group">
                 <label for="txtAddress">Địa chỉ</label>
-                <input type="text" class="form-control" id="txtAddr" name="addr" placeholder="Vui lòng nhập địa chỉ..." required/>
+                <input type="text" class="form-control" id="txtAddr" name="addr" placeholder="Vui lòng nhập địa chỉ..." value="{{user.addr}}" required/>
             </div>
             </div>
         </div>

@@ -18,7 +18,15 @@ export default {
 		return db.select(['ctg.id as id', 'ctg.name as name'])
 			.from('categories as ctg')
 			.where('ctg.parent_id',id);
+	},
+	async getAllChildCate(){
+		const cateList = await db.raw(`select c.id, c.name
+						 from categories c 
+						 where c.parent_id is not NULL`);
+		if(cateList.length == 0){
+			return null;
+		}
+		return cateList[0];
 	}
-
 
 }

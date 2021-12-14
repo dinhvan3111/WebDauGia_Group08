@@ -1,0 +1,375 @@
+{{#section 'css'}}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>#tiny_mce {
+      display: block !important;
+      margin-left: auto;
+      margin-right: auto;
+      width: 600px;
+    }</style>
+{{/section}}
+
+
+{{#section 'js'}}
+    
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/js/fileinput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.5/js/locales/vi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.5/themes/fa/theme.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/{{TINY_CLOUD_API}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+
+    tinymce.init({
+      selector: '#description',
+      height: "500",
+      plugins: 'image paste link autolink lists table media',
+      menubar: false,
+      toolbar: [
+        'undo redo | bold italic underline strikethrough | numlist bullist | alignleft aligncenter alignright | forecolor backcolor | table link image media'
+      ]
+    });
+    </script>
+
+
+
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <style>
+        .img-Extra, .img-thumbnail {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .file-thumb {
+            visibility: hidden;
+            position: absolute;
+        }
+
+        .file-imgs {
+            visibility: hidden;
+            position: absolute;
+        }
+    </style>
+    
+
+    <script>
+        $("#imgThumbnail").fileinput({
+          showUpload: false,
+          previewFileType:'any',
+          showCaption: false,
+          dropZoneEnabled: false,
+          maxFileCount: 1,
+          allowedFileExtensions: ['png', 'jpg'],
+          theme: 'fa',
+          language: 'vi'});
+        $("#imgsExta").fileinput({
+          showUpload:false,
+          previewFileType:'any',
+          showCaption: false,
+          dropZoneEnabled: false,
+          maxFileCount: 5,
+          allowedFileExtensions: ['png', 'jpg'],
+          theme: 'fa',
+          language: 'vi'});
+
+
+        $('#textTimeStart').datetimepicker({
+
+            format: 'd.m.Y H:i',
+            minDate: 0,
+            minTime: 1,
+            format: 'd/m/Y H:i',
+            mask: true,
+        });
+        $('#textTimeEnd').datetimepicker({
+            format: 'd.m.Y H:i',
+            minDate: 0,
+            minTime: 1,
+            format: 'd/m/Y H:i',
+            mask: true,
+        });
+    </script>
+    <script>
+        
+        $('#formAddPro').on('submit', function (e) {
+            e.preventDefault();
+            var startTime = $('#textTimeStart').datetimepicker('getValue');
+            var endTime = $('#textTimeEnd').datetimepicker('getValue');
+            var d = new Date()
+            if($('#textProName').val().length < 5){
+                $('#dangerProName').html('Tên sản phẩm phải ít nhất 5 kí tự!');
+                alert('Tên sản phẩm phải ít nhất 5 kí tự!');
+                return;
+            }
+            else{
+                $('#dangerProName').html('');
+            }
+            if($('#textTimeStart').datetimepicker('getValue').getTime() < d.getTime()){
+                $('#dangerTimeStart').html('Thời gian bắt đầu không hợp lệ');
+                alert('Mời nhập thời gian bắt đầu!');
+                return;
+            }
+            else{
+                $('#dangerTimeStart').html('');
+            }
+            if($('#textTimeEnd').datetimepicker('getValue').getTime() < d.getTime()){
+                $('#dangerTimeEnd').html('Mời nhập thời gian kết thúc!');
+                alert('Mời nhập thời gian kết thúc!');
+                return;
+            }
+            else{
+                $('#dangerTimeEnd').html('');
+            }
+            if($('#textTimeEnd').datetimepicker('getValue') <= $('#textTimeStart').datetimepicker('getValue')){
+                alert('Thời gian bắt đầu phải bé hơn thời gian kết thúc!');
+                $('#dangerTimeEnd').html('Thời gian bắt đầu phải bé hơn thời gian kết thúc!');
+                return;
+            }
+            else{
+                $('#dangerTimeEnd').html('');
+            }
+            var startPriceStr = $('#textProPrice').val().split(' ');
+            var buyNowPriceStr = $('#textProBuyNowPrice').val().split(' ');
+            var stepPriceStr = $('#textProStepPrice').val().split(' ');
+            startPriceStr = startPriceStr[1].trim();
+            buyNowPriceStr = buyNowPriceStr[1].trim();
+            stepPriceStr = stepPriceStr[1].trim();
+            // console.log('"',startPriceStr, buyNowPriceStr,"'");
+            if(startPriceStr.length == 0){
+              $('#dangerInPrice').html('Vui lòng nhập giá khởi điểm');
+              return;
+            }
+            else{
+              $('#dangerInPrice').html('');
+            }
+            if(stepPriceStr.length == 0){
+              $('#dangerStepPrice').html('Vui lòng nhập bước giá');
+              return;
+            }
+            else{
+              $('#dangerStepPrice').html('');
+            }
+            var startPrice = parseInt(startPriceStr.replace(/,/g, ''));
+            if(buyNowPriceStr.length > 0){
+              var buyNowPrice =  parseInt(buyNowPriceStr.replace(/,/g, ''));
+              if(!Number.isNaN(buyNowPrice)){
+                  if(startPrice >= buyNowPrice){
+                      $('#dangerPrice').html('Giá mua ngay phải lớn hơn giá khởi điểm!');
+                      alert('Giá mua ngay phải lớn hơn giá khởi điểm!');
+                      return;
+                  }
+              }
+              
+              $('#dangerPrice').html('');
+              
+            }
+            // if(typeof thumbImg === 'undefined' || thumbImg.length === 0 ){
+            //     // console.log(thumbImg);
+            //     $('#dangerThumb').html('Chưa có thumbnail cho sản phẩm');
+            //     alert('Chưa có thumbnail sản phẩm!');
+            //     return;
+            // }
+            // else{
+            //     $('#dangerThumb').html('');
+            // }
+            // if (typeof extraImgs === 'undefined' || extraImgs.length < 3) {
+            //     console.log(extraImgs);
+            //     $('#dangerExtra').html('Chưa đủ số hình phụ! Tối thiểu 3 hình phụ');
+            //     alert('Chưa đủ số hình phụ! Tối thiểu 3 hình phụ');
+            //     return;
+            // }
+            // else{
+            //     $('#dangerExtra').html('');
+            // }
+            $('#formAddPro').off('submit').submit();
+        });
+
+
+
+        $("input[data-type='currency']").on({
+            keyup: function() {
+              formatCurrency($(this));
+            }
+        });
+
+
+        function formatNumber(n) {
+          // format number 1000000 to 1,234,567
+          return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }
+
+
+        function formatCurrency(input) {
+          var input_val = input.val();
+          if (input_val === "") { return; }
+          
+          var original_len = input_val.length;
+
+          var caret_pos = input.prop("selectionStart");
+            
+          // check for decimal
+          if (input_val.indexOf(".") >= 0) {
+
+            var decimal_pos = input_val.indexOf(".");
+
+            var left_side = input_val.substring(0, decimal_pos);
+            var right_side = input_val.substring(decimal_pos);
+
+            left_side = formatNumber(left_side);
+
+            right_side = formatNumber(right_side);
+                                  
+            right_side = right_side.substring(0, 2);
+
+            input_val = "$" + left_side + "." + right_side;
+
+          } else {
+            input_val = formatNumber(input_val);
+            input_val = "(VNĐ) " + input_val;
+          }
+          
+          input.val(input_val);
+
+          var updated_len = input_val.length;
+          caret_pos = updated_len - original_len + caret_pos;
+          input[0].setSelectionRange(caret_pos, caret_pos);
+        }
+
+    </script>
+{{/section}}
+{{#if msg.length}}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  {{msg}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/if}}
+<form id="formAddPro" class="container justify-content-center" method="post" enctype="multipart/form-data">
+    <div>
+        <div class="card">
+            <div class="card-header bg-warning font-bold text-center">
+                <h2>Thêm sản phẩm</h2>
+            </div>
+            <div class="card-body">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="font-bold" for="textProName">Tên sản phẩm</label>
+                    <input type="text" class="form-control" id="textProName" name="name" placeholder="Nhập tên sản phẩm" value="{{product.name}}"
+                           autofocus required>
+                    <p id="dangerProName" style="color: red"></p>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="font-bold" for="textCate">Thuộc danh mục</label>
+                    <select class="combo" id="textCate" name="id_category">
+                      {{#each cate}}
+                      <option value="{{this.id}}">{{this.name}}</option>
+                      {{/each}}
+                    </select>
+                </div>
+              </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label class="font-bold" for="textProPrice">Giá khởi điểm</label>
+                        <input type="text" class="form-control" id="textProPrice" name="price"
+                                data-type="currency" placeholder="(VNĐ) 1,000,000" value="{{product.price}}" required>
+                        <p id="dangerInPrice" class="ml-1" style="color: red"></p>
+                        <!-- <input type="number" class="form-control" id="textProPrice" name="price" placeholder="Nhập giá khởi điểm" required> -->
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="font-bold" for="textProStepPrice">Bước giá</label>
+                        <input type="text" class="form-control" id="textProStepPrice" name="step_price"
+                                value="{{product.step_price}}" data-type="currency" placeholder="(VNĐ) 10,000" required>
+                        <p id="dangerStepPrice" class="ml-1" style="color: red"></p>
+                        <!-- <input type="number" class="form-control" id="textProStepPrice" name="step_price" placeholder="Nhập bước giá" required>  -->
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="font-bold" for="textProBuyNowPrice">Giá mua ngay</label>
+                        <input type="text" class="form-control" id="textProBuyNowPrice" name="buy_now_price"
+                                value="{{product.buy_now_price}}" data-type="currency" placeholder="(VNĐ) 10,000,000">
+                        <!-- <input type="number" class="form-control" name="buy_now_price" id="textProBuyNowPrice"
+                               placeholder="Nhập giá mua ngay"> -->
+                        <p id="dangerPrice" class="ml-1" style="color: red"></p>
+                    </div>
+                    
+                </div>
+                <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="font-bold" for="textTimeStart">Thời gian bắt đầu</label>
+                    <input type="text" class="form-control" id="textTimeStart" name="time_start"
+                           placeholder="Nhập thời gian bắt đầu" value="{{product.time_start}}" required>
+                    <p id="dangerTimeStart" style="color: red"></p>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="font-bold" for="textTimeEnd">Thời gian kết thúc</label>
+                    <input type="text" class="form-control" id="textTimeEnd" name="time_end"
+                           placeholder="Nhập thời gian kết thúc" value="{{product.time_end}}" required>
+                    <p id="dangerTimeEnd" style="color: red"></p>
+                </div>
+                </div>
+                <div class="form-group">
+                    <label class="font-bold" for="imgThumbnail">Thumbnail sản phẩm</label>
+                    <input id="imgThumbnail" name="imgThumbnail" type="file" class="file"  data-browse-on-zone-click="true">
+                    <p id="dangerThumb" style="color: red"></p>
+                    
+                    <div class="img-Thumb-group ml-2 col-sm-6">
+                        <!--                        Chỉnh sửa ở trên phần js-->
+                        <!--                        <img src="'+ fileName+'" id="previewThumb" class="img-thumbnail">-->
+                    </div>
+                    <div class="form-group">
+                        <label class="font-bold mt-3" for="imgsExta">Hình ảnh phụ</label>
+                        <input id="imgsExta" name="imgsExta" type="file" class="file"  data-browse-on-zone-click="true" multiple>
+
+                        <p id="dangerExtra" style="color: red"></p>
+                        
+                        <div class="img-Extra-group ml-2 col">
+                            <!--                        Chỉnh sửa ở trên phần js-->
+                            <!--                            <img src="' + filenames[i] +'" id="previewExtra'+ i +'" class="img-thumbnail">-->
+                        </div>
+                        
+                        <div class="form-inline mt-3">
+                            <label class="mr-5 font-bold" for="">Tự động gia hạn</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="auto_renew"
+                                       id="yesTimeExtend" value="true" checked>
+                                <label class="form-check-label" for="yesTimeExtend">Có</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="auto_renew"
+                                       id="noTimeExtend" value="false">
+                                <label class="form-check-label" for="noTimeExtend">Không</label>
+                            </div>
+                        </div>
+
+                        <div class="form-inline mt-3">
+                          <label class="mr-5 font-bold" for="">Cho phép những người chưa từng được đánh giá ra giá sản phẩm</label>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="allow_non_rating_bidder"
+                                       id="allowNonRatingBidder" value="true" checked>
+                            <label class="form-check-label" for="allowNonRatingBidder">Có</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="allow_non_rating_bidder"
+                                   id="notAllowNonRatingBidder" value="false">
+                            <label class="form-check-label" for="notAllowNonRatingBidder">Không</label>
+                          </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="font-bold" for="textDescription">Mô tả</label>
+                    <textarea id="description" name="description" class="tiny_mce">{{product.description}}</textarea>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-dark text-white pl-5 pr-5 pt-2 pb-2 font-bold">
+                        Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

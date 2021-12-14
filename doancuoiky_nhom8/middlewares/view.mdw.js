@@ -4,11 +4,13 @@ import express from 'express';
 
 export default function(app){
 	app.use(express.urlencoded({
-	    extended: true
+	    extended: true,
+	    limit: '25mb'
 	}));
-	app.use(express.json({
-	  type: "*/*"
-	}));
+	// app.use(express.json({
+	//   type: "*/*",
+	//   limit: '25mb'
+	// }));
 	app.engine('hbs', engine({
 	    defaultLayout: 'main.hbs',
 	    helpers: {

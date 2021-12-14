@@ -6,49 +6,62 @@ import moment from 'moment';
 import cryptoRandomString from 'crypto-random-string';
 import envVar from '../utils/envVar.js';
 import mailingModel from '../models/mailing.OTP.model.js';
+import checkPermission from '../middlewares/permission.mdw.js';
 
 const router = express.Router();
 
-function isLogon(req, res, next){
-	if(typeof (req.user) !== 'undefined'){
-		const url = '/';
-		return res.redirect(url);
-	}
-	next();
-};
-
-function notLogin(req, res, next){
-	if(typeof (req.user) === 'undefined'){
-		req.session.retUrl = req.originalUrl;
-		const url = '/login';
-		return res.redirect(url);
-	}
-	next();
-};
-
-router.get('/register', isLogon, function(req, res){
+router.get('/register', checkPermission.isLogon, function(req, res){
 	res.render('vwAccount/register');
 });
 
-router.post('/register', isLogon, async function(req, res){
-	const username = req.body.user;
+router.post('/register', checkPermission.isLogon, async function(req, res){
+	const username = req.body.username;
+	
 	const isNull = await accountModel.findUsername(username);
 	if(isNull !== null){
-		return res.json({"success": false, "msg": "Tên tài khoản này đã tồn tại. Vui lòng chọn tên khác"});
+		return res.render('vwAccount/register', {
+			user: {
+				username: req.body.user,
+				name: req.body.name,
+				addr: req.body.addr,
+				email: req.body.email,
+				dob: req.body.dob,
+				msg: 'Tên tài khoản này đã tồn tại. Vui lòng chọn tên khác'
+			}
+		});
 	}
 
 	const email = req.body.email;
 	const isEmailValid = await accountModel.findEmail(email);
 	if(isEmailValid !== null){
-		return res.json({"success": false, "msg": "Email này đã dùng để đăng kí cho một tài khoản. Vui lòng chọn email khác"});
+		return res.render('vwAccount/register', {
+			user: {
+				username: req.body.user,
+				name: req.body.name,
+				addr: req.body.addr,
+				email: req.body.email,
+				dob: req.body.dob,
+				msg: 'Email này đã dùng để đăng kí cho một tài khoản. Vui lòng chọn email khác'
+			}
+		});
 	}
-
+	const captcha = req.body['g-recaptcha-response'];
 	const secretKey = envVar.CAPTCHA_PRIVATE_KEY;
-	const verifyCaptcha = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+	const verifyCaptcha = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}&remoteip=${req.connection.remoteAddress}`;
 	const verified = await fetch(verifyCaptcha, {method: "POST"})
 		.then(_res => _res.json());
 	if(verified.success === false){
-		return res.json({"success": false, "msg": "Lỗi xác minh reCaptcha. Vui lòng thử lại sau"});
+		console.log(captcha);
+		return res.render('vwAccount/register', {
+			user: {
+				username: req.body.user,
+				name: req.body.name,
+				addr: req.body.addr,
+				email: req.body.email,
+				dob: req.body.dob,
+				msg: 'Lỗi xác minh reCaptcha. Vui lòng thử lại sau'
+			}
+		});
 	}
 
 	const pwd = req.body.pwd;
@@ -71,7 +84,7 @@ router.post('/register', isLogon, async function(req, res){
 	await accountModel.createAcc(usrObj);
 	const newUsr = await accountModel.findEmail(email);
 	var newId = newUsr.id;
-	console.log(newId);
+	// console.log(newId);
 	const token = cryptoRandomString({length: 100});
 	
 	var exprD = await mailingModel.getNewExpiredDate();
@@ -81,10 +94,10 @@ router.post('/register', isLogon, async function(req, res){
 	await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, newId, token, 24);
 
 	req.session.idAcc = newId;
-	return res.json({"success": true, "msg": "Đăng kí thành công"});
+	return res.redirect('/login');
 });
 
-router.get('/login', isLogon, function(req, res){
+router.get('/login', checkPermission.isLogon, function(req, res){
 	if(typeof(req.session.forgotPwd) !== 'undefined' && 
 		req.session.forgotPwd === true){
 		delete req.session.forgotPwd;
@@ -127,28 +140,23 @@ router.post('/login', async function (req, res) {
 	}
 	delete user.pwd;
 	user.dob = moment(user.dob, 'DD/MM/YYYY').format('DD-MM-YYYY');
-	console.log(user);
+	// console.log(user);
 	req.user = user;
 	req.session.passport = {user: user};
 	const url = req.session.retUrl || '/';
-	if(typeof(req.session.retUrl) === 'undefined'){
+	if(typeof(req.session.retUrl) !== 'undefined'){
 		delete req.session.retUrl;
 	}
 	res.redirect(url);
 });
-router.get('/profile', notLogin, async function(req, res){
+router.get('/profile', checkPermission.notLogin, async function(req, res){
+	console.log(req.user);
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs'
 	});
 });
 
-router.get('/addProduct', notLogin, async function(req, res){
-	res.render('vwAccount/add_product',{
-		layout: 'non_sidebar.hbs'
-	});
-});
-
-router.get('/change-password', notLogin, async function(req, res){
+router.get('/change-password', checkPermission.notLogin, async function(req, res){
 	if(res.locals.canChangePwd == false){
 		return res.redirect(req.headers.referer || '/');
 	}

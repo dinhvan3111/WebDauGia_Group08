@@ -48,7 +48,7 @@ export default{
 			return null;
 		}
 		// console.log('findOrCreateByThirdPartyAcc line 37', info);
-		console.log('line 38: ', idThirdPartyAcc, displayName, provider);
+		// console.log('line 38: ', idThirdPartyAcc, displayName, provider);
 		if(info === null){
 			const usrname = idThirdPartyAcc + provider;
 			const usrObj = {
@@ -82,6 +82,8 @@ export default{
 	async addToNotVerifiedEmail(obj){
 		return await db('not_verified_email').insert(obj);
 	},
+
+	// Password
 	async addToForgotPwd(obj){
 		const isExisted = await this.findInForgotPwd({ id_acc: obj.id_acc });
 		// console.log(obj);
@@ -107,5 +109,53 @@ export default{
 	},
 	async updatePwd(hashedPwd, id_acc){
 		return await db('accounts').update({pwd: hashedPwd}).where({id: id_acc})
+	},
+
+	// Rate 
+	async countRate(id_acc){
+		const upVoteCounter = await db('rate_history')
+									.count('id_acc', {as: 'upVote'})
+									.where({id_acc: id_acc, mark: 1});
+		const downVoteCounter = await db('rate_history')
+									.count('id_acc', {as: 'downVote'})
+									.where({id_acc: id_acc, mark: 0});
+		return {
+			upVoteCounter: upVoteCounter[0].upVote,
+			downVoteCounter: downVoteCounter[0].downVote
+		};
+	},
+	async getUpVoteRatio(id_acc){
+		const rateCounter = await this.countRate(id_acc);
+		const totalRate = rateCounter.upVoteCounter + rateCounter.downVoteCounter;
+		var user = {};
+		user.des = 'Chưa có lượt đánh giá nào';
+		user.starList = [];
+		user.ratio = 0;
+		for (let i = 0; i < 5; i++) {
+        	user.starList.push(-1);
+        	// gray star
+        }
+		if(totalRate != 0){
+	        var upVoteRate = (rateCounter.upVoteCounter / totalRate) * 100;
+	        upVoteRate = upVoteRate.toFixed(1);
+	        user.des = `Có ${upVoteRate}% người đã đánh giá tốt`;
+	        // based on 5 stars
+	        var star = upVoteRate / 20;
+	        user.ratio = star.toFixed(1);
+	        for (let i = 0; i < 5; i++) {
+	        	if(star - 1 >= 0){
+	        		// yellow star
+	        		user.starList[i] = 1;
+	        		star = star - 1;
+	        	}
+	        	else if(star - 0.5 >= 0){
+	        		// combined gray and yellow
+	        		user.starList[i] = 0;
+	        		star = star - 0.5;
+	        	}
+	        }
+	    }
+
+	    return user;
 	},
 }
