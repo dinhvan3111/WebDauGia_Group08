@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 01:35 PM
+-- Generation Time: Dec 14, 2021 at 01:02 PM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -15,7 +15,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
 
 CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `qldaugia`;
@@ -39,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `dob` date DEFAULT NULL,
   `addr` varchar(100) DEFAULT NULL,
   `is_locked` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
@@ -48,7 +47,10 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`) VALUES
 (0000000015, '110452804810387facebook', NULL, 3, 'Elizabeth Algecgkdeheg Chengsen', 'ixnxqhmhoj_1638799299@tfbnw.net', NULL, NULL, 0),
 (0000000019, 'a', NULL, 3, 'aaaaa', 'a@gmail.com', NULL, NULL, 0),
-(0000000020, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0);
+(0000000020, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0),
+(0000000043, 'ab', '$2b$10$vWfmmjKKsE.RBaSe/Uy0HeuRbJTlxZ.pbwIZWDp.NkXLBKr.YVmBG', 2, 'Hai Tuan Vu', 'vutuanhaigk@gmail.com', '2021-11-30', 'ab', 0),
+(0000000044, 'abc', '$2b$10$/ED0YtTwhgq1Km//uke9JOK50lo/HkKnJdJQOQB7.VJhCQSaWKi.2', 3, 'Hai Tuan Vu', 'vutuanhaigk123@gmail.com', '2021-11-30', 'abc', 0),
+(0000000046, 'aba', '$2b$10$d6ZkiQ.UsMcCo9UieJVbouGzi0pBT.qxGL7st.GD3Xtl07Je2J/ki', 3, 'Hai Tuan Vu', 'vexal21807@mediafate.com', '2021-11-30', 'ab', 0);
 
 -- --------------------------------------------------------
 
@@ -122,6 +124,14 @@ CREATE TABLE IF NOT EXISTS `not_verified_email` (
   `expired_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `not_verified_email`
+--
+
+INSERT INTO `not_verified_email` (`id_acc`, `token`, `expired_date`) VALUES
+(0000000043, 'ba4e0886bbe91124084fb717878f1c0e6737f5b0273482ba2a441e8f7b6b4540869b74b43dbb59d5c497228e7bacb1b8321c', '2021-12-11 15:48:31'),
+(0000000044, 'ef850db80ecc4b062da9dc5ea6310c9dd8ea443caea9f938ca2fd3fa863021c7f1a5bfaa81b5e460112bb70725dc167f32e4', '2021-12-11 14:10:05');
+
 -- --------------------------------------------------------
 
 --
@@ -140,8 +150,17 @@ CREATE TABLE IF NOT EXISTS `products` (
   `auto_renew` int(11) NOT NULL DEFAULT '0',
   `id_category` int(10) unsigned zerofill NOT NULL,
   `id_win_bidder` int(10) unsigned zerofill DEFAULT NULL,
-  `id_seller` int(10) unsigned zerofill NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id_seller` int(10) unsigned zerofill NOT NULL,
+  `not_sold` tinyint(1) NOT NULL DEFAULT '1',
+  `allow_non_rating_bidder` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `price`, `step_price`, `buy_now_price`, `time_start`, `time_end`, `description`, `auto_renew`, `id_category`, `id_win_bidder`, `id_seller`, `not_sold`, `allow_non_rating_bidder`) VALUES
+(0000000002, 'BPhone', '1000000', '100000', '10000000', '2021-12-14 19:00:00', '2021-12-14 22:00:00', '<p><em><span style="text-decoration: underline;">Đ&acirc;y l&agrave; d&ograve;ng m&ocirc; tả BPhone</span></em></p>', 0, 0000000002, NULL, 0000000043, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -156,7 +175,17 @@ CREATE TABLE IF NOT EXISTS `rate_history` (
   `mark` int(11) NOT NULL,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `comment` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `rate_history`
+--
+
+INSERT INTO `rate_history` (`id`, `id_assessor`, `id_acc`, `mark`, `time`, `comment`) VALUES
+(0000000001, 0000000043, 0000000044, 1, '2021-12-11 13:22:54', 'upvote'),
+(0000000002, 0000000043, 0000000044, 0, '2021-12-11 13:23:50', 'downVote'),
+(0000000003, 0000000044, 0000000043, 1, '2021-12-11 13:24:27', 'ok'),
+(0000000004, 0000000043, 0000000044, 1, '2021-12-11 13:25:05', 'upvote again');
 
 -- --------------------------------------------------------
 
@@ -196,10 +225,8 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('8Fk5YyqShKRUjy6kZF6BRK793qJF9Odz', 1639053299, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}'),
-('8oejZHqn0tEAbD33TGxzT0MpwuTJU37e', 1638980444, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"}}'),
-('JKSn6_I6f_F0_iuvsY93EWtgivN81TPa', 1639046874, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{},"idAcc":29}'),
-('Rv8qKTrTpSnUQaN-TtTG7v6QCy7B2Cz2', 1639035852, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"flash":{"error":["Email trung"],"info":["Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống","Email này đã được đăng ký với 1 tài khoản khác đã có trong hệ thống"]},"isLogging":true,"passport":{"user":{"id":20,"email":"open_hjrryuc_user@tfbnw.net","name":"Open Graph Test User","idThirdPartyAcc":"108130178380491","provider":"facebook","username":"108130178380491facebook"}}}');
+('05Z6vizCo2JVcJ7EXpXhzyXC-NZfhSg9', 1639568267, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{}}'),
+('YjmL2Wj6dvu4dZzvRax6SYC2J43YWCmG', 1639498594, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{}}');
 
 -- --------------------------------------------------------
 
@@ -322,7 +349,7 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
@@ -337,12 +364,12 @@ MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `rate_history`
 --
 ALTER TABLE `rate_history`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- Constraints for dumped tables
 --
