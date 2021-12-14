@@ -2,7 +2,7 @@ import multer from 'multer';
 import fs from 'fs';
 
 function addDir(newDir){
-	fs.mkdirSync(newDir, async function (err) {
+	fs.mkdirSync(newDir, function (err) {
 		if(err){
 			console.error(err);
 		}
@@ -26,10 +26,10 @@ function deleteDir(path){
 
 export default{
 	async uploadImg(path, fieldArray, req, res){
-		// return new Promise( function (resolve,reject) {
+		return new Promise( function (resolve,reject) {
 			addDir(path);
 			const storage = multer.diskStorage({
-			destination: function(req, file, cb) {
+			destination: async function(req, file, cb) {
 				if (file.fieldname === "imgThumbnail") {
 					addDir(path + '/thumb');
 				  	cb(null, path + '/thumb');
@@ -45,17 +45,20 @@ export default{
 			const upload = multer({ storage: storage });
 
 			upload.fields(fieldArray) (req, res, function(err) {
-				// console.log(req.body);
+				console.log(req.body);
 				if(err){
+					// console.log('line 50');
 					console.error(err);
-					return false;
+					reject(false);
 				}
 				else{
-					return true;
+					// console.log('line 55');
+					resolve(true);
 
 				}
 			});
-		// });
+			// console.log('line 60');
+		});
 	},
 
 	getAllFileName(path, id_product){
