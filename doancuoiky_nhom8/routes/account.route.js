@@ -126,6 +126,7 @@ router.post('/login', async function (req, res) {
 		})
 	}
 	delete user.pwd;
+	user.dob = moment(user.dob, 'DD/MM/YYYY').format('DD-MM-YYYY');
 	console.log(user);
 	req.user = user;
 	req.session.passport = {user: user};

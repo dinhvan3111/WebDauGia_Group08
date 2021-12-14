@@ -3,9 +3,131 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Thông tin người dùng</title>
+    {{#section 'css'}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+        <style>
+            body{
+                margin-top: 20px;
+                background-color: #fdfcfc;
+            }
+            .card{
+                position:relative;
+                display: flex;
+                flex-direction: column;
+
+            }
+            .content,.card-body{
+                background-color: whitesmoke;
+                text-align: center;
+
+                border-radius: 50px;
+            }
+            .card-body{
+                padding: 15px;
+            }
+            .container{
+                position: relative;
+            }
+            .info{
+                box-shadow: 5px 5px 5px #ccc;
+                padding: 0;
+
+                border-radius: 50px;
+
+            }
+            .info>.card{
+                margin-bottom: 0!important;
+            }
+            .usr-info{
+                display: flex;
+
+                border-radius: 50px;
+            }
+            .rating{
+                color: #fcac00;
+            }
+            .edit-btn {
+                background: #ccc;
+                padding: 10px 40px;
+                text-align: center;
+                color: black;
+                margin: 0 auto;
+                font-size: 16px;
+                font-weight: bolder;
+                border: none;
+                border-radius: 44px;
+                cursor: pointer;
+            }
+            .edit-btn:hover{
+                background-color: #938d8d;
+                color: #fff;
+            }
+        </style>
+    {{/section}}
 </head>
 <body>
-	<h1>Hi, {{lcAuthUser.user.name}}</h1>
+<!--	<h1>Hi, {{lcAuthUser.user.addr}}</h1>-->
+    <div class="container">
+        <div class="row col-xl justify-content-center main">
+            <div class="info col-md-8 mt-1">
+                <div class="usr-info card text-center sidebar">
+                    <div class="card-body">
+                        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">
+                        <h3>{{lcAuthUser.user.username}}</h3>
+                        <div class="rating">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="info col-md-8 mt-2">
+                <div class="card mb-3 content">
+                    <h2 class="m-3 pt-3">Thông tin người dùng</h2>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Họ và tên</h6>
+
+                            </div>
+                                <h6 class="col-md-9">{{lcAuthUser.user.name}}</h6>
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Email</h6>
+
+                            </div>
+                            <h6 class="col-md-9">{{lcAuthUser.user.email}}</h6>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Ngày sinh</h6>
+
+                            </div>
+                            <h6 class="col-md-9">{{lcAuthUser.user.dob}}</h6>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Địa chỉ</h6>
+
+                            </div>
+                            <h6 class="col-md-9">{{lcAuthUser.user.addr}}</h6>
+                        </div>
+                        <div>
+                            <button type="submit" class="edit-btn">Chỉnh sửa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
