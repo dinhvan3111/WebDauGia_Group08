@@ -1,0 +1,170 @@
+<div class="col-xl-12">
+
+    <!-- Products section -->
+                <div class="card-body">
+                    {{#if this.param}}
+                        <h1>Kết quả tìm kiếm cho: '{{param}}'</h1>
+                    {{/if}}
+                    <div class="dropdown text-right">
+                        <button class="btn border border-secondary dropdown-toggle" type="button"
+                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            Sắp xếp theo
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
+                             aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
+                            <a class="dropdown-item" href="#">Giá tăng dần</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        {{#if this.search_result.length}}
+                            {{#each this.search_result}}
+                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img class="product-img-4-sidebar" src="../img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
+                                            <h5 class="card-title">{{name}}</h5>
+                                            <h6 class="card-title">Giá hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
+                                            {{#if buy_now_price}}
+                                                <h6 class="card-title">Giá mua ngay: <span class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
+                                            {{/if}}
+                                            <h6 class="card-title">Đăng vào lúc: <span
+                                                    class="text-info">{{time_start}}</span></h6>
+                                            {{#if price_color}}
+                                                <h6 class="card-title">Đóng vào lúc: <span
+                                                        class="text-info">{{time_end}}</span></h6>
+                                            {{else}}
+                                                <h6 class="card-title">Đóng vào lúc: <span
+                                                        class="text-danger">{{time_end}}</span></h6>
+                                            {{/if}}
+                                            <h6 class="card-title">Người giữ giá hiện tại: <span
+                                                    class="text-info"></span></h6>
+                                            {{#if bidHistory.length}}
+                                                <h6 class="card-title">Số lượt ra giá: <span
+                                                        class="text-info">{{bidHistory.length}}</span></h6>
+                                            {{else}}
+                                                <h6 class="card-title">Số lượt ra giá: <span
+                                                        class="text-muted">Chưa có lượt ra giá nào</span></h6>
+                                            {{/if}}
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                                <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                Đấu giá ngay
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
+                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                Quan tâm
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/each}}
+                        {{else}}
+                            <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
+                            </div>
+                        {{/if}}
+                    </div>
+<!--                    <div class="row">-->
+<!--                        <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">-->
+<!--                            <div class="card">-->
+<!--                                <div class="card-body">-->
+<!--                                    <img class="product-img-4-sidebar" src="img/products/example.svg" alt="Sản phẩm">-->
+<!--                                    <h5 class="card-title">Sản phẩm 1</h5>-->
+<!--                                    <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>-->
+<!--                                    <h6 class="card-title">Đóng vào lúc: <span-->
+<!--                                            class="text-info">12/03/2021 12:01 PM EST</span></h6>-->
+<!--                                </div>-->
+<!--                                <div class="card-footer text-muted">-->
+<!--                                    <a class="btn btn-sm btn-outline-success" href="#" role="button">-->
+<!--                                        <i class="fa fa-gavel" aria-hidden="true"></i>-->
+<!--                                        Đấu giá ngay-->
+<!--                                    </a>-->
+<!--                                    <a class="btn btn-sm btn-outline-danger" href="#" role="button">-->
+<!--                                        <i class="fa fa-heart" aria-hidden="true"></i>-->
+<!--                                        Quan tâm-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">-->
+<!--                            <div class="card">-->
+<!--                                <div class="card-body">-->
+<!--                                    <img class="product-img-4-sidebar" src="img/products/example.svg" alt="Sản phẩm">-->
+<!--                                    <h5 class="card-title">Sản phẩm 1</h5>-->
+<!--                                    <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>-->
+<!--                                    <h6 class="card-title">Đóng vào lúc: <span-->
+<!--                                            class="text-info">12/03/2021 12:01 PM EST</span></h6>-->
+<!--                                </div>-->
+<!--                                <div class="card-footer text-muted">-->
+<!--                                    <a class="btn btn-sm btn-outline-success" href="#" role="button">-->
+<!--                                        <i class="fa fa-gavel" aria-hidden="true"></i>-->
+<!--                                        Đấu giá ngay-->
+<!--                                    </a>-->
+<!--                                    <a class="btn btn-sm btn-outline-danger" href="#" role="button">-->
+<!--                                        <i class="fa fa-heart" aria-hidden="true"></i>-->
+<!--                                        Quan tâm-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">-->
+<!--                            <div class="card">-->
+<!--                                <div class="card-body">-->
+<!--                                    <img class="product-img-4-sidebar" src="img/products/example.svg" alt="Sản phẩm">-->
+<!--                                    <h5 class="card-title">Sản phẩm 1</h5>-->
+<!--                                    <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>-->
+<!--                                    <h6 class="card-title">Đóng vào lúc: <span-->
+<!--                                            class="text-info">12/03/2021 12:01 PM EST</span></h6>-->
+<!--                                </div>-->
+<!--                                <div class="card-footer text-muted">-->
+<!--                                    <a class="btn btn-sm btn-outline-success" href="#" role="button">-->
+<!--                                        <i class="fa fa-gavel" aria-hidden="true"></i>-->
+<!--                                        Đấu giá ngay-->
+<!--                                    </a>-->
+<!--                                    <a class="btn btn-sm btn-outline-danger" href="#" role="button">-->
+<!--                                        <i class="fa fa-heart" aria-hidden="true"></i>-->
+<!--                                        Quan tâm-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">-->
+<!--                            <div class="card">-->
+<!--                                <div class="card-body">-->
+<!--                                    <img class="product-img-4-sidebar" src="img/products/example.svg" alt="Sản phẩm">-->
+<!--                                    <h5 class="card-title">Sản phẩm 1</h5>-->
+<!--                                    <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>-->
+<!--                                    <h6 class="card-title">Đóng vào lúc: <span-->
+<!--                                            class="text-info">12/03/2021 12:01 PM EST</span></h6>-->
+<!--                                </div>-->
+<!--                                <div class="card-footer text-muted">-->
+<!--                                    <a class="btn btn-sm btn-outline-success" href="#" role="button">-->
+<!--                                        <i class="fa fa-gavel" aria-hidden="true"></i>-->
+<!--                                        Đấu giá ngay-->
+<!--                                    </a>-->
+<!--                                    <a class="btn btn-sm btn-outline-danger" href="#" role="button">-->
+<!--                                        <i class="fa fa-heart" aria-hidden="true"></i>-->
+<!--                                        Quan tâm-->
+<!--                                    </a>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <ul class="pagination  mt-3 justify-content-end">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </div>
+    <!-- End Products section -->
+
+</div>

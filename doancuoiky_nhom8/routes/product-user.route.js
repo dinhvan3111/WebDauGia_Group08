@@ -11,6 +11,48 @@ router.get('/', async function (req, res){
     res.render('vwProduct/products');
 });
 
+router.get('/search_result', async function (req, res){
+    res.render('vwProduct/product_search_result', {
+        layout: 'non_sidebar.hbs'
+    });
+});
+
+router.post('/search_result', async function (req, res){
+    const cateID = req.body.search_cateID;
+    const param = req.body.search_param;
+    const search_result = await productModel.searchProduct(cateID,param);
+    moment.locale('vi');
+    var end_date = [];
+    for (let i =0 ; i < search_result.length; i++){
+        end_date.push(0);
+    }
+    for(let i =0 ; i < search_result.length; i++){
+        if(search_result[i].buy_now_price == 0){
+            delete search_result[i].buy_now_price;
+        }
+        end_date[i] = moment(search_result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+        if(end_date[i].diff(moment(), 'days') < 3){
+            search_result[i].price_color = false;
+            search_result[i].time_end = end_date[i].fromNow();
+        }
+        else{
+            search_result[i].price_color = true;
+            search_result[i].time_end = moment(search_result[i].time_end,
+                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        }
+        search_result[i].time_start = moment(search_result[i].time_start,
+            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        search_result[i].img = fileModel.getAllFileName('./public/img/products/' + search_result[i].id, search_result[i].id);
+        search_result[i].bidHistory = await productModel.getBidHistory(search_result[i].id);
+    }
+    console.log(search_result);
+    res.render('vwProduct/product_search_result', {
+        layout: 'non_sidebar.hbs',
+        param,
+        search_result
+    });
+});
+
 router.get('/:id', async function (req, res, next){
     const id_product = req.params.id;
     const product_info = await productModel.findID(id_product);

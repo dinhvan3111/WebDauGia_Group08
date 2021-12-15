@@ -44,19 +44,19 @@
                             <i class="fa fa-gavel"></i> Mua ngay</button>
                         {{/if}}
                         
-                        <button class="btn bg-success btn-long text-white">
+                        <button class="btn bg-success btn-long text-white ml-2">
                         <i class="fa fa-money"></i> Đấu giá</button>
 
                     {{/if}}
                     {{/if}}
                     {{#if inWatchList}}
-                    <button class="btn btn-outline-danger" disabled>
+                    <button class="btn btn-outline-danger ml-2" disabled>
                         <i class="fa fa-heart"></i> Đã yêu thích
                     </button>
                     {{else}}
                     <form action="add-to-watch-list" method="post">
                     <input type="text" name="id" value="{{product.id}}" hidden/>
-                    <button class="btn btn-outline-danger">
+                    <button class="btn btn-outline-danger ml-2">
                         <i class="fa fa-heart"></i> Yêu thích
                     </button>
                     </form>

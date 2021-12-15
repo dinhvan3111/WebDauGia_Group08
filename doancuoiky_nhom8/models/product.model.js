@@ -92,4 +92,20 @@ export default {
 		// console.log(product);
 		return await this.addProduct(product);
 	},
+	async searchProduct(cateID, param){
+		if(cateID == '' || cateID == '0'){
+			const search_result = await db.select()
+				.from('products')
+				.whereRaw('MATCH(name,description) AGAINST(?)', param)
+				.limit(12);
+			return search_result;
+		}
+		else{
+			const search_result = await db.select()
+				.from('products')
+				.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+				.limit(12);
+			return search_result;
+		}
+	}
 }
