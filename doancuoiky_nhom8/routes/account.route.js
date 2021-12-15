@@ -98,6 +98,11 @@ router.post('/register', checkPermission.isLogon, async function(req, res){
 });
 
 router.get('/login', checkPermission.isLogon, function(req, res){
+	const from = req.query.from;
+	if(typeof(from) != 'undefined'){
+		req.session.retUrl = '/' + from.substr(1, from.length - 2);
+		console.log(req.session.retUrl);
+	}
 	if(typeof(req.session.forgotPwd) !== 'undefined' && 
 		req.session.forgotPwd === true){
 		delete req.session.forgotPwd;
@@ -150,10 +155,34 @@ router.post('/login', async function (req, res) {
 	res.redirect(url);
 });
 router.get('/profile', checkPermission.notLogin, async function(req, res){
-	console.log(req.user);
 	res.render('vwAccount/profile',{
-		layout: 'non_sidebar.hbs'
+		layout: 'non_sidebar.hbs',
+		user: req.user,
+		manage: true
 	});
+});
+router.get('/profile/:id', async function(req, res, next){
+	const id = req.params.id;
+	const user = await accountModel.findID(id);
+	if(user !== null){
+		if(typeof(req.user) !== 'undefined'){
+			if(user.id === req.user.id){
+				return res.redirect('/profile');
+			}
+		}
+		const user_info = {
+			username: user.username,
+			name: user.name,
+			email: user.email,
+			dob: moment(user.dob, 'YYYY/MM/DD').format('DD-MM-YYYY'),
+			addr: user.addr
+		}
+		return res.render('vwAccount/profile',{
+			layout: 'non_sidebar.hbs',
+			user: user_info
+		});
+	}
+	next();
 });
 
 router.get('/change-password', checkPermission.notLogin, async function(req, res){

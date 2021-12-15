@@ -25,28 +25,56 @@
                 
                 <div class="about">
                     <h2><span class="font-weight-bold">{{product.name}}</span></h2>
-                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-danger">{{format_number product.price}} VNĐ</span></h5>
+                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-success">{{format_number product.price}} VNĐ</span></h5>
                     {{#if product.buy_now_price}}
                     <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span></h5>
                     {{/if}}
                 </div>
                 <div class="buttons">
+                    <div class="form-row">
+                    {{#if lcAuthUser.user}}
+                    {{#if canEdit}}
+                    <button class="btn bg-warning btn-long">
+                        <i class="fa fa-pencil-square-o"></i> Thêm mô tả
+                    </button>
+                    {{else}}
                     {{#if product.not_sold}}
                         {{#if product.buy_now_price}}
-                        <button class="btn bg-warning btn-long">Mua ngay</button>
+                        <button class="btn bg-warning btn-long">
+                            <i class="fa fa-gavel"></i> Mua ngay</button>
                         {{/if}}
-                    <button class="btn bg-success btn-long text-white">Đấu giá</button>
+                        
+                        <button class="btn bg-success btn-long text-white">
+                        <i class="fa fa-money"></i> Đấu giá</button>
+
                     {{/if}}
+                    {{/if}}
+                    {{#if inWatchList}}
+                    <button class="btn btn-outline-danger" disabled>
+                        <i class="fa fa-heart"></i> Đã yêu thích
+                    </button>
+                    {{else}}
+                    <form action="add-to-watch-list" method="post">
+                    <input type="text" name="id" value="{{product.id}}" hidden/>
                     <button class="btn btn-outline-danger">
                         <i class="fa fa-heart"></i> Yêu thích
                     </button>
+                    </form>
+                    {{/if}}
+                    {{else}}
+                    
+                    <a href="/login?from='products/{{product.id}}'"><button class="btn btn-outline-danger">
+                        <i class="fa fa-sign-in"></i> Đăng nhập để đấu giá
+                    </button></a>
+                    
+                    {{/if}}</div>
                 </div>
                 <hr>
                 <div class="product-description">
                     <div class="d-flex flex-row align-items-center">
                         <h5 class="card-title">
                             <i class="fa fa-calendar-check-o"></i>
-                            Đăng vào lúc: <span class="text-info">{{product.time_start}}</span>
+                            Đăng vào lúc: <span class="text-success">{{product.time_start}}</span>
                         </h5>
                     </div>
                     <div class="d-flex flex-row align-items-center">

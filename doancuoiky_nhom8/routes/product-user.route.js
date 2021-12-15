@@ -3,6 +3,7 @@ import moment from 'moment';
 import productModel from '../models/product.model.js';
 import accountModel from '../models/account.model.js';
 import fileModel from '../models/upload.model.js';
+import watchListModel from '../models/watchlist.model.js';
 
 const router = express.Router();
 
@@ -50,12 +51,40 @@ router.get('/:id', async function (req, res, next){
         }
     }
     product_info.img = fileModel.getAllFileName('./public/img/products/' + id_product, id_product);
-    // console.log(bidHistory);
+    var inWatchList = false;
+    var canEdit = false;
+    if(typeof(req.user) !== 'undefined'){
+        inWatchList = await watchListModel.findObj({id_acc: req.user.id, id_product: id_product});
+        if(inWatchList !== null){
+            inWatchList = true;
+        }
+        if(req.user.id == seller.id){
+            canEdit = true;
+        }
+    }
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',
         id: id_product,
         product: product_info,
         seller: seller,
-        bidHistory: bidHistory});
+        bidHistory: bidHistory, 
+        inWatchList: inWatchList,
+        canEdit: canEdit});
+});
+
+router.post('/add-to-watch-list', async function(req, res){
+    const id = req.body.id;
+    const id_acc = req.user.id;
+    const product = await productModel.findID(id);
+    if(product !== null){
+        const isExisted = await watchListModel.findObj({id_acc: id_acc, id_product: id});
+        if(isExisted === null){
+            await watchListModel.add(id_acc, id);
+        }
+    }
+    else{
+        return res.redirect(req.headers.referer);
+    }
+    return res.redirect('/products/' + id);
 });
 export default router;
