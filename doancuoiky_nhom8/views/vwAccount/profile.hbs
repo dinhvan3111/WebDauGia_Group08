@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Thông tin người dùng</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin người dùng</title>
     {{#section 'css'}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
         <style>
@@ -62,74 +62,77 @@
             .edit-btn:hover{
                 background-color: #938d8d;
                 color: #fff;
+                text-decoration: none;
             }
         </style>
     {{/section}}
 </head>
 <body>
 <!--	<h1>Hi, {{user.addr}}</h1>-->
-    <div class="container">
-        <div class="row col-xl justify-content-center main">
-            <div class="info col-md-8 mt-1">
-                <div class="usr-info card text-center sidebar">
-                    <div class="card-body">
-                        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">
-                        <h3>{{user.username}}</h3>
-                        <div class="rating">
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="info col-md-8 mt-2">
-                <div class="card mb-3 content">
-                    <h2 class="m-3 pt-3">Thông tin người dùng</h2>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="text-secondary">Họ và tên</h6>
+<div class="container">
+    <div class="row col-xl justify-content-center main">
+        <div class="info col-md-8 mt-1">
+            <div class="usr-info card text-center sidebar">
+                <div class="card-body">
+                    <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140"">
 
-                            </div>
-                                <h6 class="col-md-9">{{user.name}}</h6>
-
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="text-secondary">Email</h6>
-
-                            </div>
-                            <h6 class="col-md-9">{{user.email}}</h6>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="text-secondary">Ngày sinh</h6>
-
-                            </div>
-                            <h6 class="col-md-9">{{user.dob}}</h6>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="text-secondary">Địa chỉ</h6>
-
-                            </div>
-                            <h6 class="col-md-9">{{user.addr}}</h6>
-                        </div>
-                        {{#if manage}}
-                        <div>
-                            <button type="submit" class="edit-btn">Chỉnh sửa</button>
-                        </div>
-                        {{/if}}
+                    <!--                    <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">-->
+                    <h3>{{user.username}}</h3>
+                    <div class="rating">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="info col-md-8 mt-2">
+            <div class="card mb-3 content">
+                <h2 class="m-3 pt-3">Thông tin người dùng</h2>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="text-secondary">Họ và tên</h6>
+
+                        </div>
+                        <h6 class="col-md-9">{{user.name}}</h6>
+
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="text-secondary">Email</h6>
+
+                        </div>
+                        <h6 class="col-md-9">{{user.email}}</h6>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="text-secondary">Ngày sinh</h6>
+
+                        </div>
+                        <h6 class="col-md-9">{{user.dob}}</h6>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h6 class="text-secondary">Địa chỉ</h6>
+
+                        </div>
+                        <h6 class="col-md-9">{{user.addr}}</h6>
+                    </div>
+                    {{#if manage}}
+                        <div>
+                            <a href="/edit_profile" type="submit" class="edit-btn">Chỉnh sửa</a>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 </body>
 </html>

@@ -110,7 +110,18 @@ export default{
 	async updatePwd(hashedPwd, id_acc){
 		return await db('accounts').update({pwd: hashedPwd}).where({id: id_acc})
 	},
-
+	async updateName(name, id_acc){
+		return await db('accounts').update({name: name}).where({id: id_acc})
+	},
+	async updateAddr(addr, id_acc){
+		return await db('accounts').update({addr: addr}).where({id: id_acc})
+	},
+	async updateDob(dob, id_acc){
+		return await db('accounts').update({dob: dob}).where({id: id_acc})
+	},
+	async updateEmail(email, id_acc){
+		return await db('accounts').update({email: email}).where({id: id_acc})
+	},
 	// Rate 
 	async countRate(id_acc){
 		const upVoteCounter = await db('rate_history')

@@ -155,9 +155,11 @@ router.post('/login', async function (req, res) {
 	res.redirect(url);
 });
 router.get('/profile', checkPermission.notLogin, async function(req, res){
+	const user = await accountModel.findID(req.user.id);
+	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
-		user: req.user,
+		user: user,
 		manage: true
 	});
 });
@@ -183,6 +185,65 @@ router.get('/profile/:id', async function(req, res, next){
 		});
 	}
 	next();
+});
+router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
+
+	res.render('vwAccount/edit_profile',{
+		layout: 'non_sidebar.hbs',
+		id_acc: req.session.passport.user.id
+	});
+});
+router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
+	console.log(req.body)
+	const name = req.body.name;
+	const username = req.body.username;
+	const email = req.body.email;
+	const addr = req.body.addr;
+	const dob = moment(req.body.dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+	const id_acc = req.body.id_acc;
+	const user = await accountModel.findID(id_acc);
+
+	if(name !== req.session.passport.user.name){
+
+		await accountModel.updateName(name, id_acc);
+		req.session.passport.user.name = name;
+	}
+	if(addr !== req.session.passport.user.addr){
+		await accountModel.updateAddr(addr, id_acc);
+		req.session.passport.user.addr = addr;
+	}
+	if(dob !== req.session.passport.user.dob){
+		await accountModel.updateDob(dob, id_acc);
+		req.session.passport.user.dob = dob;
+	}
+	if(email !== req.session.passport.user.email){
+		const userByEmail = await accountModel.findEmail(email);
+		// email incorrect or third party account's email
+		if(userByEmail !== null){
+			return res.render('vwAccount/edit_profile', {
+				layout: 'non_sidebar.hbs',
+				err_message: "Thất bại!Email đã được sử dụng trong hệ thống!",
+				user
+			});
+		}
+		else {
+			await accountModel.updateEmail(email, id_acc);
+			const token = cryptoRandomString({length: 100});
+			const host = req.headers.host ;
+			await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, id_acc, token, 24);
+			req.session.passport.user.email = email;
+		}
+	}
+	const reuser = await accountModel.findID(id_acc);
+	req.user = reuser;
+	req.session.passport = {user: reuser};
+	// res.render('vwAccount/profile',{
+	// 	layout: 'non_sidebar.hbs'
+	// });
+	const url = "/profile/" + id_acc;
+	return res.redirect(url);
+
+
 });
 
 router.get('/change-password', checkPermission.notLogin, async function(req, res){

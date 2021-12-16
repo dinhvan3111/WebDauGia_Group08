@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chỉnh sửa thông tin</title>
+    {{#section 'js'}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+        <script>
+            $('#txtDOB').datetimepicker({
+                timepicker:false,
+                format:'d/m/Y',
+                mask:false
+            });
+        </script>
+    {{/section}}
+    {{#section 'css'}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+        <style>
+            body{
+                margin-top: 20px;
+                background-color: #fdfcfc;
+            }
+            .card{
+                position:relative;
+                display: flex;
+                flex-direction: column;
+
+            }
+            .content,.card-body{
+                background-color: whitesmoke;
+                text-align: center;
+
+                border-radius: 50px;
+            }
+            .card-body{
+                padding: 15px;
+            }
+            .container{
+                position: relative;
+            }
+            .info{
+                box-shadow: 5px 5px 5px #ccc;
+                padding: 0;
+
+                border-radius: 50px;
+
+            }
+            .info>.card{
+                margin-bottom: 0!important;
+            }
+            .usr-info{
+                display: flex;
+
+                border-radius: 50px;
+            }
+            .rating{
+                color: #fcac00;
+            }
+            .edit-btn {
+                background: #ccc;
+                padding: 10px 40px;
+                text-align: center;
+                color: black;
+                margin: 0 auto;
+                font-size: 16px;
+                font-weight: bolder;
+                border: none;
+                border-radius: 44px;
+                cursor: pointer;
+            }
+            .edit-btn:hover{
+                background-color: #938d8d;
+                color: #fff;
+            }
+            .row .edit-form{
+                border-radius: 22px;
+                border: 1px solid #ccc;
+            }
+            .err_email p {
+                color: red;
+                font-style: italic;
+                margin: 5px 0 0 0;
+            }
+        </style>
+    {{/section}}
+</head>
+<body>
+<!--	<h1>Hi, {{lcAuthUser.user.addr}}</h1>-->
+<!--<form method="post" id = "frmEditProfile">-->
+    <div class="container">
+
+        <div class="row col-xl justify-content-center main">
+            <div class="info col-md-8 mt-1">
+                <div class="usr-info card text-center sidebar">
+                    <div class="card-body">
+                        <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140"">
+<!--                        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">-->
+                        <h3>{{lcAuthUser.user.username}}</h3>
+                        <div class="rating">
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                            <i class="fa fa-star" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info col-md-8 mt-2">
+
+                <div class="card mb-3 content">
+
+                    <h2 class="m-3 pt-3">Chỉnh sửa thông tin</h2>
+                    <form method="post" action="/edit_profile" id = "frmEditProfile">
+                    <input type="hidden" id="id_acc" name="id_acc" value="{{id_acc}}" required>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Họ và tên</h6>
+
+                            </div>
+                            <input class="edit-form col-md-6 mr-1" type="text" name="name" value="{{lcAuthUser.user.name}}">
+
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Email</h6>
+
+                            </div>
+                            <input class="edit-form col-md-6 mr-1" type="email" name="email" value="{{lcAuthUser.user.email}}">
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Ngày sinh</h6>
+
+                            </div>
+                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="dob" value="{{lcAuthUser.user.dob}}">
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="text-secondary">Địa chỉ</h6>
+
+                            </div>
+                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="addr" value="{{lcAuthUser.user.addr}}">
+                        </div>
+                        {{#if err_message}}
+                            <div class="err_email">
+                                <p><i class="fa fa-envelope" aria-hidden="true"></i> {{err_message}}</p>
+                            </div>
+                        {{/if}}
+                        <div>
+                            <button type="submit" class="edit-btn mt-2">Lưu</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+<!--    </form>-->
+</body>
+</html>
