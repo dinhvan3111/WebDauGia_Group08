@@ -1,0 +1,75 @@
+{{#section 'css'}}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>#tiny_mce {
+      display: block !important;
+      margin-left: auto;
+      margin-right: auto;
+      width: 600px;
+    }</style>
+{{/section}}
+
+
+{{#section 'js'}}
+    
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/js/fileinput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.5/js/locales/vi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.5/themes/fa/theme.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/{{TINY_CLOUD_API}}/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+
+    tinymce.init({
+      selector: '#description',
+      height: "500",
+      plugins: 'image paste link autolink lists table media',
+      menubar: false,
+      toolbar: [
+        'undo redo | bold italic underline strikethrough | numlist bullist | alignleft aligncenter alignright | forecolor backcolor | table link image media'
+      ]
+    });
+    </script>
+
+{{/section}}
+{{#if msg.length}}
+    <div class="container alert alert-warning alert-dismissible fade show" role="alert" style="width: 1108px;">
+        {{msg}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{{/if}}
+<form id="formAppendDes" action="/products/appendDes" class="container justify-content-center" method="post">
+    <div>
+        <div class="card">
+            <div class="card-header bg-warning font-bold text-center">
+                <h2>Thêm mô tả</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label class="font-bold" for="textProID">ID sản phẩm</label>
+                        <input type="text" class="form-control" id="textProID" name="id" placeholder="Nhập tên sản phẩm" value="{{this.id}}"
+                               readonly required>
+                    </div>
+                    <div class="form-group col-md-9">
+                        <label class="font-bold" for="textProName">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="textProName" name="name" placeholder="Nhập tên sản phẩm" value="{{this.name}}"
+                               readonly required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="font-bold" for="textDescription">Mô tả mới</label>
+                    <textarea id="description" name="description" class="tiny_mce">{{product.description}}</textarea>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-dark text-white pl-5 pr-5 pt-2 pb-2 font-bold">
+                        Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

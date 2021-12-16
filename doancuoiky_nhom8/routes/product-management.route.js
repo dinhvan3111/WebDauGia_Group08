@@ -50,4 +50,21 @@ router.post('/add', async function(req, res){
 	}
 });
 
+router.get('/appendDes', checkPermission.isNotSeller, async function(req, res){
+	const id = req.query.id || 0;
+	const product = await productModel.findID(id);
+	res.render('vwProduct/append_description',{
+		id,
+		name: product.name,
+		layout: 'non_sidebar.hbs'
+	});
+});
+
+router.post('/appendDes', checkPermission.isNotSeller, async function(req, res){
+	const id = req.body.id;
+	const appendDes = req.body.description;
+	await productModel.appendDescription(id,appendDes);
+	res.redirect('/products/' + id);
+});
+
 export default router;

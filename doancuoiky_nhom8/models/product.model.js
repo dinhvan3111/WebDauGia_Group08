@@ -186,5 +186,24 @@ export default {
 		await db('products').update({price: newInPrice})
 							.where({id: id_product});
 	},
+	async updateProDescription(id,newDescription){
+		await db('products').update({description: newDescription})
+			.where({id: id});
+	},
+	async appendDescription(id,appendDes){
+		const product = await this.findID(id);
+		const proDes = product.description;
+		console.log(product.description);
+		const today = new Date();
+		const date = today.toJSON().slice(0, 10);
+		const nDate = date.slice(8, 10) + '/'
+			+ date.slice(5, 7) + '/'
+			+ date.slice(0, 4);
+		console.log(nDate);
+		appendDes = '<br>' +'<i class="fa fa-pencil" aria-hidden="true"></i>  '+ nDate + '<br>' + appendDes;
+		const newDes = proDes + appendDes;
+		console.log(newDes);
+		await this.updateProDescription(id,newDes);
+	}
 	
 }
