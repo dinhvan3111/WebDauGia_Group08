@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2021 at 01:02 PM
+-- Generation Time: Dec 16, 2021 at 05:29 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `dob` date DEFAULT NULL,
   `addr` varchar(100) DEFAULT NULL,
   `is_locked` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accounts`
@@ -49,8 +49,10 @@ INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email
 (0000000019, 'a', NULL, 3, 'aaaaa', 'a@gmail.com', NULL, NULL, 0),
 (0000000020, '108130178380491facebook', NULL, 3, 'Open Graph Test User', 'open_hjrryuc_user@tfbnw.net', NULL, NULL, 0),
 (0000000043, 'ab', '$2b$10$vWfmmjKKsE.RBaSe/Uy0HeuRbJTlxZ.pbwIZWDp.NkXLBKr.YVmBG', 2, 'Hai Tuan Vu', 'vutuanhaigk@gmail.com', '2021-11-30', 'ab', 0),
-(0000000044, 'abc', '$2b$10$/ED0YtTwhgq1Km//uke9JOK50lo/HkKnJdJQOQB7.VJhCQSaWKi.2', 3, 'Hai Tuan Vu', 'vutuanhaigk123@gmail.com', '2021-11-30', 'abc', 0),
-(0000000046, 'aba', '$2b$10$d6ZkiQ.UsMcCo9UieJVbouGzi0pBT.qxGL7st.GD3Xtl07Je2J/ki', 3, 'Hai Tuan Vu', 'vexal21807@mediafate.com', '2021-11-30', 'ab', 0);
+(0000000044, 'abc', '$2b$10$Ony22vGMo9eDuzbxFuCVluilWyxWgWY9zJM8uC7QDuUaBjPwzT.Rq', 3, 'Hai Tuan Vu', 'vutuanhaigk123@gmail.com', '2021-11-30', 'abc', 0),
+(0000000046, 'aba', '$2b$10$d6ZkiQ.UsMcCo9UieJVbouGzi0pBT.qxGL7st.GD3Xtl07Je2J/ki', 3, 'Hai Tuan Vu', 'vexal21807@mediafate.com', '2021-11-30', 'ab', 0),
+(0000000047, '105751357318145639642google', NULL, 3, 'Do Van', 'dinhvan3111@gmail.com', NULL, NULL, 0),
+(0000000048, 'dinhvan', '$2b$10$xWHlip460bWo849801nc4.8r0URpaCaCtL6utP0fFaFnyvijxyE3i', 3, 'Do Dinh Van', 'dodinhvan3111@gmail.com', '2001-11-03', 'Tây Sơn - Bình Định', 0);
 
 -- --------------------------------------------------------
 
@@ -60,12 +62,42 @@ INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email
 
 CREATE TABLE IF NOT EXISTS `bid_history` (
 `id` int(10) unsigned zerofill NOT NULL,
-  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `id_acc` int(10) unsigned zerofill NOT NULL,
   `id_product` int(10) unsigned zerofill NOT NULL,
-  `in_bid_price` decimal(10,0) unsigned NOT NULL,
-  `max_bid_price` decimal(10,0) unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `in_bid_price` decimal(10,0) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bid_history`
+--
+
+INSERT INTO `bid_history` (`id`, `time`, `id_acc`, `id_product`, `in_bid_price`) VALUES
+(0000000014, '2021-12-16 11:27:11', 0000000044, 0000000002, '1000000'),
+(0000000015, '2021-12-16 11:27:52', 0000000046, 0000000002, '1900000'),
+(0000000016, '2021-12-16 11:27:52', 0000000044, 0000000002, '2000000'),
+(0000000017, '2021-12-16 11:28:14', 0000000046, 0000000002, '2100000');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bid_price`
+--
+
+CREATE TABLE IF NOT EXISTS `bid_price` (
+`id_acc` int(10) unsigned zerofill NOT NULL,
+  `id_product` int(10) unsigned zerofill NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `max_bid_price` decimal(10,0) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `bid_price`
+--
+
+INSERT INTO `bid_price` (`id_acc`, `id_product`, `time`, `max_bid_price`) VALUES
+(0000000044, 0000000002, '2021-12-16 04:27:11', '2000000'),
+(0000000046, 0000000002, '2021-12-16 04:28:14', '2500000');
 
 -- --------------------------------------------------------
 
@@ -144,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `price` decimal(10,0) unsigned NOT NULL,
   `step_price` decimal(10,0) unsigned NOT NULL,
   `buy_now_price` decimal(10,0) unsigned DEFAULT NULL,
-  `time_start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `time_start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `time_end` datetime NOT NULL,
   `description` mediumtext NOT NULL,
   `auto_renew` int(11) NOT NULL DEFAULT '0',
@@ -153,14 +185,15 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id_seller` int(10) unsigned zerofill NOT NULL,
   `not_sold` tinyint(1) NOT NULL DEFAULT '1',
   `allow_non_rating_bidder` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `step_price`, `buy_now_price`, `time_start`, `time_end`, `description`, `auto_renew`, `id_category`, `id_win_bidder`, `id_seller`, `not_sold`, `allow_non_rating_bidder`) VALUES
-(0000000002, 'BPhone', '1000000', '100000', '10000000', '2021-12-14 19:00:00', '2021-12-14 22:00:00', '<p><em><span style="text-decoration: underline;">Đ&acirc;y l&agrave; d&ograve;ng m&ocirc; tả BPhone</span></em></p>', 0, 0000000002, NULL, 0000000043, 1, 0);
+(0000000002, 'BPhone', '2500000', '100000', '10000000', '2021-12-16 11:13:41', '2021-12-16 22:00:00', '<p><em><span style="text-decoration: underline;">Đ&acirc;y l&agrave; d&ograve;ng m&ocirc; tả BPhone</span></em></p>', 0, 0000000002, 0000000046, 0000000043, 1, 1),
+(0000000003, 'SAMSUNG Galaxy S20 cũ', '10000000', '200000', '19000000', '2021-12-16 11:15:32', '2021-12-16 16:00:00', '<p>SAMSUNG Galaxy S20 cũ 97% FULL BOX, xước nhẹ camera</p>', 0, 0000000002, NULL, 0000000043, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -225,8 +258,11 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('05Z6vizCo2JVcJ7EXpXhzyXC-NZfhSg9', 1639568267, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{}}'),
-('YjmL2Wj6dvu4dZzvRax6SYC2J43YWCmG', 1639498594, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{}}');
+('Ttre_6QiC2nNAe8UYnxu-DxX0WZKsyJM', 1639658673, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":44,"username":"abc","id_permission":3,"name":"Hai Tuan Vu","email":"vutuanhaigk123@gmail.com","dob":"30-11-2021","addr":"abc","is_locked":0}}}'),
+('fOI4Z7w-FXzoPj_3hY1KiFQGSps83n6b', 1639581933, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":48,"username":"dinhvan","id_permission":3,"name":"Do Dinh Van","email":"dodinhvan3111@gmail.com","dob":"03-11-2001","addr":"Tây Sơn - Bình Định","is_locked":0}}}'),
+('gYsbeHFM2Ae1YqDNvwVoHSK_86TKnRQH', 1639715299, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":44,"username":"abc","id_permission":3,"name":"Hai Tuan Vu","email":"vutuanhaigk123@gmail.com","dob":"30-11-2021","addr":"abc","is_locked":0}}}'),
+('tqQEH6Dy032_ZssR6cevAshdDjBXJz7i', 1639715340, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{},"retUrl":"/products/add"}'),
+('y_rnPr64lmeStimganZayRHv5TAlV0Mh', 1639650048, '{"cookie":{"originalMaxAge":null,"expires":null,"httpOnly":true,"path":"/"},"passport":{"user":{"id":47,"email":"dinhvan3111@gmail.com","name":"Do Van","id_in_third_party":"105751357318145639642","provider":"google"}}}');
 
 -- --------------------------------------------------------
 
@@ -246,7 +282,8 @@ CREATE TABLE IF NOT EXISTS `third_party_account` (
 
 INSERT INTO `third_party_account` (`id`, `id_in_third_party`, `provider`) VALUES
 (0000000015, '110452804810387', 'facebook'),
-(0000000020, '108130178380491', 'facebook');
+(0000000020, '108130178380491', 'facebook'),
+(0000000047, '105751357318145639642', 'google');
 
 -- --------------------------------------------------------
 
@@ -258,6 +295,13 @@ CREATE TABLE IF NOT EXISTS `watch_list` (
   `id_acc` int(10) unsigned zerofill NOT NULL,
   `id_product` int(10) unsigned zerofill NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `watch_list`
+--
+
+INSERT INTO `watch_list` (`id_acc`, `id_product`) VALUES
+(0000000047, 0000000002);
 
 --
 -- Indexes for dumped tables
@@ -274,6 +318,12 @@ ALTER TABLE `accounts`
 --
 ALTER TABLE `bid_history`
  ADD PRIMARY KEY (`id`), ADD KEY `FK_BidHis_Acc` (`id_acc`), ADD KEY `FK_BidHis_Product` (`id_product`);
+
+--
+-- Indexes for table `bid_price`
+--
+ALTER TABLE `bid_price`
+ ADD PRIMARY KEY (`id_acc`,`id_product`), ADD KEY `FK_BidPrice_Product` (`id_product`);
 
 --
 -- Indexes for table `categories`
@@ -303,7 +353,7 @@ ALTER TABLE `not_verified_email`
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
- ADD PRIMARY KEY (`id`), ADD KEY `FK_products_cate` (`id_category`), ADD KEY `FK_products_accBidder` (`id_win_bidder`), ADD KEY `FK_products_accSeller` (`id_seller`);
+ ADD PRIMARY KEY (`id`), ADD KEY `FK_products_cate` (`id_category`), ADD KEY `FK_products_accBidder` (`id_win_bidder`), ADD KEY `FK_products_accSeller` (`id_seller`), ADD FULLTEXT KEY `name` (`name`,`description`);
 
 --
 -- Indexes for table `rate_history`
@@ -349,12 +399,17 @@ ALTER TABLE `watch_list`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT for table `bid_history`
 --
 ALTER TABLE `bid_history`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT for table `bid_price`
+--
+ALTER TABLE `bid_price`
+MODIFY `id_acc` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `categories`
 --
@@ -364,7 +419,7 @@ MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `rate_history`
 --
@@ -380,6 +435,13 @@ MODIFY `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 ALTER TABLE `bid_history`
 ADD CONSTRAINT `FK_BidHis_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
 ADD CONSTRAINT `FK_BidHis_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
+
+--
+-- Constraints for table `bid_price`
+--
+ALTER TABLE `bid_price`
+ADD CONSTRAINT `FK_BidPrice_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
+ADD CONSTRAINT `FK_BidPrice_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
 -- Constraints for table `categories`

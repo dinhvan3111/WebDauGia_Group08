@@ -34,14 +34,28 @@ export default {
 									.orderBy('time_end', 'desc')
 									.limit(quantity).offset(0);
 	},
-	async getImg(id_product){
-
+	async findIgnoredBidders(info){
+		const res = await db('ignore_bidder').where(info);
+		if(res.length == 0){
+			return null;
+		}
+		return res;
 	},
-	async getThumbnail(id_product){
-
-	},
-	async getImgsExtra(id_product){
-
+	async searchProduct(cateID, param){
+		if(cateID == '' || cateID == '0'){
+			const search_result = await db.select()
+				.from('products')
+				.whereRaw('MATCH(name,description) AGAINST(?)', param)
+				.limit(12);
+			return search_result;
+		}
+		else{
+			const search_result = await db.select()
+				.from('products')
+				.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+				.limit(12);
+			return search_result;
+		}
 	},
 
 
@@ -92,20 +106,13 @@ export default {
 		// console.log(product);
 		return await this.addProduct(product);
 	},
-	async searchProduct(cateID, param){
-		if(cateID == '' || cateID == '0'){
-			const search_result = await db.select()
-				.from('products')
-				.whereRaw('MATCH(name,description) AGAINST(?)', param)
-				.limit(12);
-			return search_result;
-		}
-		else{
-			const search_result = await db.select()
-				.from('products')
-				.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
-				.limit(12);
-			return search_result;
-		}
-	}
+	async updatePriceHoldingBidder(id_product, id_acc){
+		await db('products').update({id_win_bidder: id_acc})
+							.where({id: id_product});
+	},
+	async updateInPrice(id_product, newInPrice){
+		await db('products').update({price: newInPrice})
+							.where({id: id_product});
+	},
+	
 }

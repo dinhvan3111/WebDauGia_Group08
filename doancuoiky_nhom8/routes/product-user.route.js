@@ -4,6 +4,8 @@ import productModel from '../models/product.model.js';
 import accountModel from '../models/account.model.js';
 import fileModel from '../models/upload.model.js';
 import watchListModel from '../models/watchlist.model.js';
+import biddingModel from '../models/bidding.model.js';
+import checkPermission from '../middlewares/permission.mdw.js';
 
 const router = express.Router();
 
@@ -95,6 +97,9 @@ router.get('/:id', async function (req, res, next){
     product_info.img = fileModel.getAllFileName('./public/img/products/' + id_product, id_product);
     var inWatchList = false;
     var canEdit = false;
+    var ignored = false;
+    var isHoldingPrice = false;
+    var max_bid_price = 0;
     if(typeof(req.user) !== 'undefined'){
         inWatchList = await watchListModel.findObj({id_acc: req.user.id, id_product: id_product});
         if(inWatchList !== null){
@@ -103,6 +108,16 @@ router.get('/:id', async function (req, res, next){
         if(req.user.id == seller.id){
             canEdit = true;
         }
+        let isIgnored = await productModel.findIgnoredBidders({id_product: id_product, id_acc: req.user.id});
+        if(isIgnored !== null){
+            ignored = true;
+        }
+        if(product_info.id_win_bidder == req.user.id){
+            isHoldingPrice = true;
+            let holdingPriceBidder = await biddingModel.findByProductID(id_product);
+            max_bid_price = holdingPriceBidder.max_bid_price;
+        }
+
     }
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',
@@ -111,10 +126,13 @@ router.get('/:id', async function (req, res, next){
         seller: seller,
         bidHistory: bidHistory, 
         inWatchList: inWatchList,
-        canEdit: canEdit});
+        canEdit: canEdit,
+        ignored: ignored,
+        isHoldingPrice: isHoldingPrice,
+        max_bid_price: max_bid_price});
 });
 
-router.post('/add-to-watch-list', async function(req, res){
+router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){
     const id = req.body.id;
     const id_acc = req.user.id;
     const product = await productModel.findID(id);
@@ -129,4 +147,61 @@ router.post('/add-to-watch-list', async function(req, res){
     }
     return res.redirect('/products/' + id);
 });
+
+router.post('/:id/bidding', checkPermission.notLogin, async function(req, res){
+    var max_bid_price = req.body.max_bid_price;
+    const id_product = req.body.id_product;
+    const id_acc = req.user.id;
+    const product = await productModel.findID(id_product);
+    const step_price = parseInt(product.step_price);
+    max_bid_price = max_bid_price.split(' ')[1].replace(/,/g, '');
+    max_bid_price = parseInt(max_bid_price);
+    const price_hoding_bidder = await biddingModel.findByProductID(id_product);
+    var newInPrice = 0;
+    if(price_hoding_bidder !== null){
+        if(price_hoding_bidder.max_bid_price < max_bid_price){
+            await biddingModel.addNewAuction(id_acc,
+                                id_product,
+                                parseInt(price_hoding_bidder.max_bid_price) + 
+                                parseInt(product.step_price));
+            newInPrice = max_bid_price;
+            await biddingModel.addNewPriceHoldingBidder(id_product, 
+                                id_acc, newInPrice);
+            await productModel.updatePriceHoldingBidder(id_product, id_acc);
+        }
+        else if(price_hoding_bidder.max_bid_price > max_bid_price){
+            
+            await biddingModel.addNewAuction(id_acc,
+                            id_product,
+                            max_bid_price);
+            newInPrice = parseInt(max_bid_price) + 
+                        parseInt(step_price);
+            await biddingModel.addNewAuction(price_hoding_bidder.id_acc,
+                                price_hoding_bidder.id_product,
+                                newInPrice);
+            
+        }
+        else{
+            await biddingModel.addNewAuction(id_acc,
+                                id_product,
+                                max_bid_price - product.step_price);
+            newInPrice = max_bid_price;
+            await biddingModel.addNewAuction(price_hoding_bidder.id_acc,
+                                    price_hoding_bidder.id_product,
+                                    newInPrice);
+        }
+    }
+    else{
+        await biddingModel.addNewPriceHoldingBidder(id_product,
+                            id_acc, max_bid_price);
+        await biddingModel.addNewAuction(id_acc,
+                                id_product,
+                                product.price);
+        await productModel.updatePriceHoldingBidder(id_product, id_acc);
+        newInPrice = parseInt(product.price);
+    }
+    await productModel.updateInPrice(id_product, newInPrice);
+    return res.redirect(req.headers.referer);
+});
+
 export default router;
