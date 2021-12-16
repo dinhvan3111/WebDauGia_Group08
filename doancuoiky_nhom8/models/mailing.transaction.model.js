@@ -35,7 +35,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Sản phẩm ${product_name} của bạn vừa có người ra giá`,
 				icon_fa: 'fa fa-gavel mt-3',
-				color_icon_fa: 'green',
+				color_icon: 'green',
 			    name: name,
 			    header: 'CÓ NGƯỜI RA GIÁ MỚI',
 			    description: 'sản phẩm của bạn vừa có người ra giá mới',
@@ -57,7 +57,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Bạn đã đấu giá thành công sản phẩm ${product_name}`,
 				icon_fa: 'fa fa-gavel mt-3',
-				color_icon_fa: 'green',
+				color_icon: 'green',
 			    name: name,
 			    header: 'RA GIÁ THÀNH CÔNG',
 			    description: 'chúc mừng bạn đã ra giá thành công',
@@ -78,7 +78,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Đã có người đặt giá cao hơn cho sản phẩm ${product_name}`,
 				icon_fa: 'fa fa-times-circle mt-3',
-				color_icon_fa: 'red',
+				color_icon: 'red',
 			    name: name,
 			    header: 'ĐẤU GIÁ THẤT BẠI',
 			    description: 'Chúng tôi rất tiếc, bạn đã đấu giá thất bại. Đã có người ra giá cho sản phẩm cao hơn bạn',
@@ -105,7 +105,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Bạn vừa bị từ chối ra giá cho sản phẩm ${product_name}`,
 				icon_fa: 'fa fa-gavel mt-3',
-				color_icon_fa: 'red',
+				color_icon: 'red',
 			    name: name,
 			    header: 'BẠN BỊ TỪ CHỐI RA GIÁ',
 			    description: 'Rất tiếc, bạn vừa bị người bán từ chối ra giá cho sản phẩm:',
@@ -130,7 +130,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Sản phẩm ${product_name} của bạn không có lượt ra giá nào`,
 				icon_fa: 'fa fa-user-times mt-3',
-				color_icon_fa: 'red',
+				color_icon: 'red',
 			    name: name,
 			    header: 'KHÔNG CÓ NGƯỜI MUA',
 			    description: 'Chúng tôi rất tiếc, sản phẩm của bạn đã hết thời gian đăng bán mà không có người nào ra giá cho sản phẩm của bạn',
@@ -158,7 +158,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Bạn đã bán thành công sản phẩm ${product_name}`,
 				icon_fa: 'fa fa-calendar-check-o mt-3',
-				color_icon_fa: 'green',
+				color_icon: 'green',
 			    name: name,
 			    header: 'ĐẤU GIÁ KẾT THÚC',
 			    description: 'Chúc mừng, bạn đã bán thành công sản phẩm:',
@@ -180,7 +180,7 @@ export default {
 			dynamic_template_data: {
 				subject: `Bạn đã chiến thắng đấu giá sản phẩm ${product_name}`,
 				icon_fa: 'fa fa-check-circle mt-3',
-				color_icon_fa: 'green',
+				color_icon: 'green',
 			    name: name,
 			    header: 'CHIẾN THẮNG ĐẤU GIÁ',
 			    description: 'Chúc mừng, bạn đã chiến thắng đấu giá sản phẩm:',

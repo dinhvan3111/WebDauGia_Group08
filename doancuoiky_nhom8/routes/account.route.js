@@ -187,11 +187,20 @@ router.get('/profile/:id', async function(req, res, next){
 	next();
 });
 
+// router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
+//
+// 	res.render('vwAccount/edit_profile',{
+// 		layout: 'non_sidebar.hbs',
+// 		id_acc: req.session.passport.user.id
+// 	});
+// });
 router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
-
+	const user = await accountModel.findID(req.session.passport.user.id);
+	user.dob = moment(user.dob).format('DD-MM-YYYY');
+	console.log(user.dob);
 	res.render('vwAccount/edit_profile',{
 		layout: 'non_sidebar.hbs',
-		id_acc: req.session.passport.user.id
+		user: user
 	});
 });
 router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
@@ -201,9 +210,10 @@ router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
 	const email = req.body.email;
 	const addr = req.body.addr;
 	const dob = moment(req.body.dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
 	const id_acc = req.body.id_acc;
 	const user = await accountModel.findID(id_acc);
-
+	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	if(name !== req.session.passport.user.name){
 
 		await accountModel.updateName(name, id_acc);
@@ -231,6 +241,8 @@ router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
 			await accountModel.updateEmail(email, id_acc);
 			const token = cryptoRandomString({length: 100});
 			const host = req.headers.host ;
+			//var exprD = await mailingModel.getNewExpiredDate();
+			//await accountModel.addToNotVerifiedEmail({id_acc: id_acc, token: token, expired_date: exprD});
 			await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, id_acc, token, 24);
 			req.session.passport.user.email = email;
 		}

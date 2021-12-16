@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Chỉnh sửa thông tin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa thông tin</title>
     {{#section 'js'}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
         <script>
@@ -88,40 +88,40 @@
 <body>
 <!--	<h1>Hi, {{lcAuthUser.user.addr}}</h1>-->
 <!--<form method="post" id = "frmEditProfile">-->
-    <div class="container">
+<div class="container">
 
-        <div class="row col-xl justify-content-center main">
-            <div class="info col-md-8 mt-1">
-                <div class="usr-info card text-center sidebar">
-                    <div class="card-body">
-                        <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140"">
-<!--                        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">-->
-                        <h3>{{lcAuthUser.user.username}}</h3>
-                        <div class="rating">
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                            <i class="fa fa-star" aria-hidden="true"></i>
-                        </div>
+    <div class="row col-xl justify-content-center main">
+        <div class="info col-md-8 mt-1">
+            <div class="usr-info card text-center sidebar">
+                <div class="card-body">
+                    <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140">
+                    <!--                        <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">-->
+                    <h3>{{lcAuthUser.user.username}}</h3>
+                    <div class="rating">
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <i class="fa fa-star" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="info col-md-8 mt-2">
+        <div class="info col-md-8 mt-2">
 
-                <div class="card mb-3 content">
+            <div class="card mb-3 content">
 
-                    <h2 class="m-3 pt-3">Chỉnh sửa thông tin</h2>
-                    <form method="post" action="/edit_profile" id = "frmEditProfile">
-                    <input type="hidden" id="id_acc" name="id_acc" value="{{id_acc}}" required>
+                <h2 class="m-3 pt-3">Chỉnh sửa thông tin</h2>
+                <form method="post" action="/edit_profile" id = "frmEditProfile">
+                    <input type="hidden" id="id_acc" name="id_acc" value="{{user.id}}" required>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
                                 <h6 class="text-secondary">Họ và tên</h6>
 
                             </div>
-                            <input class="edit-form col-md-6 mr-1" type="text" name="name" value="{{lcAuthUser.user.name}}">
+                            <input class="edit-form col-md-6 mr-1" type="text" name="name" value="{{user.name}}">
 
                         </div>
                         <hr>
@@ -130,7 +130,7 @@
                                 <h6 class="text-secondary">Email</h6>
 
                             </div>
-                            <input class="edit-form col-md-6 mr-1" type="email" name="email" value="{{lcAuthUser.user.email}}">
+                            <input class="edit-form col-md-6 mr-1" type="email" name="email" value="{{user.email}}">
                         </div>
                         <hr>
                         <div class="row">
@@ -138,7 +138,7 @@
                                 <h6 class="text-secondary">Ngày sinh</h6>
 
                             </div>
-                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="dob" value="{{lcAuthUser.user.dob}}">
+                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="dob" value="{{user.dob}}">
                         </div>
                         <hr>
                         <div class="row">
@@ -146,7 +146,7 @@
                                 <h6 class="text-secondary">Địa chỉ</h6>
 
                             </div>
-                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="addr" value="{{lcAuthUser.user.addr}}">
+                            <input class="edit-form col-md-6 mr-1" id="txtDOB" type="text" name="addr" value="{{user.addr}}">
                         </div>
                         {{#if err_message}}
                             <div class="err_email">
@@ -157,14 +157,14 @@
                             <button type="submit" class="edit-btn mt-2">Lưu</button>
                         </div>
                     </div>
-                    </form>
-                </div>
-
+                </form>
             </div>
 
         </div>
 
     </div>
+
+</div>
 <!--    </form>-->
 </body>
 </html>
