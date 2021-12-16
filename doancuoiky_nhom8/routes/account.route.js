@@ -186,6 +186,7 @@ router.get('/profile/:id', async function(req, res, next){
 	}
 	next();
 });
+
 router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
 
 	res.render('vwAccount/edit_profile',{

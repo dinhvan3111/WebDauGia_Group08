@@ -1,5 +1,9 @@
 import db from '../utils/database.js';
 import moment from 'moment';
+import fileModel from '../models/upload.model.js';
+import accountModel from '../models/account.model.js';
+import biddingModel from '../models/bidding.model.js';
+import watchListModel from '../models/watchlist.model.js';
 
 export default {
 	async findID(id){
@@ -56,6 +60,74 @@ export default {
 				.limit(12);
 			return search_result;
 		}
+	},
+	async getProductDetail(req, product_info, id_product){
+		if(product_info.buy_now_price == 0){
+	        delete product_info.buy_now_price;
+	    }
+	    if(product_info.not_sold == 0){
+	        delete product_info.not_sold;
+	    }
+	    moment.locale('vi');
+	    const end_date = moment(product_info.time_end, 'YYYY/MM/DD HH:mm:ss');
+	    if(end_date.diff(moment(), 'days') < 3){
+	        product_info.time_end = end_date.fromNow();
+	    }
+	    else{
+	        product_info.time_end = moment(product_info.time_end, 
+	                        'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+	    }
+	    
+	    product_info.time_start = moment(product_info.time_start, 
+	                        'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+	    
+	    var seller = await accountModel.findID(product_info.id_seller);
+	    const sellerVoteRatio = await accountModel.getUpVoteRatio(seller.id);
+	    // console.log(sellerVoteRatio);
+	    seller.des = sellerVoteRatio.des;
+	    const bidHistory = await this.getBidHistory(id_product);
+	    if(bidHistory !== null){
+	        for(let i = 0; i < bidHistory.length; i++){
+	            let bidderVoteRatio = await accountModel.getUpVoteRatio(bidHistory[i].bidder_id);
+	            bidHistory[i].ratio = bidderVoteRatio.ratio
+	            bidHistory[i].time = moment(bidHistory[i].time, 
+	                            'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+	        }
+	    }
+	    product_info.img = fileModel.getAllFileName('./public/img/products/' + id_product, id_product);
+	    var inWatchList = false;
+	    var canEdit = false;
+	    var ignored = false;
+	    var isHoldingPrice = false;
+	    var max_bid_price = 0;
+	    if(typeof(req.user) !== 'undefined'){
+	        inWatchList = await watchListModel.findObj({id_acc: req.user.id, id_product: id_product});
+	        if(inWatchList !== null){
+	            inWatchList = true;
+	        }
+	        if(req.user.id == seller.id){
+	            canEdit = true;
+	        }
+	        let isIgnored = await this.findIgnoredBidders({id_product: id_product, id_acc: req.user.id});
+	        if(isIgnored !== null){
+	            ignored = true;
+	        }
+	        if(product_info.id_win_bidder == req.user.id){
+	            isHoldingPrice = true;
+	            let holdingPriceBidder = await biddingModel.findByProductID(id_product);
+	            max_bid_price = holdingPriceBidder.max_bid_price;
+	        }
+
+	    }
+	    return {
+	    	seller: seller,
+	    	bidHistory: bidHistory,
+	    	inWatchList: inWatchList,
+	    	canEdit: canEdit,
+	        ignored: ignored,
+	        isHoldingPrice: isHoldingPrice,
+	        max_bid_price: max_bid_price
+	    }
 	},
 
 

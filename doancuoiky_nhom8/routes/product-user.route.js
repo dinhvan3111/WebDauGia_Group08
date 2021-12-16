@@ -62,74 +62,19 @@ router.get('/:id', async function (req, res, next){
         next();
         return;
     }
-    if(product_info.buy_now_price == 0){
-        delete product_info.buy_now_price;
-    }
-    if(product_info.not_sold == 0){
-        delete product_info.not_sold;
-    }
-    moment.locale('vi');
-    const end_date = moment(product_info.time_end, 'YYYY/MM/DD HH:mm:ss');
-    if(end_date.diff(moment(), 'days') < 3){
-        product_info.time_end = end_date.fromNow();
-    }
-    else{
-        product_info.time_end = moment(product_info.time_end, 
-                        'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-    }
+    const info = await productModel.getProductDetail(req, product_info, id_product);
     
-    product_info.time_start = moment(product_info.time_start, 
-                        'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-    
-    var seller = await accountModel.findID(product_info.id_seller);
-    const sellerVoteRatio = await accountModel.getUpVoteRatio(seller.id);
-    // console.log(sellerVoteRatio);
-    seller.des = sellerVoteRatio.des;
-    const bidHistory = await productModel.getBidHistory(id_product);
-    if(bidHistory !== null){
-        for(let i = 0; i < bidHistory.length; i++){
-            let bidderVoteRatio = await accountModel.getUpVoteRatio(bidHistory[i].bidder_id);
-            bidHistory[i].ratio = bidderVoteRatio.ratio
-            bidHistory[i].time = moment(bidHistory[i].time, 
-                            'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        }
-    }
-    product_info.img = fileModel.getAllFileName('./public/img/products/' + id_product, id_product);
-    var inWatchList = false;
-    var canEdit = false;
-    var ignored = false;
-    var isHoldingPrice = false;
-    var max_bid_price = 0;
-    if(typeof(req.user) !== 'undefined'){
-        inWatchList = await watchListModel.findObj({id_acc: req.user.id, id_product: id_product});
-        if(inWatchList !== null){
-            inWatchList = true;
-        }
-        if(req.user.id == seller.id){
-            canEdit = true;
-        }
-        let isIgnored = await productModel.findIgnoredBidders({id_product: id_product, id_acc: req.user.id});
-        if(isIgnored !== null){
-            ignored = true;
-        }
-        if(product_info.id_win_bidder == req.user.id){
-            isHoldingPrice = true;
-            let holdingPriceBidder = await biddingModel.findByProductID(id_product);
-            max_bid_price = holdingPriceBidder.max_bid_price;
-        }
-
-    }
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',
         id: id_product,
         product: product_info,
-        seller: seller,
-        bidHistory: bidHistory, 
-        inWatchList: inWatchList,
-        canEdit: canEdit,
-        ignored: ignored,
-        isHoldingPrice: isHoldingPrice,
-        max_bid_price: max_bid_price});
+        seller: info.seller,
+        bidHistory: info.bidHistory, 
+        inWatchList: info.inWatchList,
+        canEdit: info.canEdit,
+        ignored: info.ignored,
+        isHoldingPrice: info.isHoldingPrice,
+        max_bid_price: info.max_bid_price});
 });
 
 router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){
@@ -149,58 +94,7 @@ router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, 
 });
 
 router.post('/:id/bidding', checkPermission.notLogin, async function(req, res){
-    var max_bid_price = req.body.max_bid_price;
-    const id_product = req.body.id_product;
-    const id_acc = req.user.id;
-    const product = await productModel.findID(id_product);
-    const step_price = parseInt(product.step_price);
-    max_bid_price = max_bid_price.split(' ')[1].replace(/,/g, '');
-    max_bid_price = parseInt(max_bid_price);
-    const price_hoding_bidder = await biddingModel.findByProductID(id_product);
-    var newInPrice = 0;
-    if(price_hoding_bidder !== null){
-        if(price_hoding_bidder.max_bid_price < max_bid_price){
-            await biddingModel.addNewAuction(id_acc,
-                                id_product,
-                                parseInt(price_hoding_bidder.max_bid_price) + 
-                                parseInt(product.step_price));
-            newInPrice = max_bid_price;
-            await biddingModel.addNewPriceHoldingBidder(id_product, 
-                                id_acc, newInPrice);
-            await productModel.updatePriceHoldingBidder(id_product, id_acc);
-        }
-        else if(price_hoding_bidder.max_bid_price > max_bid_price){
-            
-            await biddingModel.addNewAuction(id_acc,
-                            id_product,
-                            max_bid_price);
-            newInPrice = parseInt(max_bid_price) + 
-                        parseInt(step_price);
-            await biddingModel.addNewAuction(price_hoding_bidder.id_acc,
-                                price_hoding_bidder.id_product,
-                                newInPrice);
-            
-        }
-        else{
-            await biddingModel.addNewAuction(id_acc,
-                                id_product,
-                                max_bid_price - product.step_price);
-            newInPrice = max_bid_price;
-            await biddingModel.addNewAuction(price_hoding_bidder.id_acc,
-                                    price_hoding_bidder.id_product,
-                                    newInPrice);
-        }
-    }
-    else{
-        await biddingModel.addNewPriceHoldingBidder(id_product,
-                            id_acc, max_bid_price);
-        await biddingModel.addNewAuction(id_acc,
-                                id_product,
-                                product.price);
-        await productModel.updatePriceHoldingBidder(id_product, id_acc);
-        newInPrice = parseInt(product.price);
-    }
-    await productModel.updateInPrice(id_product, newInPrice);
+    await biddingModel.autoAuction(req);
     return res.redirect(req.headers.referer);
 });
 

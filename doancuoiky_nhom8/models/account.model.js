@@ -122,6 +122,7 @@ export default{
 	async updateEmail(email, id_acc){
 		return await db('accounts').update({email: email}).where({id: id_acc})
 	},
+
 	// Rate 
 	async countRate(id_acc){
 		const upVoteCounter = await db('rate_history')

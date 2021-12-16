@@ -1,4 +1,8 @@
 import db from '../utils/database.js';
+import numeral from 'numeral';
+import productModel from '../models/product.model.js';
+import mailing from '../models/mailing.transaction.model.js';
+import accountModel from '../models/account.model.js';
 
 export default{
 	async findByProductID(id_product){
@@ -10,13 +14,128 @@ export default{
 		}
 		return res[0];
 	},
+	async findExistedBidder(id_acc, id_product){
+		const res = await db('bid_price').where({id_product: id_product, id_acc: id_acc});
+		if(res.length == 0){
+			return null;
+		}
+		return res[0];
+	},
 	async addNewPriceHoldingBidder(id_product, id_acc, max_bid_price){
-		await db('bid_price').insert({id_product: id_product, 
+		const isExisted = await this.findExistedBidder(id_acc, id_product);
+		if(isExisted !== null){
+			return await db('bid_price').update({max_bid_price: max_bid_price})
+										.where({id_product: id_product, id_acc: id_acc});
+		}
+
+		return await db('bid_price').insert({id_product: id_product, 
 							id_acc: id_acc, max_bid_price:max_bid_price});
 	},
 	async addNewAuction(id_acc, id_product, bid_price){
 		await db('bid_history').insert({id_acc: id_acc,
 								id_product: id_product,
 								in_bid_price: bid_price});
+	},
+	async autoAuction(req){
+		var max_bid_price = req.body.max_bid_price;
+	    const id_product = req.body.id_product;
+	    const id_acc = req.user.id;
+	    const product = await productModel.findID(id_product);
+	    const step_price = parseInt(product.step_price);
+	    max_bid_price = max_bid_price.split(' ')[1].replace(/,/g, '');
+	    max_bid_price = parseInt(max_bid_price);
+	    const price_hoding_bidder = await this.findByProductID(id_product);
+	    var newInPrice = 0;
+
+	    const seller = await accountModel.findID(product.id_seller);
+	    const price_hoding_bidder_info = await accountModel.findID(price_hoding_bidder.id_acc);
+	    const domain = req.protocol + '://' + req.headers.host;
+	    const link_product = domain + '/products/' + id_product;
+	    const link_price_holding_bidder = domain + '/profile/' + price_hoding_bidder.id_acc;
+	    const link_new_bidder = domain + '/profile/' + id_acc;
+	    var change_price_holding_bidder = true;
+	    var lowPrice = 0;
+
+	    if(price_hoding_bidder !== null){
+	        if(price_hoding_bidder.max_bid_price < max_bid_price){
+	            
+	            newInPrice = parseInt(price_hoding_bidder.max_bid_price) + 
+	                                parseInt(product.step_price);
+
+	            await this.addNewAuction(id_acc,
+	                                id_product,
+	                                newInPrice);
+	            await this.addNewPriceHoldingBidder(id_product, 
+	                                id_acc, max_bid_price);
+	            await productModel.updatePriceHoldingBidder(id_product, id_acc);
+
+	            await mailing.bidSuccess_sendOldBidder(price_hoding_bidder_info.name,
+	            		price_hoding_bidder_info.email, 
+	            		product.name, link_product,
+						numeral(price_hoding_bidder.max_bid_price).format('0,0'),
+						numeral(newInPrice).format('0,0'));
+
+
+	        }
+	        else if(price_hoding_bidder.max_bid_price > max_bid_price){
+	            change_price_holding_bidder = false;
+	            lowPrice = max_bid_price;
+	            await this.addNewAuction(id_acc,
+	                            id_product,
+	                            lowPrice);
+	            newInPrice = parseInt(max_bid_price) + 
+	                        parseInt(step_price);
+	            await this.addNewAuction(price_hoding_bidder.id_acc,
+	                                price_hoding_bidder.id_product,
+	                                newInPrice);
+	            
+	        }
+	        else{
+	        	change_price_holding_bidder = false;
+	        	lowPrice = max_bid_price - product.step_price;
+	            await this.addNewAuction(id_acc,
+	                                id_product,
+	                                lowPrice);
+	            newInPrice = parseInt(max_bid_price);
+	            await this.addNewAuction(price_hoding_bidder.id_acc,
+	                                    price_hoding_bidder.id_product,
+	                                    newInPrice);
+	        }
+	    }
+	    else{
+	        await this.addNewPriceHoldingBidder(id_product,
+	                            id_acc, max_bid_price);
+	        newInPrice = parseInt(product.price);
+	        await this.addNewAuction(id_acc,
+	                                id_product,
+	                                newInPrice);
+	        await productModel.updatePriceHoldingBidder(id_product, id_acc);
+	        
+	       
+	    }
+	    if(change_price_holding_bidder === true){
+	    	await mailing.bidSuccess_sendSeller(seller.name, seller.email,
+	    			product.name, link_product, 
+                	req.user.name, link_new_bidder, numeral(newInPrice).format('0,0'));
+	        await mailing.bidSuccess_sendBidder(req.user.name, req.user.email,
+	        		product.name, link_product, numeral(newInPrice).format('0,0'));
+	    }
+	    else{
+	    	await mailing.bidSuccess_sendSeller(seller.name, seller.email,
+	    			product.name, link_product, 
+                	req.user.name, link_new_bidder, numeral(lowPrice).format('0,0'));
+	    	await mailing.bidSuccess_sendSeller(seller.name, seller.email,
+	    			product.name, link_product, 
+                	price_hoding_bidder_info.name, link_price_holding_bidder,
+                	numeral(newInPrice).format('0,0'));
+	        await mailing.bidSuccess_sendBidder(req.user.name, req.user.email,
+	        		product.name, link_product, numeral(lowPrice).format('0,0'));
+	        await mailing.bidSuccess_sendOldBidder(req.user.name, req.user.email,
+	        		product.name, link_product,
+	        		numeral(max_bid_price).format('0,0'),
+	        		numeral(newInPrice).format('0,0'));
+	    }
+	    await productModel.updateInPrice(id_product, newInPrice);
+	    
 	}
 }
