@@ -204,6 +204,21 @@ export default {
 		const newDes = proDes + appendDes;
 		console.log(newDes);
 		await this.updateProDescription(id,newDes);
-	}
+	},
+	async findExpriredProduct(){
+		const proList = await db.raw(`SELECT p.id as product_id, p.time_end as expired_date,
+								p.name as product_name, p.price as price, 
+								p.id_win_bidder as id_win_bidder, p.id_seller as id_seller,
+						        a.name seller_name, a.email as seller_email
+								FROM products p join accounts a on p.id_seller = a.id
+								WHERE p.time_end <= now() and p.not_sold = 1;`);
+		if(proList[0].length == 0){
+			return null;
+		}
+		return proList[0];
+	},
+	async endAuction(){
+		await db('products').update({not_sold: 0}).whereRaw('time_end <= now()');
+	},
 	
 }

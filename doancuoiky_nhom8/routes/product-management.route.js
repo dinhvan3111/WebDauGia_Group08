@@ -56,6 +56,7 @@ router.get('/appendDes', checkPermission.isNotSeller, async function(req, res){
 	res.render('vwProduct/append_description',{
 		id,
 		name: product.name,
+		TINY_CLOUD_API: envVar.TINY_CLOUD_API,
 		layout: 'non_sidebar.hbs'
 	});
 });

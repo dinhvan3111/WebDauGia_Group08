@@ -25,6 +25,7 @@ export default {
 	async bidSuccess(name, email, host, urlLink, idAcc, token, hour){
 		
 	},
+	// template1
 	async bidSuccess_sendSeller(name, email, product_name, link_product, 
 		bidder_name, link_bidder, bid_price){
 		const mailMsg = {
@@ -34,8 +35,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Sản phẩm ${product_name} của bạn vừa có người ra giá`,
-				icon_fa: 'fa fa-gavel mt-3',
-				color_icon: 'green',
+				template1: true,
+				
 			    name: name,
 			    header: 'CÓ NGƯỜI RA GIÁ MỚI',
 			    description: 'sản phẩm của bạn vừa có người ra giá mới',
@@ -48,6 +49,7 @@ export default {
 		};
 		return await sendEmail(mailMsg);
 	},
+	// template2
 	async bidSuccess_sendBidder(name, email, product_name, link_product, bid_price){
 		const mailMsg = {
 			to: email,
@@ -56,8 +58,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Bạn đã đấu giá thành công sản phẩm ${product_name}`,
-				icon_fa: 'fa fa-gavel mt-3',
-				color_icon: 'green',
+				template2: true,
+				
 			    name: name,
 			    header: 'RA GIÁ THÀNH CÔNG',
 			    description: 'chúc mừng bạn đã ra giá thành công',
@@ -68,6 +70,7 @@ export default {
 		};
 		return await sendEmail(mailMsg);
 	},
+	// template3
 	async bidSuccess_sendOldBidder(name, email, product_name, link_product,
 		bid_price, win_price){
 		const mailMsg = {
@@ -77,8 +80,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Đã có người đặt giá cao hơn cho sản phẩm ${product_name}`,
-				icon_fa: 'fa fa-times-circle mt-3',
-				color_icon: 'red',
+				template3: true,
+				
 			    name: name,
 			    header: 'ĐẤU GIÁ THẤT BẠI',
 			    description: 'Chúng tôi rất tiếc, bạn đã đấu giá thất bại. Đã có người ra giá cho sản phẩm cao hơn bạn',
@@ -96,6 +99,7 @@ export default {
 	/////////////////////////////////////////////////
 
 	// Người mua bị từ chối ra giá
+	// template4
 	async rejectBidder(name, email, product_name, link_product, bid_price){
 		const mailMsg = {
 			to: email,
@@ -104,8 +108,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Bạn vừa bị từ chối ra giá cho sản phẩm ${product_name}`,
-				icon_fa: 'fa fa-gavel mt-3',
-				color_icon: 'red',
+				template4: true,
+				
 			    name: name,
 			    header: 'BẠN BỊ TỪ CHỐI RA GIÁ',
 			    description: 'Rất tiếc, bạn vừa bị người bán từ chối ra giá cho sản phẩm:',
@@ -121,6 +125,7 @@ export default {
 	//////////////////////////////////////////////////
 
 	// Đấu giá kết thúc, không có người mua
+	// template5
 	async endBidding_noOneBid(name, email, product_name, link_product, expired_date){
 		const mailMsg = {
 			to: email,
@@ -129,8 +134,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Sản phẩm ${product_name} của bạn không có lượt ra giá nào`,
-				icon_fa: 'fa fa-user-times mt-3',
-				color_icon: 'red',
+				template5: true,
+				
 			    name: name,
 			    header: 'KHÔNG CÓ NGƯỜI MUA',
 			    description: 'Chúng tôi rất tiếc, sản phẩm của bạn đã hết thời gian đăng bán mà không có người nào ra giá cho sản phẩm của bạn',
@@ -148,6 +153,7 @@ export default {
 	async endBidding(){
 
 	},
+	// template6
 	async endBidding_sendSeller(name, email, product_name, link_product,
 		bidder_name, link_bidder, win_price){
 		const mailMsg = {
@@ -157,8 +163,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Bạn đã bán thành công sản phẩm ${product_name}`,
-				icon_fa: 'fa fa-calendar-check-o mt-3',
-				color_icon: 'green',
+				template6: true,
+				
 			    name: name,
 			    header: 'ĐẤU GIÁ KẾT THÚC',
 			    description: 'Chúc mừng, bạn đã bán thành công sản phẩm:',
@@ -171,6 +177,7 @@ export default {
 		};
 		return await sendEmail(mailMsg);
 	},
+	// template7
 	async endBidding_sendBidder(name, email, product_name, link_product, win_price){
 		const mailMsg = {
 			to: email,
@@ -179,8 +186,8 @@ export default {
 			templateId: TRANSACTION_TEMPLATE,
 			dynamic_template_data: {
 				subject: `Bạn đã chiến thắng đấu giá sản phẩm ${product_name}`,
-				icon_fa: 'fa fa-check-circle mt-3',
-				color_icon: 'green',
+				template7: true,
+				
 			    name: name,
 			    header: 'CHIẾN THẮNG ĐẤU GIÁ',
 			    description: 'Chúc mừng, bạn đã chiến thắng đấu giá sản phẩm:',

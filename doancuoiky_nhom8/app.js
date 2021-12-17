@@ -34,8 +34,9 @@ localMdw(app);
 routeMdw(app);
 
 app.listen(port, async function () {
-    console.log(`Web app listening at http://localhost:${port}`);
+    const domain = `http://localhost:${port}`;
+    console.log(`Web app listening at ${domain}`);
     // console.log('Timer is starting check ... at here');
-    // await timers.run();
+    await timers.run(domain);
 });
 
