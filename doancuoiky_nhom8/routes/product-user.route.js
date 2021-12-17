@@ -22,7 +22,8 @@ router.get('/search_result', async function (req, res){
 router.post('/search_result', async function (req, res){
     const cateID = req.body.search_cateID;
     const param = req.body.search_param;
-    const search_result = await productModel.searchProduct(cateID,param);
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const search_result = await productModel.searchProduct(cateID,param,sort);
     moment.locale('vi');
     var end_date = [];
     for (let i =0 ; i < search_result.length; i++){
@@ -50,6 +51,7 @@ router.post('/search_result', async function (req, res){
     console.log(search_result);
     res.render('vwProduct/product_search_result', {
         layout: 'non_sidebar.hbs',
+        cateID,
         param,
         search_result
     });

@@ -45,19 +45,48 @@ export default {
 		}
 		return res;
 	},
-	async searchProduct(cateID, param){
+	async searchProduct(cateID, param, sort){
+		var search_result = null;
 		if(cateID == '' || cateID == '0'){
-			const search_result = await db.select()
-				.from('products')
-				.whereRaw('MATCH(name,description) AGAINST(?)', param)
-				.limit(12);
+			if(sort === '0'){
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('MATCH(name,description) AGAINST(?)', param)
+					.limit(12);
+			}
+			else if(sort === '1'){ // Thời gian kết thúc giảm dần
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('MATCH(name,description) AGAINST(?)', param)
+					.limit(12).orderBy('time_end', 'desc');
+			}
+			else{ // Giá tăng dần
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('MATCH(name,description) AGAINST(?)', param)
+					.limit(12).orderBy('price', 'asc');
+			}
 			return search_result;
 		}
 		else{
-			const search_result = await db.select()
-				.from('products')
-				.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
-				.limit(12);
+			if(sort === '0'){
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+					.limit(12);
+			}
+			else if(sort === '1'){ // Thời gian kết thúc giảm dần
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+					.limit(12).orderBy('time_end', 'desc');
+			}
+			else{ // Giá tăng dần
+				search_result = await db.select()
+					.from('products')
+					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+					.limit(12).orderBy('price', 'asc');
+			}
 			return search_result;
 		}
 	},

@@ -1,3 +1,25 @@
+{{#section 'css'}}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>
+        #frmSort {
+            display: none;
+        }
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.sort-function .sort-function-time').on('click',function (){
+            $('#txtSort').val('1');
+            $('#frmSort').submit();
+        });
+        $('.sort-function .sort-function-price').on('click',function (){
+            $('#txtSort').val('2');
+            $('#frmSort').submit();
+        });
+    </script>
+{{/section}}
 <div class="col-xl-12">
 
     <!-- Products section -->
@@ -11,10 +33,15 @@
                                 aria-expanded="false">
                             Sắp xếp theo
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
+                        <form id="frmSort" action="/products/search_result" method="post">
+                            <input id="txtCateID" name="search_cateID" type="text" value="{{this.cateID}}">
+                            <input id="txtParam" name="search_param" type="text" value="{{this.param}}">
+                            <input id="txtSort" name="sort" type="text" value="">
+                        </form>
+                        <div class="sort-function dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
                              aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
-                            <a class="dropdown-item" href="#">Giá tăng dần</a>
+                            <a class="sort-function-time dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
+                            <a class="sort-function-price dropdown-item" href="#">Giá tăng dần</a>
                         </div>
                     </div>
                     <div class="row">
