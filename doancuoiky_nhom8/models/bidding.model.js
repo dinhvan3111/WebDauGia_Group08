@@ -12,7 +12,7 @@ export default{
 		if(res.length == 0){
 			return null;
 		}
-		return res[0];
+		return res;
 	},
 	async findExistedBidder(id_acc, id_product){
 		const res = await db('bid_price').where({id_product: id_product, id_acc: id_acc});
@@ -44,14 +44,24 @@ export default{
 	    const step_price = parseInt(product.step_price);
 	    max_bid_price = max_bid_price.split(' ')[1].replace(/,/g, '');
 	    max_bid_price = parseInt(max_bid_price);
-	    const price_hoding_bidder = await this.findByProductID(id_product);
+	    const bidderList = await this.findByProductID(id_product);
+	    var price_hoding_bidder= null;
+	    if(bidderList !== null){
+	    	price_hoding_bidder = bidderList[0];
+	    }
 	    var newInPrice = 0;
 
 	    const seller = await accountModel.findID(product.id_seller);
-	    const price_hoding_bidder_info = await accountModel.findID(price_hoding_bidder.id_acc);
+	    var price_hoding_bidder_info = null;
+	    if(price_hoding_bidder !== null){
+	    	price_hoding_bidder_info = await accountModel.findID(price_hoding_bidder.id_acc);
+	    }
 	    const domain = req.protocol + '://' + req.headers.host;
 	    const link_product = domain + '/products/' + id_product;
-	    const link_price_holding_bidder = domain + '/profile/' + price_hoding_bidder.id_acc;
+	    var link_price_holding_bidder = null;
+	    if(price_hoding_bidder !== null){
+	    	link_price_holding_bidder = domain + '/profile/' + price_hoding_bidder.id_acc;
+	    }
 	    const link_new_bidder = domain + '/profile/' + id_acc;
 	    var change_price_holding_bidder = true;
 	    var lowPrice = 0;
@@ -137,5 +147,8 @@ export default{
 	    }
 	    await productModel.updateInPrice(id_product, newInPrice);
 	    
-	}
+	},
+	async deletePriceOfBidder(info){
+		return await db('bid_price').where(info).del();
+	},
 }

@@ -37,6 +37,6 @@ app.listen(port, async function () {
     const domain = `http://localhost:${port}`;
     console.log(`Web app listening at ${domain}`);
     // console.log('Timer is starting check ... at here');
-    // await timers.run(domain);
+    await timers.run(domain);
 });
 

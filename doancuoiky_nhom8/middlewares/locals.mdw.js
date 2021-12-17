@@ -27,7 +27,7 @@ export default function(app){
 	            });
 	        }
 	    }
-		var maxCate = 0;
+	    var maxCate = 0;
 		for(let i = 0; i < result.length;i++){
 			if(result[i].subCate.length > maxCate){
 				maxCate = result[i].subCate.length;

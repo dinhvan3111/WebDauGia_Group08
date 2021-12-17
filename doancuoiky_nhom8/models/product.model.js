@@ -1,9 +1,12 @@
 import db from '../utils/database.js';
 import moment from 'moment';
+import numeral from 'numeral';
 import fileModel from '../models/upload.model.js';
 import accountModel from '../models/account.model.js';
 import biddingModel from '../models/bidding.model.js';
 import watchListModel from '../models/watchlist.model.js';
+import mailing from '../models/mailing.transaction.model.js';
+
 
 export default {
 	async findID(id){
@@ -17,7 +20,8 @@ export default {
 	async getBidHistory(id_product){
 		const bidHistory = await db('bid_history as bidHis')
 				.select(['bidHis.time as time', 'bidHis.in_bid_price as in_bid_price',
-						 'acc.name as bidder_name', 'acc.id as bidder_id'])
+						 'acc.name as bidder_name', 'acc.id as bidder_id', 
+						 'bidHis.id as id_bid_his'])
 				.join('accounts as acc', 'acc.id', 'bidHis.id_acc')
 				.join('products as p', 'p.id', 'bidHis.id_product')
 				.where({'p.id': id_product})
@@ -28,7 +32,7 @@ export default {
 		}
 		for(let i = 0; i < bidHistory.length; i++){
 			let splited = bidHistory[i].bidder_name.split(' ');
-			bidHistory[i].bidder_name = '****' + splited[splited.length - 1];
+			bidHistory[i].mask_name = '****' + splited[splited.length - 1];
 		}
 		return bidHistory;
 	},
@@ -110,7 +114,7 @@ export default {
 	    var startDate = '';
 	    var canBid = true;
 	    const start_date = moment(product_info.time_start, 'YYYY/MM/DD HH:mm:ss');
-	    if(moment().diff(start_date, 'days') == 0){
+	    if(moment().diff(start_date, 'seconds') < 0){
 	    	canBid = false;
 	    	startDate = start_date.fromNow();
 	    }
@@ -152,7 +156,9 @@ export default {
 	        if(product_info.id_win_bidder == req.user.id){
 	            isHoldingPrice = true;
 	            let holdingPriceBidder = await biddingModel.findByProductID(id_product);
-	            max_bid_price = holdingPriceBidder.max_bid_price;
+	            console.log(holdingPriceBidder);
+	            max_bid_price = holdingPriceBidder[0].max_bid_price;
+	            
 	        }
 
 	    }
@@ -259,5 +265,75 @@ export default {
 	async endAuction(){
 		await db('products').update({not_sold: 0}).whereRaw('time_end <= now()');
 	},
-	
+	async getAuctionHistoryOfBidder(bidder_id, product_id){
+		const res = db('bid_history').where({id_product: product_id, id_acc: bidder_id})
+									.orderBy([
+										{ column: 'in_bid_price', order: 'desc'}, 
+										{ column: 'time', order: 'asc' }]);
+		if(res.length == 0){
+			return null;
+		}
+		return res;
+	},
+	async deleteAuctionHistory(info){
+		return await db('bid_history').where(info).del();
+	},
+	async ignoreBidder(product_info, bidder_info, domain){
+		const auctionHistoryOfBidder = await this.getAuctionHistoryOfBidder(bidder_info.id, product_info.id);
+		if(auctionHistoryOfBidder === null){
+			return;
+		}
+		const isExisted = await this.findIgnoredBidders({
+							id_product: product_info.id,
+							id_acc: bidder_info.id});
+		if(isExisted !== null){
+			return;
+		}
+		const link_product = domain + '/products/' + product_info.id;
+		const bidderPrice = auctionHistoryOfBidder[0].in_bid_price;
+		if(product_info.id_win_bidder == bidder_info.id){
+			const auctionHistory = await this.getBidHistory(product_info.id);
+			if(auctionHistory.length == 1){
+				await this.updateInPrice(product_info.id, auctionHistory[0].in_bid_price);
+				await this.updatePriceHoldingBidder(product_info.id, null);
+				
+			}
+			else{
+				let newPrice = 0;
+				
+				for(let i = 1; i < auctionHistory.length; i++){
+					let beIgnored = await this.findIgnoredBidders({
+								id_product: product_info.id,
+								id_acc: auctionHistory[i].bidder_id});
+					if(beIgnored === null){
+						newPrice = auctionHistory[i].in_bid_price;
+						await this.updatePriceHoldingBidder(product_info.id, 
+									auctionHistory[i].bidder_id);		
+						break;
+					}
+					else{
+						if(i == auctionHistory.length - 1){
+							newPrice = auctionHistory[i].in_bid_price;
+							await this.updatePriceHoldingBidder(product_info.id, null);
+						}
+						await this.deleteAuctionHistory({id_acc: auctionHistory[i].bidder_id, 
+								id_product: product_info.id,
+								id: auctionHistory[i].id_bid_his});
+						
+					}
+
+				}
+				await this.updateInPrice(product_info.id, newPrice); 
+			}
+			await this.deleteAuctionHistory({id_acc: bidder_info.id, 
+								id_product: product_info.id,
+								id: auctionHistory[0].id_bid_his});
+		}
+		await biddingModel.deletePriceOfBidder({id_acc: bidder_info.id, 
+							id_product: product_info.id});
+		await db('ignore_bidder').insert({id_product: product_info.id, id_acc: bidder_info.id});
+		await mailing.rejectBidder(bidder_info.name, bidder_info.email, 
+					product_info.name, link_product, 
+					numeral(bidderPrice).format('0,0'));
+	},
 }

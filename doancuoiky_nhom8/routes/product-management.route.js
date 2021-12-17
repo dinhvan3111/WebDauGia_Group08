@@ -1,6 +1,7 @@
 import express from 'express';
 import envVar from '../utils/envVar.js';
 import upload from '../models/upload.model.js';
+import accountModel from '../models/account.model.js';
 import productModel from '../models/product.model.js';
 import cateModel from '../models/category.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
@@ -66,6 +67,19 @@ router.post('/appendDes', checkPermission.isNotSeller, async function(req, res){
 	const appendDes = req.body.description;
 	await productModel.appendDescription(id,appendDes);
 	res.redirect('/products/' + id);
+});
+
+router.post('/:product_id/ignore', checkPermission.isNotSeller, 
+				async function(req, res){
+	const bidder_id = req.body.id_bidder;
+	const product = await productModel.findID(req.params.product_id);
+	const bidder = await accountModel.findID(bidder_id);
+	if(product !== null && bidder !== null){
+		await productModel.ignoreBidder(product, bidder, 
+							req.protocol + '://' + req.headers.host);
+	}
+
+	res.redirect(req.headers.referer);
 });
 
 export default router;
