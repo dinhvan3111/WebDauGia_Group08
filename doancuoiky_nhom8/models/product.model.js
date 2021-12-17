@@ -77,6 +77,14 @@ export default {
 	        product_info.time_end = moment(product_info.time_end, 
 	                        'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
 	    }
+
+	    var startDate = '';
+	    var canBid = true;
+	    const start_date = moment(product_info.time_start, 'YYYY/MM/DD HH:mm:ss');
+	    if(moment().diff(start_date, 'days') == 0){
+	    	canBid = false;
+	    	startDate = start_date.fromNow();
+	    }
 	    
 	    product_info.time_start = moment(product_info.time_start, 
 	                        'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
@@ -126,7 +134,9 @@ export default {
 	    	canEdit: canEdit,
 	        ignored: ignored,
 	        isHoldingPrice: isHoldingPrice,
-	        max_bid_price: max_bid_price
+	        max_bid_price: max_bid_price,
+	        canBid: canBid, 
+	        startDate: startDate
 	    }
 	},
 

@@ -62,14 +62,18 @@
                             <i class="fa fa-ban"></i> Bạn đã bị từ chối ra giá</button>
                         {{else}}
                         {{#if product.buy_now_price}}
+                        {{#if canBid}}
                         <button class="btn bg-warning btn-long">
                             <i class="fa fa-money"></i> Mua ngay</button>
+                        {{/if}}
                         {{/if}}
                         
                         {{#if isHoldingPrice}}
                         <button class="btn bg-warning ml-2 disabled">
                             <i class="fa fa-money"></i> Giá tối đa của bạn: {{format_number max_bid_price}} (VNĐ)</button>
                         {{else}}
+
+                        {{#if canBid}}
                         <!-- Button trigger modal -->
                         <button type="button" class="btn bg-success btn-long text-white ml-2" data-toggle="modal" data-target="#bidModal">
                           <i class="fa fa-gavel"></i> Đấu giá
@@ -99,6 +103,13 @@
                             </div>
                           </div>
                         </div>
+
+                        {{else}}
+
+                        <button class="btn bg-warning ml-2 disabled">
+                            <i class="fa fa-gavel"></i> Mở đấu giá trong: {{startDate}}</button>
+
+                        {{/if}}
                         {{/if}}
                         {{/if}}
                     {{/if}}

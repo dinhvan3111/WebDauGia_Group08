@@ -74,7 +74,9 @@ router.get('/:id', async function (req, res, next){
         canEdit: info.canEdit,
         ignored: info.ignored,
         isHoldingPrice: info.isHoldingPrice,
-        max_bid_price: info.max_bid_price});
+        max_bid_price: info.max_bid_price,
+        canBid: info.canBid,
+        startDate: info.startDate});
 });
 
 router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){
