@@ -113,11 +113,13 @@ export default {
 
 	    var startDate = '';
 	    var canBid = true;
+	    var notEnoughVotes = false;
 	    const start_date = moment(product_info.time_start, 'YYYY/MM/DD HH:mm:ss');
 	    if(moment().diff(start_date, 'seconds') < 0){
 	    	canBid = false;
 	    	startDate = start_date.fromNow();
 	    }
+
 	    
 	    product_info.time_start = moment(product_info.time_start, 
 	                        'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
@@ -163,6 +165,12 @@ export default {
 	            
 	        }
 
+	        // not enough votes
+	        const userRatio = await accountModel.getUpVoteRatio(req.user.id);
+	        console.log(userRatio);
+	        if(userRatio.percent < 80){
+	        	notEnoughVotes = true;
+	        }
 	    }
 	    return {
 	    	seller: seller,
@@ -173,7 +181,8 @@ export default {
 	        isHoldingPrice: isHoldingPrice,
 	        max_bid_price: max_bid_price,
 	        canBid: canBid, 
-	        startDate: startDate
+	        startDate: startDate,
+	        notEnoughVotes: notEnoughVotes
 	    }
 	},
 	async buyNow(bidder_info, product_info, domain){
