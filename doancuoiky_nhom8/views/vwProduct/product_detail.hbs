@@ -34,17 +34,20 @@
                 <div class="about">
                     <h2><span class="font-weight-bold">{{product.name}}</span></h2>
                     <h5 class="font-weight-bold mt-4">Bước giá: <span class="ml-2 text-success">{{format_number product.step_price}} VNĐ</span></h5>
-                    
-                    <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-success">{{format_number product.price}} VNĐ</span>
-                    <input hidden type="number" id="inPrice" value="{{product.price}}">
-                    <input hidden type="number" id="stepPrice" value="{{product.step_price}}">
+                    {{#if product.priceSold}}
+                        <h5 class="font-weight-bold mt-4">Đã bán với giá: <span class="ml-2 text-danger">{{format_number product.priceSold}} VNĐ</span>
+                    {{else}}
+                        <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-success">{{format_number product.price}} VNĐ</span>
+                        <input hidden type="number" id="inPrice" value="{{product.price}}">
+                        <input hidden type="number" id="stepPrice" value="{{product.step_price}}">
 
-                    </h5>
+                        </h5>
 
-                    {{#if product.buy_now_price}}
-                    <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span>
-                    <input hidden type="number" id="buyNowPrice" value="{{product.buy_now_price}}">
-                    </h5>
+                        {{#if product.buy_now_price}}
+                        <h5 class="font-weight-bold mt-4">Giá mua ngay: <span class="ml-2 text-danger">{{format_number product.buy_now_price}} VNĐ</span>
+                        <input hidden type="number" id="buyNowPrice" value="{{product.buy_now_price}}">
+                        </h5>
+                        {{/if}}
                     {{/if}}
                 </div>
                 <div class="buttons">
@@ -62,10 +65,41 @@
                             <i class="fa fa-ban"></i> Bạn đã bị từ chối ra giá</button>
                         {{else}}
                         {{#if product.buy_now_price}}
-                        {{#if canBid}}
-                        <button class="btn bg-warning btn-long">
-                            <i class="fa fa-money"></i> Mua ngay</button>
-                        {{/if}}
+                            {{#if canBid}}
+
+                            <form id="frmBuyNow" action="{{product.id}}/buy-now" method="post">
+                            </form>
+
+
+                            <a type="button" data-toggle="modal" href="#buyNowModal">
+                            <button class="btn bg-warning btn-long" onclick="javascript:$('#frmBuyNow').submit();" >
+                                <i class="fa fa-money"></i> Mua ngay</button>
+                            </a>
+
+                            <div class="modal fade" id="buyNowModal" tabindex="-1">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="buyNowModalLabel">Mua ngay sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Bạn muốn mua ngay với giá {{format_number product.buy_now_price}} (VNĐ) ?
+                                  </div>
+                                  <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                    <button type="button" class="btn btn-primary"><i class="fa fa-check" onclick="javascript:$('#frmBuyNow').submit();"></i> Mua ngay</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+                            {{/if}}
                         {{/if}}
                         
                         {{#if isHoldingPrice}}
@@ -80,29 +114,29 @@
                         </button>
 
                         <!-- Modal -->
-                            <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <form id="frmBidding" action="{{product.id}}/bidding" method="post">
-                                            <div class="modal-body">
-                                                <input class="" type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
-                                                <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
-                                                <p id="dangerMaxBidPrice" style="color: red"></p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-success"><i class="fa fa-gavel"></i> Đặt giá</button></a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                        <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <form id="frmBidding" action="{{product.id}}/bidding" method="post">
+                              <div class="modal-body">
+                               <input type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
+                               <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
+                               <p id="dangerMaxBidPrice" style="color: red"></p>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-primary"><i class="fa fa-gavel"></i> Đặt giá</button></a>
+                              </div>
+                              </form>
                             </div>
+                          </div>
+                        </div>
 
                         {{else}}
 
@@ -111,6 +145,11 @@
 
                         {{/if}}
                         {{/if}}
+                        {{/if}}
+                    {{else}}
+                        {{#if isHoldingPrice}}
+                        <button class="btn bg-success btn-long disabled">
+                            <i class="fa fa-check"></i> Bạn đã thắng sản phẩm này</button>
                         {{/if}}
                     {{/if}}
                     {{/if}}
@@ -214,7 +253,11 @@
                                 
                                 <tr class="">
                                     <td>{{this.time}}</td>
+                                    {{#if ../canEdit}}
+                                    <td><a href="/profile/{{bidder_id}}">{{this.bidder_name}}</a></td>
+                                    {{else}}
                                     <td>{{this.mask_name}}</td>
+                                    {{/if}}
                                     <td>{{format_number this.in_bid_price}} VNĐ</td>
                                     <td>
                                         <div class="stars"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <span class="ml-1 font-bold">{{this.ratio}}</span></div>

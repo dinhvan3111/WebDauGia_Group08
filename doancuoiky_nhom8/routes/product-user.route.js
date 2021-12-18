@@ -64,7 +64,11 @@ router.get('/:id', async function (req, res, next){
         next();
         return;
     }
+    if(product_info.not_sold == 0){
+        product_info.priceSold = product_info.price;
+    }
     const info = await productModel.getProductDetail(req, product_info, id_product);
+
     
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',
@@ -100,6 +104,23 @@ router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, 
 router.post('/:id/bidding', checkPermission.notLogin, async function(req, res){
     await biddingModel.autoAuction(req);
     return res.redirect(req.headers.referer);
+});
+
+router.post('/:id/buy-now', checkPermission.notLogin, async function(req, res){
+    const product_info = await productModel.findID(req.params.id);
+    if(product_info !== null && product_info.buy_now_price !== null &&
+                    req.user.id != product_info.id_seller){
+        
+        const isIgnored = await productModel.findIgnoredBidders({
+                                id_product: product_info.id,
+                                id_acc: req.user.id});
+        if(isIgnored === null){
+            const bidder_info = await accountModel.findID(req.user.id);
+            const domain = req.protocol + '://' + req.headers.host;
+            await productModel.buyNow(bidder_info, product_info, domain);
+        }
+    }
+    res.redirect(req.headers.referer);
 });
 
 export default router;

@@ -156,8 +156,10 @@ export default {
 	        if(product_info.id_win_bidder == req.user.id){
 	            isHoldingPrice = true;
 	            let holdingPriceBidder = await biddingModel.findByProductID(id_product);
-	            console.log(holdingPriceBidder);
-	            max_bid_price = holdingPriceBidder[0].max_bid_price;
+	            // console.log(holdingPriceBidder);
+	            if(holdingPriceBidder !== null){
+	            	max_bid_price = holdingPriceBidder[0].max_bid_price;
+	            }
 	            
 	        }
 
@@ -174,6 +176,44 @@ export default {
 	        startDate: startDate
 	    }
 	},
+	async buyNow(bidder_info, product_info, domain){
+		const today = moment().format('YYYY/MM/DD HH:mm:ss');
+		const seller = await accountModel.findID(product_info.id_seller);
+
+		await biddingModel.deletePriceOfBidder({id_product: product_info.id});
+		await biddingModel.addNewAuction(bidder_info.id, 
+							product_info.id, product_info.buy_now_price);
+
+		const linkNewBidder = domain + '/profile/' + bidder_info.id;
+		const formattedPrice = numeral(product_info.buy_now_price).format('0,0');
+		const link_product = domain + '/products/' + product_info.id;
+
+		const newProductInfo = {
+			id: product_info.id,
+			not_sold: 0,
+			time_end: today,
+			price: product_info.buy_now_price,
+			id_win_bidder: bidder_info.id
+		}
+
+		if(bidder_info.id != product_info.id_win_bidder && product_info.id_win_bidder !== null){
+			const oldBidder = await accountModel.findID(product_info.id_win_bidder);
+			await mailing.bidSuccess_sendOldBidder(oldBidder.name, 
+							oldBidder.email, product_info.name, link_product,
+							numeral(product_info.price).format('0,0'),
+							numeral(product_info.buy_now_price).format('0,0'));
+		}
+		await this.updateProduct(newProductInfo);
+		await mailing.endBidding_sendSeller(seller.name, seller.email, 
+							product_info.name, link_product,
+							bidder_info.name, linkNewBidder,
+							formattedPrice);
+		await mailing.endBidding_sendBidder(bidder_info.name, bidder_info.email, 
+							product_info.name, 
+							link_product, 
+							formattedPrice)
+	},
+
 
 
 	// Manage products
@@ -336,4 +376,5 @@ export default {
 					product_info.name, link_product, 
 					numeral(bidderPrice).format('0,0'));
 	},
+
 }

@@ -151,4 +151,5 @@ export default{
 	async deletePriceOfBidder(info){
 		return await db('bid_price').where(info).del();
 	},
+	
 }
