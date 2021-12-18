@@ -20,30 +20,38 @@
                     <tr>
                         <!--                <th scope="row">{{id}}</th>-->
                         <td>{{name}}</td>
+                    <form action="/admin/categories/del" method="post">
                         <td class="text-right">
                             <a class="btn btn-sm btn-success font-bold" href="#" role="button">
                                 Xem thêm
                             </a>
                             {{#if @root/isAdmin}}
 
-
-                                <a class="btn btn-sm btn-primary" href="#" role="button">
+                                <input type="hidden" name="id" value="{{id}}">
+                                <a class="btn btn-sm btn-primary" href="childctg/edit_category?id={{id}}" role="button">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
-                                <a class="btn btn-sm btn-danger" href="#" role="button">
+
+                                <button class="btn btn-sm btn-danger">
                                     <i class="fa fa-trash" aria-hidden="true"></i>
-                                </a>
+                                </button>
+
                             {{/if}}
                         </td>
+                    </form>
                     </tr>
                 {{/if}}
             {{/each}}
             </tbody>
         </table>
         <div class="card-footer text-muted">
-            <a class="btn btn-outline-success" href="/admin/categories" role="button">
+            <a class="btn btn-outline-secondary" href="/admin/categories" role="button">
                 <i class="fa fa-backward" aria-hidden="true"></i>
                 Quay lại
+            </a>
+            <a href="/admin/categories/childctg/{{parent_id}}/add_category" id="btn-add-ctg" type="button" class="btn btn-outline-success"><i
+                    class="fa fa-plus"
+                    aria-hidden="true"></i> Thêm danh mục
             </a>
         </div>
         <!--	<h4 class="card-header">-->

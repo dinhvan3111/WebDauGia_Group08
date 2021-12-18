@@ -1,5 +1,13 @@
 {{#section 'css'}}
     <link rel="stylesheet" href="/css/style.css"/>
+    <style>
+        .err_del{
+            color: red;
+            font-style: italic;
+            text-align: center;
+        }
+    </style>
+
 {{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10 mt-3">
     <div class="card">
@@ -45,6 +53,9 @@
             </tbody>
 
         </table>
+        {{#if err_del}}
+            <p class="err_del">{{err_del}}</p>
+        {{/if}}
         {{#if isAdmin}}
             <hr class="m-0">
             <div>

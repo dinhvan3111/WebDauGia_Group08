@@ -13,7 +13,13 @@ export default {
 			.from('categories as ctg')
 			.where('ctg.parent_id', null);
 	},
+	async findProductByIdCtg(id){
+		const list = await db('products').where('id_category', id);
+		if (list.length === 0)
+			return null;
 
+		return list[0];
+	},
 	getAllChildWithId(id){
 		return db.select(['ctg.id as id', 'ctg.name as name'])
 			.from('categories as ctg')
