@@ -15,7 +15,7 @@ router.get('/accept_request', checkPermission.isNotSeller, async function(req, r
 	const getRequests = await adminManagement.getAllRequest();
 	const allRequests = []
 	for(let i =0; i < getRequests.length;i++){
-		const userRequest = await adminManagement.findID(getRequests[i].id_acc);
+		const userRequest = await accountModel.findID(getRequests[i].id_acc);
 		allRequests.push(userRequest);
 	}
 	res.render('vwAccount/accept_request',{
@@ -31,7 +31,7 @@ router.post('/accept_request', async function(req, res){
 	const getRequests = await adminManagement.getAllRequest();
 	const allRequests = []
 	for(let i =0; i < getRequests.length;i++){
-		const userRequest = await adminManagement.findID(getRequests[i].id_acc);
+		const userRequest = await accountModel.findID(getRequests[i].id_acc);
 		allRequests.push(userRequest);
 	}
 	res.render('vwAccount/accept_request',{

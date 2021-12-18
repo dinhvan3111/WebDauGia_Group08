@@ -161,13 +161,20 @@ export default{
 			const oldTimeEnd = moment(product.time_end, 'YYYY/MM/DD HH:mm:ss');
 	    	const interval = oldTimeEnd.diff(moment(), 'minutes');
 	    	if(interval >= 0 && interval <= 5){
-	    		const newTimeEnd = oldTimeEnd.add(10, 'minutes')
+	    		var newTimeEnd = oldTimeEnd.add(10, 'minutes')
 	    							.format('YYYY/MM/DD HH:mm:ss');
-	    		console.log('new time end: ' + newTimeEnd);
+	    		const sellerExpiredDate = await accountModel.getSellerExpiredDate(product.id_seller);
+	    		const expirationDate = moment(sellerExpiredDate.time, 
+	    								'YYYY/MM/DD HH:mm:ss');
+
+	    		// Quá thời gian 7 ngày làm seller
+	    		if(newTimeEnd.diff(expirationDate, 'seconds') > 0){
+	    			newTimeEnd = expirationDate;
+	    		}
 	    		await productModel.updateProduct({
 	    			id: product.id,
 	    			time_end: newTimeEnd
-	    		})
+	    		});
 	    	}
 	    }
 	}

@@ -172,4 +172,13 @@ export default{
 
 	    return user;
 	},
+
+	// Seller
+	async getSellerExpiredDate(seller_id){
+		const info = await db('seller_expired_day').where({id: seller_id});
+		if(info.length == 0){
+			return null;
+		}
+		return info[0];
+	}
 }
