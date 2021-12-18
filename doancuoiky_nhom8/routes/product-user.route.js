@@ -68,7 +68,7 @@ router.get('/:id', async function (req, res, next){
         product_info.priceSold = product_info.price;
     }
     const info = await productModel.getProductDetail(req, product_info, id_product);
-
+    
     
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',
@@ -82,7 +82,8 @@ router.get('/:id', async function (req, res, next){
         isHoldingPrice: info.isHoldingPrice,
         max_bid_price: info.max_bid_price,
         canBid: info.canBid,
-        startDate: info.startDate});
+        startDate: info.startDate,
+        notEnoughVotes: info.notEnoughVotes});
 });
 
 router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){

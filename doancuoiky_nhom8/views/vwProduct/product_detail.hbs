@@ -64,85 +64,95 @@
                         <button class="btn bg-warning btn-long disabled">
                             <i class="fa fa-ban"></i> Bạn đã bị từ chối ra giá</button>
                         {{else}}
-                        {{#if product.buy_now_price}}
-                            {{#if canBid}}
 
-                            <form id="frmBuyNow" action="{{product.id}}/buy-now" method="post">
-                            </form>
+                        {{#if notEnoughVotes}}
+                        <button class="btn bg-warning btn-long disabled">
+                            <i class="fa fa-ban"></i> Điểm đánh giá tích cực của bạn phải trên 80%</button>
+                        {{else}}
+
+                            {{#if product.buy_now_price}}
+                                {{#if canBid}}
+
+                                <form id="frmBuyNow" action="{{product.id}}/buy-now" method="post">
+                                </form>
 
 
-                            <a type="button" data-toggle="modal" href="#buyNowModal">
-                            <button class="btn bg-warning btn-long" onclick="javascript:$('#frmBuyNow').submit();" >
-                                <i class="fa fa-money"></i> Mua ngay</button>
-                            </a>
+                                <a type="button" data-toggle="modal" href="#buyNowModal">
+                                <button class="btn bg-warning btn-long" onclick="javascript:$('#frmBuyNow').submit();" >
+                                    <i class="fa fa-money"></i> Mua ngay</button>
+                                </a>
 
-                            <div class="modal fade" id="buyNowModal" tabindex="-1">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="buyNowModalLabel">Mua ngay sản phẩm</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    Bạn muốn mua ngay với giá {{format_number product.buy_now_price}} (VNĐ) ?
-                                  </div>
-                                  <div class="modal-footer">
+                                <div class="modal fade" id="buyNowModal" tabindex="-1">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="buyNowModalLabel">Mua ngay sản phẩm</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                        Bạn muốn mua ngay với giá {{format_number product.buy_now_price}} (VNĐ) ?
+                                      </div>
+                                      <div class="modal-footer">
 
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                    <button type="button" class="btn btn-primary"><i class="fa fa-check" onclick="javascript:$('#frmBuyNow').submit();"></i> Mua ngay</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                        <button type="button" class="btn btn-primary"><i class="fa fa-check" onclick="javascript:$('#frmBuyNow').submit();"></i> Mua ngay</button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
 
 
 
 
 
+                                {{/if}}
                             {{/if}}
                         {{/if}}
-                        
                         {{#if isHoldingPrice}}
                         <button class="btn bg-warning ml-2 disabled">
                             <i class="fa fa-money"></i> Giá tối đa của bạn: {{format_number max_bid_price}} (VNĐ)</button>
                         {{else}}
 
-                        {{#if canBid}}
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn bg-success btn-long text-white ml-2" data-toggle="modal" data-target="#bidModal">
-                          <i class="fa fa-gavel"></i> Đấu giá
-                        </button>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <form id="frmBidding" action="{{product.id}}/bidding" method="post">
-                              <div class="modal-body">
-                               <input type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
-                               <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
-                               <p id="dangerMaxBidPrice" style="color: red"></p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-primary"><i class="fa fa-gavel"></i> Đặt giá</button></a>
-                              </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
+                        {{#if notEnoughVotes}}
 
                         {{else}}
+                            {{#if canBid}}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn bg-success btn-long text-white ml-2" data-toggle="modal" data-target="#bidModal">
+                              <i class="fa fa-gavel"></i> Đấu giá
+                            </button>
 
-                        <button class="btn bg-warning ml-2 disabled">
-                            <i class="fa fa-gavel"></i> Mở đấu giá trong: {{startDate}}</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <form id="frmBidding" action="{{product.id}}/bidding" method="post">
+                                  <div class="modal-body">
+                                   <input type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
+                                   <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
+                                   <p id="dangerMaxBidPrice" style="color: red"></p>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-primary"><i class="fa fa-gavel"></i> Đặt giá</button></a>
+                                  </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
 
+                            {{else}}
+
+                            <button class="btn bg-warning ml-2 disabled">
+                                <i class="fa fa-gavel"></i> Mở đấu giá trong: {{startDate}}</button>
+
+                            {{/if}}
                         {{/if}}
                         {{/if}}
                         {{/if}}

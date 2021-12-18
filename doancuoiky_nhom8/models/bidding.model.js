@@ -1,5 +1,6 @@
 import db from '../utils/database.js';
 import numeral from 'numeral';
+import moment from 'moment';
 import productModel from '../models/product.model.js';
 import mailing from '../models/mailing.transaction.model.js';
 import accountModel from '../models/account.model.js';
@@ -65,6 +66,9 @@ export default{
 	    const link_new_bidder = domain + '/profile/' + id_acc;
 	    var change_price_holding_bidder = true;
 	    var lowPrice = 0;
+
+	    // Update end time
+	    await this.updateProductTimeEnd(product);
 
 	    if(price_hoding_bidder !== null){
 	        if(price_hoding_bidder.max_bid_price < max_bid_price){
@@ -146,10 +150,26 @@ export default{
 	        		numeral(newInPrice).format('0,0'));
 	    }
 	    await productModel.updateInPrice(id_product, newInPrice);
-	    
+
+
 	},
 	async deletePriceOfBidder(info){
 		return await db('bid_price').where(info).del();
 	},
+	async updateProductTimeEnd(product){
+		if(product.auto_renew == 1){
+			const oldTimeEnd = moment(product.time_end, 'YYYY/MM/DD HH:mm:ss');
+	    	const interval = oldTimeEnd.diff(moment(), 'minutes');
+	    	if(interval >= 0 && interval <= 5){
+	    		const newTimeEnd = oldTimeEnd.add(10, 'minutes')
+	    							.format('YYYY/MM/DD HH:mm:ss');
+	    		console.log('new time end: ' + newTimeEnd);
+	    		await productModel.updateProduct({
+	    			id: product.id,
+	    			time_end: newTimeEnd
+	    		})
+	    	}
+	    }
+	}
 	
 }

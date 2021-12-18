@@ -143,6 +143,7 @@ export default{
 		user.des = 'Chưa có lượt đánh giá nào';
 		user.starList = [];
 		user.ratio = 0;
+		user.percent = 0;
 		for (let i = 0; i < 5; i++) {
         	user.starList.push(-1);
         	// gray star
@@ -150,6 +151,7 @@ export default{
 		if(totalRate != 0){
 	        var upVoteRate = (rateCounter.upVoteCounter / totalRate) * 100;
 	        upVoteRate = upVoteRate.toFixed(1);
+	        user.percent = upVoteRate;
 	        user.des = `Có ${upVoteRate}% người đã đánh giá tốt`;
 	        // based on 5 stars
 	        var star = upVoteRate / 20;
