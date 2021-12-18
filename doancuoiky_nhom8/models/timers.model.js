@@ -2,6 +2,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import productModel from './product.model.js';
 import accountModel from './account.model.js';
+import adminManagement from './admin_management.model.js';
 import mailing from './mailing.transaction.model.js';
 
 async function checkExpiredProduct(domain){
@@ -42,13 +43,21 @@ async function checkExpiredProduct(domain){
         }
     }
 }
+async function checkExpiredSeller(domain){
+    const expiredSeller = await adminManagement.findExpiredSellerAuth();
+    if(expiredSeller !== null){
+        for(let i = 0; i < expiredSeller.length;i++){
+            await adminManagement.endSellerAuth(expiredSeller[i].id);
+        };
+    }
+}
 
 export default {
     async run(domain){
         // console.log(domain);
         setInterval(async function() {
             await checkExpiredProduct(domain);
-
+            await checkExpiredSeller(domain);
         }, 60 * 1000);
     }
 }

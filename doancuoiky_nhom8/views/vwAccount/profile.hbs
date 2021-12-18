@@ -64,7 +64,22 @@
                 color: #fff;
                 text-decoration: none;
             }
+            #frmUpgrade{
+                display: none;
+            }
         </style>
+    {{/section}}
+    {{#section 'js'}}
+        <script>
+                {{#if this.message}}
+                alert('{{this.message}}');
+                {{/if}}
+        </script>
+        <script>
+            $('#send-request-btn').on('click', function (){
+                $('#frmUpgrade').submit();
+            });
+        </script>
     {{/section}}
 </head>
 <body>
@@ -124,11 +139,19 @@
                         </div>
                         <h6 class="col-md-9">{{user.addr}}</h6>
                     </div>
-                    {{#if manage}}
-                        <div>
+                    <div>
+                        {{#if manage}}
                             <a href="/edit_profile" type="submit" class="edit-btn">Chỉnh sửa</a>
-                        </div>
-                    {{/if}}
+                        {{/if}}
+                        {{#if isBidder}}
+                            <form id="frmUpgrade" method="post">
+                                <input type="text" id="txtIDAcc" name="id_acc" value="{{user.id}}">
+                            </form>
+                            <a href="#" type="submit" id="send-request-btn" class="edit-btn">Gửi yêu cầu trở thành Seller</a>
+                        {{else}}
+
+                        {{/if}}
+                    </div>
                 </div>
             </div>
         </div>

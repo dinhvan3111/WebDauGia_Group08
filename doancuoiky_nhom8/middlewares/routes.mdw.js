@@ -4,7 +4,7 @@ import productUserRoute from '../routes/product-user.route.js';
 import authRoute from '../routes/auth.route.js';
 import mailingRoute from '../routes/mailing.route.js';
 import productManagementRoute from '../routes/product-management.route.js';
-
+import adminManagementRoute from '../routes/admin_management.route.js';
 
 export default function(app){
 	app.get('/', async function (req, res) {
@@ -22,6 +22,7 @@ export default function(app){
 	app.use('/products',productUserRoute);
 	app.use('/products', productManagementRoute);
 	app.use('/mailing', mailingRoute);
+	app.use('/admin', adminManagementRoute);
 
 
 

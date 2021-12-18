@@ -1,0 +1,72 @@
+{{#section 'css'}}
+    <style>
+        #frmAccept{
+            display: none;
+        }
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.acceptBtn').on('click',function (){
+            const isAccept = $(this).attr('data-isAccept');
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtIsAccept').val(isAccept);
+            $('#frmAccept').submit();
+        });
+        $('.refuseBtn').on('click',function (){
+            const isAccept = $(this).attr('data-isAccept');
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtIsAccept').val(isAccept);
+            $('#frmAccept').submit();
+        });
+    </script>
+{{/section}}
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <h4 class="card-header bg-dark text-white">
+            Phê duyệt trở thành Seller trong vòng 7 ngày
+        </h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Tên người dùng</th>
+                <th scope="col">Email</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#if this.requests}}
+                {{#each this.requests}}
+                    <tr class="">
+                        <td>{{id}}</td>
+                        <td>{{username}}</td>
+                        <td>{{email}}</td>
+                        <td>
+                            <a data-id="{{id}}" data-isAccept="true" class="acceptBtn btn btn-sm btn-success font-bold btn-long" href="#" role="button">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                            </a>
+                            <a data-id="{{id}}" data-isAccept="false" class="refuseBtn btn btn-sm btn-danger btn-long" href="#" role="button">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {{/each}}
+            {{else}}
+                <tr class="">
+                    <td colspan="4" class="text-center">
+                        <p>Chưa có yêu cầu nào</p>
+                    </td>
+                </tr>
+            {{/if}}
+
+            </tbody>
+        </table>
+        <form id="frmAccept" method="post">
+            <input type="text" id="txtUserID" name="id" value="">
+            <input type="text" id="txtIsAccept" name="isAccept" value="">
+        </form>
+    </div>
+</div>

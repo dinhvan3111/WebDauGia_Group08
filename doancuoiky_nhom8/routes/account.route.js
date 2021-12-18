@@ -6,6 +6,7 @@ import moment from 'moment';
 import cryptoRandomString from 'crypto-random-string';
 import envVar from '../utils/envVar.js';
 import mailingModel from '../models/mailing.OTP.model.js';
+import acceptRequestModel from '../models/admin_management.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
 
 const router = express.Router();
@@ -156,10 +157,36 @@ router.post('/login', async function (req, res) {
 });
 router.get('/profile', checkPermission.notLogin, async function(req, res){
 	const user = await accountModel.findID(req.user.id);
+	const isBidder = (user.id_permission === 3) ? true : false;
+	user.dob = moment(user.dob).format('DD-MM-YYYY');
+	res.render('vwAccount/profile',{
+		layout: 'non_sidebar.hbs',
+		isBidder,
+		user: user,
+		manage: true
+	});
+});
+router.post('/profile', checkPermission.notLogin, async function(req, res){
+	const id_acc = req.body.id_acc;
+	const check = await acceptRequestModel.addRequest(id_acc);
+	var message;
+	if(check === 1){
+		message = 'Gửi yêu cầu thành công';
+	}
+	else if(check === 0){
+		message = 'Bạn đã là seller';
+	}
+	else{
+		message = 'Yêu cầu của bạn đang trong hàng đợi';
+	}
+	const user = await accountModel.findID(req.user.id);
+	const isBidder = (user.id_permission === 3) ? true : false;
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		user: user,
+		isBidder,
+		message,
 		manage: true
 	});
 });
