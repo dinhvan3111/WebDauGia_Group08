@@ -57,6 +57,57 @@ nav .search-for-lg {
     box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 }
 
+/*Categoy*/
+.row .card .main-category{
+    color:#000;
+}
+.row .card .main-category{
+    text-decoration: none;
+}
+#btn-add-ctg{
+    padding: 0.25rem 0.5rem;
+    margin: 6px 12px;
+    font-weight: bold;
+    /*width:200px;*/
+    float: right;
+}
+/*bid*/
+.card .modal-content{
+    border-radius:16px;
+    /*height:192px;*/
+
+}
+.modal{
+    /*display:flex;*/
+    align-items: center!important;
+}
+.modal-dialog{
+    align-items: center;
+    vertical-align: middle;
+    height:100vh;
+    display: flex;
+}
+#max_bid_price{
+    width: 100%;
+    border-radius: 20px;
+    padding:6px;
+
+}
+#bidModalLabel{
+    font-style: italic;
+}
+.modal-content .modal-footer button{
+    padding:0 12px!important;
+    height:36px!important;
+    border-radius: 16px;
+}
+.modal-content .modal-footer{
+    padding:6px 12px;
+}
+.modal-content .modal-body{
+    padding:16px 16px 0 16px;
+}
+
 /* Sidebar */
 #sidebar {
     width: 15%;

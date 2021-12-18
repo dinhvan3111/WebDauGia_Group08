@@ -27,6 +27,37 @@ export default {
 			return null;
 		}
 		return cateList[0];
-	}
+	},
+	add(entity) {
+		return db('categories').insert(entity);
+	},
+	patch(entity) {
+		console.log(entity);
+		const id = entity.id;
+		delete entity.id;
+
+		return db('categories')
+			.where('id', id)
+			.update(entity);
+	},
+	async findByName(name) {
+		const list = await db('categories').where('name', name);
+		if (list.length === 0)
+			return null;
+
+		return list[0];
+	},
+	async findById(id) {
+		const list = await db('categories').where('id', id);
+		if (list.length === 0)
+			return null;
+
+		return list[0];
+	},
+	deleteById(id) {
+		return db('categories')
+			.where('id', id)
+			.del();
+	},
 
 }

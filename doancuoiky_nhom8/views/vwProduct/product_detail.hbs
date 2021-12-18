@@ -80,29 +80,29 @@
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <form id="frmBidding" action="{{product.id}}/bidding" method="post">
-                              <div class="modal-body">
-                               <input type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
-                               <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
-                               <p id="dangerMaxBidPrice" style="color: red"></p>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-primary"><i class="fa fa-gavel"></i> Đặt giá</button></a>
-                              </div>
-                              </form>
+                            <div class="modal fade" id="bidModal" tabindex="-1" aria-labelledby="bidModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="bidModalLabel">Nhập giá tối đa bạn muốn đặt</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form id="frmBidding" action="{{product.id}}/bidding" method="post">
+                                            <div class="modal-body">
+                                                <input class="" type="text" name="max_bid_price" id="max_bid_price" placeholder="(VNĐ) {{format_number product.price}}" data-type="currency" value required>
+                                                <input hidden type="text" name="id_product" id="id_product" value="{{product.id}}" required>
+                                                <p id="dangerMaxBidPrice" style="color: red"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                <a href="javascript: $('#frmBidding').submit();"><button type="button" class="btn btn-success"><i class="fa fa-gavel"></i> Đặt giá</button></a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
-                        </div>
 
                         {{else}}
 

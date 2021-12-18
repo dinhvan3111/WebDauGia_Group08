@@ -1,0 +1,86 @@
+
+{{#section 'css'}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .card-body .title{
+            font-weight: bold;
+        }
+        .card-body{
+            padding: 20px 20px 0 20px;
+        }
+        .form-add-ctg{
+            width: 450px;
+            margin: auto;
+            margin-top: 0px;
+            margin-bottom: 100px;
+        }
+        .btn-add-ctg{
+            font-weight: bold;
+            border-radius: 16px;
+
+        }
+        .text-field{
+            padding: 6px;
+            border-radius: 16px;
+        }
+        .card-footer{
+            padding: 6px 20px;
+        }
+        .btn-block{
+            text-align: center;
+        }
+        .err_message{
+            font-style: italic;
+            color: #f14646;
+            font-size: 16px;
+            text-align: center;
+        }
+        .success_message{
+            font-style: italic;
+            color: #00bd00;
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+{{/section}}
+
+<div class="col-xl mt-3">
+
+
+        <div class="card form-add-ctg">
+            <h4 class="card-header bg-warning">
+                Thêm danh mục
+            </h4>
+            <form id="frmAddCtg" method="post">
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="txtCatName" class="title">Tên danh mục</label>
+                    <input type="text" class="text-field form-control" id="txtName" name="name" autofocus required>
+                </div>
+            </div>
+                {{#if err_message}}
+                    <p class="err_message"><i class="fas fa-sad-tear"></i></i> {{err_message}}</p>
+                {{/if}}
+                {{#if success_message}}
+                    <p class="success_message"><i class="fas fa-sad-tear"></i></i> {{success_message}}</p>
+                {{/if}}
+            <div class="card-footer text-muted">
+                <div class="btn-block">
+                <a class="btn-add-ctg btn btn-outline-success" href="/admin/categories" role="button">
+                    <i class="fa fa-backward" aria-hidden="true"></i>
+                    List
+                </a>
+                <button type="submit" class="btn-add-ctg btn btn-primary">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    Save
+                </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </form>
+
+
+</div>
