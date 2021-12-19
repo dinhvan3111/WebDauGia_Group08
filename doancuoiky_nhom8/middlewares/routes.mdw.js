@@ -6,28 +6,48 @@ import authRoute from '../routes/auth.route.js';
 import mailingRoute from '../routes/mailing.route.js';
 import productManagementRoute from '../routes/product-management.route.js';
 import adminManagementRoute from '../routes/admin_management.route.js';
+import checkVerifiedEmail from './verifiedEmail.mdw.js';
 import adminManagement from "../models/admin_management.model.js";
 
 export default function(app){
+
+	app.post('/logout', function(req, res){
+		if(typeof(req.session.idAcc) !== 'undefined'){
+	      	delete req.session.idAcc;
+	    }
+	    req.logout();
+	    const url = req.headers.referer || '/';
+	    res.redirect(url);
+	});
+
+	app.use('/mailing', mailingRoute);
+	checkVerifiedEmail(app);
 	app.get('/', async function (req, res) {
-		if(res.locals.permission != 1){
-			res.render('home');
-		}
-		else{
-			const accountList = await adminManagement.getAllAccounts();
-			for(let i =0; i < accountList.length; i++){
-				if(accountList[i].id_permission === 2){
-					accountList[i].permission = 'Seller';
-				}
-				if(accountList[i].id_permission === 3){
-					accountList[i].permission = 'Bidder';
-				}
-			}
-			res.render('vwAccount/account_management',{
-				layout: 'admin.hbs',
-				accountList
-			});
-		}
+		const productList = await productModel.getTopProduct();
+		// console.log(productList);
+	    res.render('home', {
+	    	products: productList
+	    });
+
+	 //    if(res.locals.permission != 1){
+		// 	res.render('home');
+		// }
+		// else{
+		// 	const accountList = await adminManagement.getAllAccounts();
+		// 	for(let i =0; i < accountList.length; i++){
+		// 		if(accountList[i].id_permission === 2){
+		// 			accountList[i].permission = 'Seller';
+		// 		}
+		// 		if(accountList[i].id_permission === 3){
+		// 			accountList[i].permission = 'Bidder';
+		// 		}
+		// 	}
+		// 	res.render('vwAccount/account_management',{
+		// 		layout: 'admin.hbs',
+		// 		accountList
+		// 	});
+		// }
+	    
 	});
 
 	app.get('/bs4', function (req, res) {
@@ -36,11 +56,12 @@ export default function(app){
 
 
 	app.use('/', authRoute);
-	app.use('/admin/categories', categoryRoute);
 	app.use('/', accountRoute);
+	
+	
+	app.use('/admin/categories', categoryRoute);
 	app.use('/products',productUserRoute);
 	app.use('/products', productManagementRoute);
-	app.use('/mailing', mailingRoute);
 	app.use('/admin', adminManagementRoute);
 
 

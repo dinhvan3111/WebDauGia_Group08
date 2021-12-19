@@ -160,22 +160,13 @@ router.get('/profile', checkPermission.notLogin, async function(req, res){
 	const isBidder = (user.id_permission === 3) ? false : true;
 	console.log(isBidder);
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
-	if(res.locals.permission === 1){
-		res.render('vwAccount/profile',{
-			layout: 'admin.hbs',
-			isBidder,
-			user: user,
-			manage: true
-		});
-	}
-	else{
-		res.render('vwAccount/profile',{
-			layout: 'non_sidebar.hbs',
-			isBidder,
-			user: user,
-			manage: true
-		});
-	}
+	
+	res.render('vwAccount/profile',{
+		layout: 'non_sidebar.hbs',
+		isBidder,
+		user: user,
+		manage: true
+	});
 });
 router.post('/profile', checkPermission.notLogin, async function(req, res){
 	const id_acc = req.body.id_acc;
@@ -234,18 +225,12 @@ router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
 	const user = await accountModel.findID(req.session.passport.user.id);
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	console.log(user.dob);
-	if(res.locals.permission === 1){
-		res.render('vwAccount/edit_profile',{
-			layout: 'admin.hbs',
-			user: user
-		});
-	}
-	else{
-		res.render('vwAccount/edit_profile',{
-			layout: 'non_sidebar.hbs',
-			user: user
-		});
-	}
+	
+	res.render('vwAccount/edit_profile',{
+		layout: 'non_sidebar.hbs',
+		user: user
+	});
+	
 
 });
 router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
@@ -276,20 +261,13 @@ router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
 		const userByEmail = await accountModel.findEmail(email);
 		// email incorrect or third party account's email
 		if(userByEmail !== null){
-			if(res.locals.permisson === 1){
-				return res.render('vwAccount/edit_profile', {
-					layout: 'admin.hbs',
-					err_message: "Thất bại!Email đã được sử dụng trong hệ thống!",
-					user
-				});
-			}
-			else{
+			
 				return res.render('vwAccount/edit_profile', {
 					layout: 'non_sidebar.hbs',
 					err_message: "Thất bại!Email đã được sử dụng trong hệ thống!",
 					user
 				});
-			}
+
 		}
 		else {
 			await accountModel.updateEmail(email, id_acc);
@@ -317,20 +295,13 @@ router.get('/change-password', checkPermission.notLogin, async function(req, res
 	if(res.locals.canChangePwd == false){
 		return res.redirect(req.headers.referer || '/');
 	}
-	if(res.locals.permission === 1){
-		res.render('vwAccount/resetPassword',{
-			layout: 'admin.hbs',
-			id_acc: req.session.passport.user.id,
-			isChangePwd: true
-		});
-	}
-	else{
+	
 		res.render('vwAccount/resetPassword',{
 			layout: 'non_sidebar.hbs',
 			id_acc: req.session.passport.user.id,
 			isChangePwd: true
 		});
-	}
+	
 
 });
 
@@ -351,43 +322,27 @@ router.post('/change-password', async function(req, res){
 		}
 		const ret = bcrypt.compareSync(req.body.OldPwd, user.pwd);
 		if(ret === false){
-			console.log('false')
-			if(res.locals.permission === 1){
-				return res.render('vwAccount/resetPassword',{
-					layout: 'admin.hbs',
-					id_acc: id_acc,
-					isChangePwd: true,
-					err_message: 'Đổi mật khẩu thất bại'
-				});
-			}
-		else{
+			// console.log('false')
+			
 				return res.render('vwAccount/resetPassword',{
 					layout: 'non_sidebar.hbs',
 					id_acc: id_acc,
 					isChangePwd: true,
 					err_message: 'Đổi mật khẩu thất bại'
 				});
-			}
+			
 			return
 		}
 		await accountModel.updatePwd(hashedPwd, id_acc);
 		console.log('true');
-		if(res.locals.permission === 1){
-			return res.render('vwAccount/resetPassword',{
-				layout: 'admin.hbs',
-				id_acc: id_acc,
-				isChangePwd: true,
-				success: 'Đổi mật khẩu thành công'
-			})
-		}
-		else{
+		
 			return res.render('vwAccount/resetPassword',{
 				layout: 'non_sidebar.hbs',
 				id_acc: id_acc,
 				isChangePwd: true,
 				success: 'Đổi mật khẩu thành công'
 			})
-		}
+		
 	}
 	else{
 		// forgot pwd
@@ -436,14 +391,14 @@ router.post('/forgot-password', async function(req, res){
 	});
 });
 
-router.post('/logout', function(req, res){
-	if(typeof(req.session.idAcc) !== 'undefined'){
-      	delete req.session.idAcc;
-    }
-    req.logout();
-    const url = req.headers.referer || '/';
-    res.redirect(url);
-});
+// router.post('/logout', function(req, res){
+// 	if(typeof(req.session.idAcc) !== 'undefined'){
+//       	delete req.session.idAcc;
+//     }
+//     req.logout();
+//     const url = req.headers.referer || '/';
+//     res.redirect(url);
+// });
 
 
 export default router;

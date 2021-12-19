@@ -66,7 +66,7 @@ export default function(app){
 		
 		// console.log(req.session);
 		// console.log(req.user);
-
+		// console.log(authUser);
 	    res.locals.lcAuthUser = authUser;
 	    next();
 	});

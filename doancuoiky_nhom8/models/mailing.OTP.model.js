@@ -1,6 +1,7 @@
 import envVar from '../utils/envVar.js';
 import db from '../utils/database.js';
 import sgMail from '@sendgrid/mail';
+import accountModel from './account.model.js';
 
 
 sgMail.setApiKey(envVar.SENDGRID_API_KEY);
@@ -49,8 +50,8 @@ export default {
 	async delete(id_acc){
 		return await db('not_verified_email').where('id_acc', id_acc).del();
 	},
-	async updateExprDate(id_acc, date){
-		return await db('not_verified_email').update({expired_date: date})
+	async updateExprDate(id_acc, token, date){
+		return await db('not_verified_email').update({expired_date: date, token: token})
 						.where('id_acc', id_acc);
 	},
 	async getNewExpiredDate(){
@@ -58,6 +59,24 @@ export default {
 		var d = new Date(new Date().getTime() + (hour * 60 * 60 * 1000));
 		return d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' '
 					+ d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+	},
+	async addOrUpdateNotVerifiedEmail(id_acc, email, token){
+		const info = await accountModel.findID(id_acc);
+		const newExpiredD = await this.getNewExpiredDate();
+		const isExisted = await this.find({id_acc: id_acc});
+		if(info.email != email){
+			await accountModel.updateEmail(email, id_acc);
+		}
+		if(isExisted !== null){
+			await this.updateExprDate(id_acc, token, newExpiredD);
+		}
+		else{
+			await accountModel.addToNotVerifiedEmail({
+								id_acc: id_acc, 
+								token: token, 
+								expired_date: newExpiredD});
+		}
+
 	},
 	// end verify email section
 

@@ -21,7 +21,13 @@ export default function(app){
 	            }
 	            return num;
 	        },
-			section: hbs_sections()
+			section: hbs_sections(),
+			isAdmin(permission){
+				if(permission == 1){
+					return true;
+				}
+				return false;
+			}
 	    }
 	}));
 

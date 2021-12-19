@@ -2,6 +2,7 @@ import express from 'express';
 import verifyEmailModel from '../models/mailing.OTP.model.js';
 import accountModel from '../models/account.model.js';
 import cryptoRandomString from 'crypto-random-string';
+import checkPermission from '../middlewares/permission.mdw.js';
 
 const router = express.Router();
 
@@ -35,10 +36,11 @@ router.post('/resending-verify-email', async function(req, res){
 	const host = req.headers.host;
 	// console.log(exprD);
 
+	const token = cryptoRandomString({length: 100});
 	const user = await accountModel.findID(id_acc);
-	await verifyEmailModel.updateExprDate(id_acc, exprD);
+	await verifyEmailModel.updateExprDate(id_acc, token, exprD);
 	await verifyEmailModel.sendVerifyEmail(user.name, user.email, host,
-				req.protocol + '://' + host, id_acc, notVerified.token, 24);
+				req.protocol + '://' + host, id_acc, token, 24);
 	return showMsgVerifyEmail(req, res, false, 'Đã gửi lại email xác nhận',
 							'/mailing/resending-verify-email');
 });
@@ -70,6 +72,9 @@ router.get('/verify-email', async function(req, res){
 	}
 
 	await verifyEmailModel.delete(id_acc);
+	const accInfo = await accountModel.findID(id_acc);
+	req.user.email = accInfo.email;
+	req.session.passport.user.email = accInfo.email;
 	showMsgVerifyEmail(req, res, true, 'Xác minh email thành công', 'javascript:;');
 });
 
@@ -115,6 +120,58 @@ router.post('/resending-forgot-password-email', async function(req, res){
 				host, req.protocol + '://' + host, user.id, token, 24)
 	return showMsgVerifyEmail(req, res, false, 'Đã gửi lại email xác nhận',
 							'/mailing/resending-forgot-password-email');
+});
+
+router.get('/enter-your-email', checkPermission.notLogin, async function(req, res, next){
+	const isVerifiedEmail = await verifyEmailModel.find({id_acc: req.user.id});
+	// console.log(isVerifiedEmail);
+	if(isVerifiedEmail === null && req.user.email !== null){
+		// Đã xác thực email
+		next();
+	}
+	if(req.user.email === null ){
+		return res.render('vwAccount/verifyEmail', {
+			inputEmail: true,
+			layout: 'non_sidebar.hbs'
+		});
+	}
+	else{
+		return res.render('vwAccount/verifyEmail', {
+			msg: 'Vui lòng kiểm tra email để xác nhận tài khoản để tiếp tục sử dụng website', 
+			isLogon: true,
+			id_acc: req.user.id,
+			verified: false,
+			action: '/mailing/resending-verify-email',
+			layout: 'non_sidebar.hbs'
+		});
+	}
+});
+
+router.post('/enter-your-email', checkPermission.notLogin, async function(req, res){
+	const email = req.body.email;
+	const isExisted = await accountModel.findEmail(email);
+	const response = {
+		success: true,
+		notification: 'Đã gửi thành công mail xác nhận. Vui lòng kiểm tra mail của bạn'
+	};
+	if(isExisted !== null && isExisted.id != req.user.id){
+		response.success = false;
+		response.notification = 'Email này đã được tạo bởi một tài khoản khác có trong hệ thống';
+	}
+	else{
+		const host = req.headers.host;
+		const token = cryptoRandomString({length: 100});
+		await verifyEmailModel.addOrUpdateNotVerifiedEmail(req.user.id, email, token);
+		await verifyEmailModel.sendVerifyEmail(req.user.name, 
+					email, host, req.protocol + '://' + host,
+					req.user.id, token, 24);
+	}
+	return res.render('vwAccount/verifyEmail', {
+		inputEmail: true,
+		email: email,
+		response: response,
+		layout: 'non_sidebar.hbs'
+	})
 });
 
 export default router;

@@ -15,7 +15,12 @@ async function findOrCreate(profile){
 	const idThirdPartyAcc = profile.id;
 	const provider = profile.provider;
 	const displayName = profile.displayName;
-	const email = profile.emails[0].value || null;
+	console.log('session:')
+	console.log(profile);
+	var email = null;
+	if(typeof(profile.emails) !== 'undefined'){
+		email = profile.emails[0].value;
+	}
 	const info = await accountModel.findOrCreateByThirdPartyAcc(
 					idThirdPartyAcc, displayName, email, provider);
 	return info;

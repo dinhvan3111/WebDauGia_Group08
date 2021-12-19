@@ -3,14 +3,14 @@
 {{/section}}
 
 {{#if this.msg.length}}
-	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	<div class="alert alert-warning alert-dismissible fade show ml-3" role="alert">
 	  {{msg}}
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 	    <span aria-hidden="true">&times;</span>
 	  </button>
 	</div>
 	{{#if this.isLogon}}
-		<div><button>Ok</button></div>
+		{{!-- <div><button>Ok</button></div> --}}
 	{{else}}
 		<div><br><br><a href="/login">Go to login</a></div>
 
@@ -18,11 +18,117 @@
 	{{#if this.verified}}
 
 	{{else}}
+		<div class="form-row ml-3">
 		<form action="{{action}}" method="post">
 			<input type="hidden" name="id_acc" value="{{id_acc}}"/>
-			<button>Gửi lại link xác nhận mới</button>
+			<button id="send" disabled>Gửi lại trong 30s</button>
 		</form>
+		</div>
 	{{/if}}
-
+	<input type="text" hidden id="resend" value="1"/>
 	
 {{/if}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{#if inputEmail}}
+
+
+<div class="form-row ml-3">
+<form action="/mailing/enter-your-email" method="post">
+	
+	
+	
+	<h3>Bạn cần thêm email để nhận mail từ website chúng tôi</h3>
+	{{#if response}}
+		{{#if response.success}}
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+		  {{response.notification}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{{else}}
+		<div class="alert alert-warning alert-dismissible fade show" role="alert">
+		  {{response.notification}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		{{/if}}
+	{{/if}}
+	<div><label for="email">Nhập email của bạn:</label>
+	<input type="email" id="email" name="email" value="{{email}}" required /></div>
+	
+	{{#if response.success}}
+		<button id="send" disabled >Gửi lại trong 30s</button>
+
+	{{else}}
+		<button id="send">Gửi mail xác nhận</button>
+	{{/if}}
+	
+	
+	
+
+
+</form>
+</div>
+
+{{/if}}
+
+{{#if response.success}}
+	<input type="text" hidden id="resend" value="1"/>
+{{else}}
+	<input type="text" hidden id="resend" value="0"/>
+{{/if}}
+<input type="number" hidden id="delay" value="29">
+
+
+
+
+
+
+
+{{#section 'js'}}
+<script>
+
+
+
+
+
+
+$( window ).on("load", function(){
+	const resend = $('#resend').val();
+	if(resend == '1'){
+		const enableResend = setInterval(function(){  
+			const delay = $('#delay').val();
+			// console.log(delay);
+			if(delay == 0){
+				clearInterval(enableResend);
+		    	$('#send').prop('disabled', false);
+		    	$('#send').html('Gửi lại email xác nhận');
+		    }
+		    else{
+		    	$('#delay').val(parseInt(delay) - 1);
+		    	// const resendInSeconds = $('#send').html() + ' trong ' + delay 's';
+		    	$('#send').html('Gửi lại trong ' + delay + 's');
+		    }
+		}, 1000);
+	}
+});
+</script>
+{{/section}}

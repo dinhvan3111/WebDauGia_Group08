@@ -41,20 +41,41 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
                 </li>
+
+
+
+                {{#if (isAdmin lcAuthUser.user.id_permission)}}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Sản phẩm
+                    </a>
+                    <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
+                        <a class="dropdown-item font-bold" href="/products">Danh sách sản phẩm</a>
+                        <a class="dropdown-item font-bold" href="#">Quản lý sản phẩm</a>
+                    </div>
+                </li>
+                {{else}}
                 <li class="nav-item">
                     <a class="nav-link" href="/products">Danh sách sản phẩm</a>
                 </li>
+                {{/if}}
+
+
+
+                {{#if (isAdmin lcAuthUser.user.id_permission)}}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
-                        Dropdown
+                        Quản lý tài khoản
                     </a>
                     <div class="dropdown-menu bg-light-yellow" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item font-bold" href="#">Test mail</a>
-                        <a class="dropdown-item font-bold" href="#">Another action</a>
-                        <a class="dropdown-item font-bold" href="#">Something else here</a>
+                        <a class="dropdown-item font-bold" href="/admin/accept_request">Phê duyệt người bán</a>
+                        <a class="dropdown-item font-bold" href="/admin/seller-management">Danh sách người bán</a>
+                        <a class="dropdown-item font-bold" href="/admin/account-management">Khoá tài khoản người dùng</a>
                     </div>
                 </li>
+                {{/if}}
                 <li class="nav-item">
                     <a class="nav-link" href="#">About us</a>
                 </li>

@@ -20,7 +20,7 @@ router.get('/accept_request', checkPermission.isNotAdmin, async function(req, re
 	}
 	res.render('vwAccount/accept_request',{
 		requests: allRequests,
-		layout: 'admin.hbs'
+		layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/accept_request', checkPermission.isNotAdmin, async function(req, res){
@@ -36,7 +36,7 @@ router.post('/accept_request', checkPermission.isNotAdmin, async function(req, r
 	}
 	res.render('vwAccount/accept_request',{
 		requests: allRequests,
-		layout: 'admin.hbs'
+		layout: 'non_sidebar.hbs'
 	});
 });
 
@@ -51,7 +51,7 @@ router.get('/seller-management', checkPermission.isNotAdmin, async function(req,
 	}
 	res.render('vwAccount/sellers_expired_day',{
 		allSellers,
-		layout: 'admin.hbs'
+		layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/seller-management', checkPermission.isNotAdmin, async function(req, res){
@@ -75,7 +75,7 @@ router.get('/account-management', checkPermission.isNotAdmin, async function(req
 	}
 	res.render('vwAccount/account_management',{
 		accountList,
-		layout: 'admin.hbs'
+		layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/account-management', checkPermission.isNotAdmin, async function(req, res){
