@@ -71,11 +71,11 @@
         </style>
     {{/section}}
     {{#section 'js'}}
-        <script>
-                {{#if this.message}}
-                alert('{{this.message}}');
-                {{/if}}
-        </script>
+<!--        <script>-->
+<!--                {{#if this.message}}-->
+<!--                alert('{{this.message}}');-->
+<!--                {{/if}}-->
+<!--        </script>-->
         <script>
             $('#send-request-btn').on('click', function (){
                 $('#frmUpgrade').submit();
@@ -86,6 +86,16 @@
 <body>
 <!--	<h1>Hi, {{user.addr}}</h1>-->
 <div class="container">
+    {{#if this.message}}
+        <div class="alert alert-warning alert-dismissible fade show mt-1 text-center" role="alert">
+            <strong>Lưu ý! </strong> {{this.message}}.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {{else}}
+
+    {{/if}}
     <div class="row col-xl justify-content-center main">
         <div class="info col-md-8 mt-1">
             <div class="usr-info card text-center sidebar">
@@ -145,12 +155,12 @@
                             <a href="/edit_profile" type="submit" class="edit-btn">Chỉnh sửa</a>
                         {{/if}}
                         {{#if isBidder}}
+
+                        {{else}}
                             <form id="frmUpgrade" method="post">
                                 <input type="text" id="txtIDAcc" name="id_acc" value="{{user.id}}">
                             </form>
                             <a href="#" type="submit" id="send-request-btn" class="edit-btn">Gửi yêu cầu trở thành Seller</a>
-                        {{else}}
-
                         {{/if}}
                     </div>
                 </div>

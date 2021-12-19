@@ -3,30 +3,14 @@ import moment from "moment";
 // import DATE_FORMATER from 'dateformat';
 
 export default{
-	// async findID(id_acc){
-	// 	const usr = await db('accounts')
-	// 							.where('id', id_acc);
-	// 	if(usr.length == 0){
-	// 		return null;
-	// 	}
-	// 	return usr[0];
-	// },
-	// async findUsername(username){
-	// 	const usrname = await db('accounts')
-	// 							.where('username', username);
-	// 	if(usrname.length == 0){
-	// 		return null;
-	// 	}
-	// 	return usrname[0];
-	// },
-	// async findEmail(email){
-	// 	const mail = await db('accounts')
-	// 							.where('email', email);
-	// 	if(mail.length == 0){
-	// 		return null;
-	// 	}
-	// 	return mail[0];
-	// },
+	async findID(id_acc){
+		const usr = await db('accounts')
+								.where('id', id_acc);
+		if(usr.length == 0){
+			return null;
+		}
+		return usr[0];
+	},
 	async addRequest(id_acc){
 		const checkIfInRequestDb = await db('request_upgrade').select('id_acc').where('id_acc',id_acc);
 		const checkIfInSellerExpiredDb = await db('seller_expired_day').select('id').where('id',id_acc);
@@ -46,6 +30,12 @@ export default{
 	},
 	getAllRequest(){
 		return db('request_upgrade').select();
+	},
+	getAllSellerExpiredDay(){
+		return db('seller_expired_day').select();
+	},
+	getAllAccounts(){
+		return db('accounts').select();
 	},
 	async acceptRequest(id,isAccept){
 		if(isAccept === 'true') {
@@ -74,6 +64,15 @@ export default{
 		else{
 			return expiredList[0];
 		}
+	},
+	async lockUserById(id){
+		await  db('accounts').update({is_locked: 1}).where('id',id);
+	},
+	async unlockUserById(id){
+		await  db('accounts').update({is_locked: 0}).where('id',id);
+	},
+	async deleteUserById(id){
+		await  db('accounts').where('id',id).del();
 	},
 	async endSellerAuth(id){
 		await db('accounts').update({id_permission: 3}).where('id',id);

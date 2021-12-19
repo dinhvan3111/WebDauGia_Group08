@@ -51,6 +51,7 @@ export default function(app){
 			authUser = false;
 		}
 		else{
+			res.locals.permission = req.session.passport.user.id_permission;
 			if(typeof(req.user.provider) === 'undefined'){
 				res.locals.canChangePwd = true;
 			}

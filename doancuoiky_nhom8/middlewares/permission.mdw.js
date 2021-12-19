@@ -36,7 +36,18 @@ export default {
 			notLogin(req, res);
 			const user = await accountModel.findID(req.user.id);
 			// console.log(user);
-			if(user.id_permission > 2){
+			if(user.id_permission != 2){
+				return res.render('404', {layout: false});
+			}
+			next();
+		}
+	},
+	async isNotAdmin(req,res,next){
+		if(notLogin(req, res) !== true){
+			notLogin(req, res);
+			const user = await accountModel.findID(req.user.id);
+			// console.log(user);
+			if(user.id_permission !== 1){
 				return res.render('404', {layout: false});
 			}
 			next();

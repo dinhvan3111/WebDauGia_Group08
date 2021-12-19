@@ -1,0 +1,163 @@
+{{#section 'css'}}
+    <style>
+        #frmDownGradeSeller{
+            display: none;
+        }
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.lock-acc-btn').on('click',function (){
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('lock');
+        });
+        $('.delete-acc-btn').on('click',function (){
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('delete');
+        });
+        $('.unlock-acc-btn').on('click',function (){
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('unlock');
+        });
+        $('#confirmDeleteBtn').on('click',function (){
+            $('#frmDownGradeSeller').submit();
+        });
+        $('#confirmLockBtn').on('click',function (){
+            $('#frmDownGradeSeller').submit();
+        })
+        $('#confirmUnlockBtn').on('click',function (){
+            $('#frmDownGradeSeller').submit();
+        })
+    </script>
+{{/section}}
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <h4 class="card-header bg-dark text-white">
+            Quản lý các tài khoản
+        </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tên người dùng</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Loại tài khoản</th>
+                    <th scope="col"> </th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#if this.accountList}}
+                    {{#each this.accountList}}
+                        <tr class="">
+                            <td>{{id}}</td>
+                            <td>{{username}}</td>
+                            <td>{{email}}</td>
+                            <td>{{permissionName}}</td>
+                            <td>
+                                {{#if permissionId}}
+
+                                {{else}}
+                                    {{#if is_locked}}
+                                        <a data-id="{{id}}" class="unlock-acc-btn btn btn-sm btn-success font-bold btn-long mr-1" href="#" role="button" data-toggle="modal" data-target="#unlockAccountModal">
+                                            <i class="fa fa-unlock" aria-hidden="true"></i>
+                                        </a>
+                                    {{else}}
+                                        <a data-id="{{id}}" class="lock-acc-btn btn btn-sm btn-dark font-bold btn-long mr-2" href="#" role="button" data-toggle="modal" data-target="#lockAccountModal">
+                                            <i class="fa fa-lock" aria-hidden="true"></i>
+                                        </a>
+                                    {{/if}}
+                                {{/if}}
+<!--                                <a data-id="{{id}}" class="delete-acc-btn btn btn-sm btn-danger font-bold btn-long" href="#" role="button" data-toggle="modal" data-target="#deleteAccountModal">-->
+<!--                                    <i class="fa fa-times" aria-hidden="true"></i>-->
+<!--                                </a>-->
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{else}}
+                    <tr class="">
+                        <td colspan="5" class="text-center">
+                            <p>Chưa có yêu cầu nào</p>
+                        </td>
+                    </tr>
+                {{/if}}
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    Xác nhận xoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn xoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmLockBtn" type="button" class=" btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="lockAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                    Xác nhận khoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn khoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmDeleteBtn" type="button" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="unlockAccountModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-unlock" aria-hidden="true"></i>
+                                    Xác nhận mở khoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn mở khoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmUnlockBtn" type="button" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </tbody>
+            </table>
+        </div>
+        <form id="frmDownGradeSeller" method="post">
+            <input type="text" id="txtUserID" name="id" value="">
+            <input type="text" id="txtAction" name="action" value="">
+        </form>
+    </div>
+</div>

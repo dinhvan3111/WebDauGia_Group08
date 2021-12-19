@@ -1,0 +1,85 @@
+{{#section 'css'}}
+    <style>
+        #frmDownGradeSeller{
+            display: none;
+        }
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.down-grade-btn').on('click',function (){
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+        });
+        $('#confirmBtn').on('click',function (){
+            $('#frmDownGradeSeller').submit();
+        })
+    </script>
+{{/section}}
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <h4 class="card-header bg-dark text-white">
+            Quản lý các Seller tạm thời
+        </h4>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tên người dùng</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Thời gian hết hạn</th>
+                    <th scope="col">Hạ cấp tài khoản</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#if this.allSellers}}
+                    {{#each this.allSellers}}
+                        <tr class="">
+                            <td>{{id}}</td>
+                            <td>{{username}}</td>
+                            <td>{{email}}</td>
+                            <td>{{time}}</td>
+                            <td>
+                                <a data-id="{{id}}" class="down-grade-btn btn btn-sm btn-danger font-bold btn-long" href="#" role="button" data-toggle="modal" data-target="#exampleModal">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{else}}
+                    <tr class="">
+                        <td colspan="5" class="text-center">
+                            <p>Chưa có seller tạm thời nào</p>
+                        </td>
+                    </tr>
+                {{/if}}
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Xác nhận hạ cấp</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn hạ cấp Seller này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmBtn" type="button" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </tbody>
+            </table>
+        </div>
+        <form id="frmDownGradeSeller" method="post">
+            <input type="text" id="txtUserID" name="id" value="">
+        </form>
+    </div>
+</div>

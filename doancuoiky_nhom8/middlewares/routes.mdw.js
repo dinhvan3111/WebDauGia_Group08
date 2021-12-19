@@ -6,14 +6,28 @@ import authRoute from '../routes/auth.route.js';
 import mailingRoute from '../routes/mailing.route.js';
 import productManagementRoute from '../routes/product-management.route.js';
 import adminManagementRoute from '../routes/admin_management.route.js';
+import adminManagement from "../models/admin_management.model.js";
 
 export default function(app){
 	app.get('/', async function (req, res) {
-		const productList = await productModel.getTopProduct();
-		// console.log(productList);
-	    res.render('home', {
-	    	products: productList
-	    });
+		if(res.locals.permission != 1){
+			res.render('home');
+		}
+		else{
+			const accountList = await adminManagement.getAllAccounts();
+			for(let i =0; i < accountList.length; i++){
+				if(accountList[i].id_permission === 2){
+					accountList[i].permission = 'Seller';
+				}
+				if(accountList[i].id_permission === 3){
+					accountList[i].permission = 'Bidder';
+				}
+			}
+			res.render('vwAccount/account_management',{
+				layout: 'admin.hbs',
+				accountList
+			});
+		}
 	});
 
 	app.get('/bs4', function (req, res) {
