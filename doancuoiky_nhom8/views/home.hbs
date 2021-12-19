@@ -39,7 +39,35 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                            {{#if products.nearTimeEnd}}
+                                {{#each products.nearTimeEnd}}
+                                <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                                    <div class="card">
+                                        <a href="/products/{{id}}">
+                                        <div class="card-body">
+                                            <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
+                                            <h5 class="card-title">{{name}}</h5>
+                                            <h6 class="card-title">Giá: <span class="text-danger">{{format_number price}} VNĐ</span></h6>
+                                            <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                                <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                Đấu giá ngay
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
+                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                Quan tâm
+                                            </a>
+                                        </div></a>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            {{else}}
+                            <div><span>Chưa có sản phẩm nào</span></div>
+                            {{/if}}
+
+                            {{!-- <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                 <div class="card">
                                     <div class="card-body">
                                         <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
@@ -118,29 +146,11 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
-                                        <h5 class="card-title">Sản phẩm 1</h5>
-                                        <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>
-                                        <h6 class="card-title">Đóng vào lúc: <span class="text-info">12/03/2021 12:01 PM EST</span></h6>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                        <a class="btn btn-sm btn-outline-success" href="/products/detail" role="button">
-                                            <i class="fa fa-gavel" aria-hidden="true"></i>
-                                            Đấu giá ngay
-                                        </a>
-                                        <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                            Quan tâm
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
+                        {{#if products.nearTimeEnd}}
                         <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>
+                        {{/if}}
                     </div>
                 </div>
 
@@ -150,7 +160,37 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                            {{#if products.mostBid}}
+                                {{#each products.mostBid}}
+                                <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                                    <div class="card">
+                                        <a href="/products/{{id}}">
+                                        <div class="card-body">
+                                            <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
+                                            <h5 class="card-title">{{name}}</h5>
+                                            <h6 class="card-title">Giá: <span class="text-danger">{{format_number price}} VNĐ</span></h6>
+                                            <h6 class="card-title"><span class="text-danger">{{auctionCount}}</span> lượt đấu giá</h6>
+                                            <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                                <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                Đấu giá ngay
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
+                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                Quan tâm
+                                            </a>
+                                        </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            {{else}}
+                            <div><span>Chưa có sản phẩm nào</span></div>
+                            {{/if}}
+
+                            {{!-- <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                 <div class="card">
                                     <div class="card-body">
                                         <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
@@ -229,29 +269,11 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
-                                        <h5 class="card-title">Sản phẩm 1</h5>
-                                        <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>
-                                        <h6 class="card-title">Đóng vào lúc: <span class="text-info">12/03/2021 12:01 PM EST</span></h6>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                        <a class="btn btn-sm btn-outline-success" href="/products/detail" role="button">
-                                            <i class="fa fa-gavel" aria-hidden="true"></i>
-                                            Đấu giá ngay
-                                        </a>
-                                        <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                            Quan tâm
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>
+                        {{#if products.mostBid}}
+                            <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>
+                        {{/if}}
                     </div>
                 </div>
 
@@ -261,7 +283,35 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                            {{#if products.highestPrice}}
+                                {{#each products.highestPrice}}
+                                <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
+                                            <h5 class="card-title">{{name}}</h5>
+                                            <h6 class="card-title">Giá: <span class="text-danger">{{format_number price}} VNĐ</span></h6>
+                                            <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                        </div>
+                                        <div class="card-footer text-muted">
+                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                                <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                Đấu giá ngay
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
+                                                <i class="fa fa-heart" aria-hidden="true"></i>
+                                                Quan tâm
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/each}}
+                            {{else}}
+                            <div><span>Chưa có sản phẩm nào</span></div>
+                            {{/if}}
+
+
+                            {{!-- <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                 <div class="card">
                                     <div class="card-body">
                                         <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
@@ -340,29 +390,11 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <img class="product-img-5-sidebar" src="img/products/example.svg" alt="Sản phẩm">
-                                        <h5 class="card-title">Sản phẩm 1</h5>
-                                        <h6 class="card-title">Giá: <span class="text-danger">100.000vnđ</span></h6>
-                                        <h6 class="card-title">Đóng vào lúc: <span class="text-info">12/03/2021 12:01 PM EST</span></h6>
-                                    </div>
-                                    <div class="card-footer text-muted">
-                                        <a class="btn btn-sm btn-outline-success" href="/products/detail" role="button">
-                                            <i class="fa fa-gavel" aria-hidden="true"></i>
-                                            Đấu giá ngay
-                                        </a>
-                                        <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                            Quan tâm
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>
+                        {{#if products.highestPrice}}
+                            <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>
+                        {{/if}}
                     </div>
                 </div>
             </blockquote>

@@ -180,5 +180,5 @@ export default{
 			return null;
 		}
 		return info[0];
-	}
+	},
 }

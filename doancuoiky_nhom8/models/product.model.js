@@ -222,6 +222,74 @@ export default {
 							link_product, 
 							formattedPrice)
 	},
+	async topProductsNearTimeEnd(numOfProducts){
+		const res = await db('products').orderBy('time_end', 'asc')
+							.limit(numOfProducts)
+							.whereRaw('time_end >= now()');
+		if(res.length == 0){
+			return null;
+		}
+		return res;
+	},
+	async topProductsMostBid(numOfProducts){
+		const res = await db.raw(`select (select count(*)
+							        from bid_history bh 
+							        where bh.id_product = p.id) as auctionCount,
+									id, name, price, time_end
+							from products p
+							where p.not_sold = 1;`);
+		if(res[0].length == 0){
+			return null;
+		}
+		return res[0];
+	},
+	async topProductsHighestPrice(numOfProducts){
+		const res = await db('products').orderBy('price', 'desc')
+										.limit(numOfProducts)
+										.where({not_sold: 1});
+		if(res.length == 0){
+			return null;
+		}
+		return res;
+	},
+	getImgProductList(productList){
+		if(productList === null){
+			return null;
+		}
+		for(let i = 0; i < productList.length; i++){
+			productList[i].img = fileModel.getAllFileName('./public/img/products/' 
+															+ productList[i].id, 
+															productList[i].id);	
+		}
+		return productList;
+	},
+	getRelativeTimeOfProductList(productList){
+		if(productList === null){
+			return null;
+		}
+		moment.locale('vi');
+		for(let i = 0; i < productList.length; i++){
+			const time_end = moment(productList[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+			productList[i].relativeTimeEnd = time_end.fromNow();
+		}
+		return productList;
+	},
+	async getTopProduct(){
+		var nearTimeEnd = await this.topProductsNearTimeEnd(5);
+		var mostBid = await this.topProductsMostBid(5);
+		var highestPrice = await this.topProductsHighestPrice(5);
+		nearTimeEnd = this.getImgProductList(nearTimeEnd);
+		mostBid = this.getImgProductList(mostBid);
+		highestPrice = this.getImgProductList(highestPrice);
+		nearTimeEnd = this.getRelativeTimeOfProductList(nearTimeEnd);
+		mostBid = this.getRelativeTimeOfProductList(mostBid);
+		highestPrice = this.getRelativeTimeOfProductList(highestPrice);
+		return {
+			nearTimeEnd: nearTimeEnd,
+			mostBid: mostBid,
+			highestPrice: highestPrice
+		};
+	},
 
 
 

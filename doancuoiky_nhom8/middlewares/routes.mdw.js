@@ -1,3 +1,4 @@
+import productModel from '../models/product.model.js';
 import categoryRoute from '../routes/category.route.js';
 import accountRoute from '../routes/account.route.js';
 import productUserRoute from '../routes/product-user.route.js';
@@ -8,7 +9,11 @@ import adminManagementRoute from '../routes/admin_management.route.js';
 
 export default function(app){
 	app.get('/', async function (req, res) {
-	    res.render('home');
+		const productList = await productModel.getTopProduct();
+		// console.log(productList);
+	    res.render('home', {
+	    	products: productList
+	    });
 	});
 
 	app.get('/bs4', function (req, res) {
