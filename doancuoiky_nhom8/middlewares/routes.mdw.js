@@ -16,8 +16,8 @@ export default function(app){
 	      	delete req.session.idAcc;
 	    }
 	    req.logout();
-	    const url = req.headers.referer || '/';
-	    res.redirect(url);
+	    // const url = req.headers.referer || '/';
+		res.redirect('/login');
 	});
 
 	app.use('/mailing', mailingRoute);

@@ -17,6 +17,7 @@ router.get('/', async function (req, res){
 		}
 	}
 	res.render('vwCategory/index', {
+		layout: 'non_sidebar.hbs',
 		categories: list,
 		isAdmin
 	})
@@ -58,13 +59,14 @@ router.get('/', async function (req, res){
 // });
 router.get('/add_category', checkPermission.isNotAdmin,async function (req,res){
 	res.render('vwCategory/add_category',{
-		// layout:'non_sidebar.hbs'
+		layout:'non_sidebar.hbs'
 	});
 })
 router.post('/add_category', async function (req,res){
 	const category = await categoryModel.findByName(req.body.name);
 	if(category!== null){
 		res.render('vwCategory/add_category',{
+			layout: 'non_sidebar.hbs',
 			err_message: "Tên danh mục đã tồn tại!"
 		});
 	}
@@ -72,6 +74,7 @@ router.post('/add_category', async function (req,res){
 		const ret = await categoryModel.add(req.body);
 		// console.log(ret);
 		res.render('vwCategory/add_category',{
+			layout: 'non_sidebar.hbs',
 			success_message:"Thêm danh mục thành công!"
 		});
 	}
@@ -109,6 +112,7 @@ router.get('/edit', checkPermission.isNotAdmin,async function(req, res){
 	}
 
 	res.render('vwCategory/edit', {
+		layout: 'non_sidebar.hbs',
 		category
 	});
 });
@@ -117,6 +121,7 @@ router.post('/patch', async function (req, res) {
 	const new_category =await categoryModel.findByName(req.body.name);
 	if(new_category !== null){
 		res.render('vwCategory/edit', {
+			layout: 'non_sidebar.hbs',
 			category,
 			err_message: "Thất bại! Tên danh mục đã được sử dụng!"
 		});
@@ -136,6 +141,7 @@ router.get('/childctg', async function(req, res){
 		}
 	}
 	res.render('vwCategory/childctg',{
+		layout: 'non_sidebar.hbs',
 		categories: list,
 		isAdmin,
 		parent_id: id
@@ -145,7 +151,7 @@ router.get('/childctg/:id/add_category', checkPermission.isNotAdmin,async functi
 	//console.log(req.params.id);
 	const parent_id = req.params.id;
 	res.render('vwCategory/add_childCategory',{
-		// layout:'non_sidebar.hbs'
+		layout:'non_sidebar.hbs',
 		parent_id
 	});
 })
@@ -153,12 +159,14 @@ router.post('/childctg/:id/add_category', async function (req,res) {
 	const category = await categoryModel.findByName(req.body.name);
 	if (category !== null) {
 		res.render('vwCategory/add_childCategory', {
+			layout: 'non_sidebar.hbs',
 			err_message: "Tên danh mục đã tồn tại!"
 		});
 	} else {
 		const ret = await categoryModel.add(req.body);
 		// console.log(ret);
 		res.render('vwCategory/add_category', {
+			layout: 'non_sidebar.hbs',
 			success_message: "Thêm danh mục thành công!"
 		});
 	}
@@ -173,6 +181,7 @@ router.get('/childctg', async function(req, res){
 		}
 	}
 	res.render('vwCategory/childctg',{
+		layout: 'non_sidebar.hbs',
 		categories: list,
 		isAdmin,
 		parent_id: id
@@ -183,7 +192,7 @@ router.get('/childctg/edit_category', checkPermission.isNotAdmin,async function 
 	const category = await categoryModel.findById(id);
 	const parent = await categoryModel.findById(category.parent_id);
 	res.render('vwCategory/edit_childCategory',{
-		// layout:'non_sidebar.hbs'
+		layout:'non_sidebar.hbs',
 		category,
 		parent
 	});
@@ -202,6 +211,7 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 	console.log(current_parent);
 	if(parent_category===null){
 		return res.render('vwCategory/edit_childCategory', {
+			layout: 'non_sidebar.hbs',
 			category,
 			parent:current_parent,
 			err_message: "Thất bại! Tên danh mục cha Không tồn tại!"

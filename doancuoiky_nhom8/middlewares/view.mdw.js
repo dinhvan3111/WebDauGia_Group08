@@ -27,6 +27,13 @@ export default function(app){
 					return true;
 				}
 				return false;
+			},
+			isSeller(permission){
+				console.log(permission);
+				if(permission <= 2){
+					return true;
+				}
+				return false;
 			}
 	    }
 	}));

@@ -153,14 +153,14 @@
                     <div>
                         {{#if manage}}
                             <a href="/edit_profile" type="submit" class="edit-btn">Chỉnh sửa</a>
-                        {{/if}}
-                        {{#if isBidder}}
+                            {{#if isBidder}}
 
-                        {{else}}
-                            <form id="frmUpgrade" method="post">
-                                <input type="text" id="txtIDAcc" name="id_acc" value="{{user.id}}">
-                            </form>
-                            <a href="#" type="submit" id="send-request-btn" class="edit-btn">Gửi yêu cầu trở thành Seller</a>
+                            {{else}}
+                                <form id="frmUpgrade" method="post">
+                                    <input type="text" id="txtIDAcc" name="id_acc" value="{{user.id}}">
+                                </form>
+                                <a href="#" type="submit" id="send-request-btn" class="edit-btn">Gửi yêu cầu trở thành Seller</a>
+                            {{/if}}
                         {{/if}}
                     </div>
                 </div>

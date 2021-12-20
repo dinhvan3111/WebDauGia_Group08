@@ -1,5 +1,6 @@
 import categoryModel from '../models/category.model.js';
 import envVar from '../utils/envVar.js';
+import accountModel from '../models/account.model.js';
 
 export default function(app){
 
@@ -54,6 +55,12 @@ export default function(app){
 			res.locals.permission = req.session.passport.user.id_permission;
 			if(typeof(req.user.provider) === 'undefined'){
 				res.locals.canChangePwd = true;
+			}
+			else{
+				const user = await accountModel.findID(authUser.user.id);
+				req.user.id_permission = user.id_permission;
+				authUser.user.id_permission = user.id_permission;
+				req.session.passport.id_permission = user.id_permission;
 			}
 		}
 		// if(typeof (req.session.passport.user) === 'undefined'){
