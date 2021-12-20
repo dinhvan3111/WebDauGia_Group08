@@ -5,7 +5,7 @@ import accountModel from '../models/account.model.js';
 import productModel from '../models/product.model.js';
 import cateModel from '../models/category.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
-
+import moment from 'moment';
 const router = express.Router();
 
 router.get('/add', checkPermission.isNotSeller, async function(req, res){
@@ -81,5 +81,32 @@ router.post('/:product_id/ignore', checkPermission.isNotSeller,
 
 	res.redirect(req.headers.referer);
 });
-
+router.get('/management', checkPermission.isNotAdmin, async function(req, res){
+	const catID = req.query.id || 0;
+	const list_product = await productModel.getListProductToManage(catID);
+	var choseCtg = "Tất cả";
+	if(catID !==0){
+		choseCtg = await cateModel.findById(catID);
+		choseCtg = choseCtg.name;
+	}
+	const categories = await cateModel.getAllChild();
+	console.log(choseCtg);
+	for(var i = 0;i <list_product.length; i++){
+		list_product[i].start = moment(list_product[i].start).format('HH:mm DD-MM-YYYY')
+		list_product[i].end = moment(list_product[i].end).format('HH:mm DD-MM-YYYY');
+	}
+	res.render('vwProduct/product_management',{
+		list_product,
+		layout:'non_sidebar.hbs',
+		categories,
+		choseCtg
+	})
+});
+router.post('/del', checkPermission.isNotAdmin,
+	async function(req, res){
+		const id = req.body.proID;
+		console.log(id);
+		const product = await productModel.deleteProduct(id);
+		res.redirect(req.headers.referer);
+	});
 export default router;

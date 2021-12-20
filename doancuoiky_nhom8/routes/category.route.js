@@ -11,7 +11,7 @@ router.get('/', async function (req, res){
 	var isAdmin = false;
 
 	if(req.session.passport.user!==undefined) {
-		if (req.session.passport.user.id_permission < 3) {
+		if (req.session.passport.user.id_permission === 1) {
 			isAdmin = true;
 
 		}
@@ -87,7 +87,7 @@ router.post('/del', async function (req, res) {
 	const child = await categoryModel.getAllChildWithId(req.body.id);
 	var isAdmin = false;
 	if(req.session.passport.user!==undefined) {
-		if (req.session.passport.user.id_permission < 3) {
+		if (req.session.passport.user.id_permission === 1) {
 			isAdmin = true;
 
 		}
@@ -136,7 +136,7 @@ router.get('/childctg', async function(req, res){
 	const list = await categoryModel.getAllChildWithId(id);
 	var isAdmin = false;
 	if(req.session.passport.user!==undefined) {
-		if (req.session.passport.user.id_permission < 3) {
+		if (req.session.passport.user.id_permission === 1) {
 			isAdmin = true;
 		}
 	}
@@ -176,7 +176,7 @@ router.get('/childctg', async function(req, res){
 	const list = await categoryModel.getAllChildWithId(id);
 	var isAdmin = false;
 	if(req.session.passport.user!==undefined) {
-		if (req.session.passport.user.id_permission < 3) {
+		if (req.session.passport.user.id_permission === 1) {
 			isAdmin = true;
 		}
 	}

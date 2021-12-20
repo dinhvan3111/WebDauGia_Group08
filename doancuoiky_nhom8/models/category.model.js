@@ -7,7 +7,9 @@ export default {
             .leftJoin('categories as parent', 'child.parent_id', '=', 'parent.id')
             .orderBy('parent.name');
     },
-
+    getAllChild() {
+        return db('categories').where('parent_id', !null);
+    },
     getAllParent() {
         return db.select(['ctg.id as id', 'ctg.name as name'])
             .from('categories as ctg')

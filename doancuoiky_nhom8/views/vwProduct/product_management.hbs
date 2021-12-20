@@ -1,0 +1,273 @@
+{{#section 'css'}}
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #frmDownGradeSeller {
+            display: none;
+        }
+
+        .btn-delete {
+            text-align: center;
+        }
+
+        .img-avt {
+            height: 150px;
+            width: 150px;
+        }
+
+        .name-column {
+            width: 400px;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        th {
+            font-size: 18px;
+        }
+        .dropdown-menu .dropdown-item{
+            padding: 15px;
+        }
+        .dropdown-menu,.dropdown-item:hover{
+            border-radius: 5px;
+        }
+
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.lock-acc-btn').on('click', function () {
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('lock');
+        });
+        $('.delete-acc-btn').on('click', function () {
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('delete');
+        });
+        $('.unlock-acc-btn').on('click', function () {
+            const id = $(this).attr('data-id');
+            $('#txtUserID').val(id);
+            $('#txtAction').val('unlock');
+        });
+        $('#confirmDeleteBtn').on('click', function () {
+            $('#frmDownGradeSeller').submit();
+        });
+        $('#confirmLockBtn').on('click', function () {
+            $('#frmDownGradeSeller').submit();
+        })
+        $('#confirmUnlockBtn').on('click', function () {
+            $('#frmDownGradeSeller').submit();
+        })
+    </script>
+{{/section}}
+<div class="col-sm-12 mt-3">
+
+    <div class="card">
+        <h4 class="card-header bg-dark text-white">
+            Quản lý sản phẩm
+            <div class="dropdown float-right">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-expanded="false">
+                    <b>{{choseCtg}}</b>
+                </button>
+
+                <div class="dropdown-menu dropdown-menu-right mt-1" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/products/management"><b>Tất cả</b></a>
+                    <hr class="m-0">
+                    {{#each categories}}
+                        <a class="dropdown-item" href="?id={{id}}"><b>{{name}}</b></a>
+                        <hr class="m-0">
+                    {{/each}}
+                </div>
+
+            </div>
+        </h4>
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th class="name-column" scope="col">Tên sản phẩm</th>
+                    <th scope="col">Ảnh đại diện</th>
+                    <th scope="col">Tên người bán</th>
+                    <th scope="col">Giá hiện tại</th>
+                    <th scope="col">Ngày bắt đầu</th>
+                    <th scope="col">Ngày kết thúc</th>
+                    <th scope="col">Xóa sản phẩm</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{#if this.list_product.length}}
+
+                    {{#each this.list_product}}
+                        <tr class="">
+                            <td>{{proID}}</td>
+                            <td style="vertical-align: center;" class="name-column">{{proName}}</td>
+                            <td><img class="img-avt" src="/img/products/{{proID}}/thumb/{{img}}"></td>
+                            <td>{{accName}}</td>
+                            <td>{{format_number price}} VNĐ</td>
+                            <td>{{start}}</td>
+                            <td>{{end}}</td>
+                            <form method="post">
+                            <td class="btn-delete">
+
+                                <input type="hidden" name="proID" value="{{proID}}">
+                                <button type="submit" formaction="/products/del" class="btn btn-danger"><i class="fa fa-times"
+                                                                                aria-hidden="true"></i></button>
+                            </td>
+                            </form>
+                        </tr>
+                    {{/each}}
+
+                {{else}}
+                    <tr class="">
+                        <td colspan="5" class="text-center">
+                            <p>Không có sản phẩm phù hợp</p>
+                        </td>
+                    </tr>
+                {{/if}}
+
+                <!-- Modal -->
+                <div class="modal fade" id="deleteAccountModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                    Xác nhận xoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn xoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmLockBtn" type="button" class=" btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="lockAccountModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-lock" aria-hidden="true"></i>
+                                    Xác nhận khoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn khoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmDeleteBtn" type="button" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="unlockAccountModal" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">
+                                    <i class="fa fa-unlock" aria-hidden="true"></i>
+                                    Xác nhận mở khoá tài khoản
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn mở khoá tài khoản này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                <button id="confirmUnlockBtn" type="button" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+        <form id="frmDownGradeSeller" method="post">
+            <input type="text" id="txtUserID" name="id" value="">
+            <input type="text" id="txtAction" name="action" value="">
+        </form>
+    </div>
+    <nav style="position: relative;" class="mt-1 mb-2 float-right">
+        <ul class="pagination">
+            <li class="page-item disabled">
+                <a class="page-link">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="#">2</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="modal fade" id="bidModal" tabindex="-1"
+         aria-labelledby="bidModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bidModalLabel">Nhập giá
+                        tối đa bạn muốn đặt</h5>
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="frmBidding" action="{{product.id}}/bidding"
+                      method="post">
+                    <div class="modal-body">
+                        <input type="text" name="max_bid_price"
+                               id="max_bid_price"
+                               placeholder="(VNĐ) {{format_number
+                                       product.price}}"
+                               data-type="currency" value required>
+                        <input hidden type="text" name="id_product"
+                               id="id_product" value="{{product.id}}"
+                               required>
+                        <p id="dangerMaxBidPrice"
+                           style="color: red"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Đóng
+                        </button>
+                        <a href="javascript: $('#frmBidding').submit();">
+                            <button type="button"
+                                    class="btn btn-primary"><i
+                                    class="fa fa-gavel"></i> Đặt giá
+                            </button>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
