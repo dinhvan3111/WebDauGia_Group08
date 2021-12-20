@@ -20,7 +20,7 @@ router.get('/', async function (req, res){
 	})
 });
 
-router.get('/add_category', checkPermission.isNotSeller,async function (req,res){
+router.get('/add_category', checkPermission.isNotAdmin,async function (req,res){
 	res.render('vwCategory/add_category',{
 		// layout:'non_sidebar.hbs'
 	});
@@ -65,7 +65,7 @@ router.post('/del', async function (req, res) {
 		res.redirect('/admin/categories');
 	}
 });
-router.get('/edit', checkPermission.isNotSeller,async function(req, res){
+router.get('/edit', checkPermission.isNotAdmin,async function(req, res){
 	const id = req.query.id || 0;
 	const category = await categoryModel.findById(id);
 	if (category === null) {
@@ -105,7 +105,7 @@ router.get('/childctg', async function(req, res){
 		parent_id: id
 	})
 });
-router.get('/childctg/:id/add_category', checkPermission.isNotSeller,async function (req,res){
+router.get('/childctg/:id/add_category', checkPermission.isNotAdmin,async function (req,res){
 	//console.log(req.params.id);
 	const parent_id = req.params.id;
 	res.render('vwCategory/add_childCategory',{
@@ -142,7 +142,7 @@ router.get('/childctg', async function(req, res){
 		parent_id: id
 	})
 });
-router.get('/childctg/edit_category', checkPermission.isNotSeller,async function (req,res){
+router.get('/childctg/edit_category', checkPermission.isNotAdmin,async function (req,res){
 	const id =  req.query.id||0;
 	const category = await categoryModel.findById(id);
 	const parent = await categoryModel.findById(category.parent_id);
@@ -152,7 +152,7 @@ router.get('/childctg/edit_category', checkPermission.isNotSeller,async function
 		parent
 	});
 })
-router.post('/childctg/edit_category', checkPermission.isNotSeller,async function(req, res){
+router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function(req, res){
 	console.log(req.body);
 	const id = req.body.id;
 	const parent_name = req.body.parent_name;
