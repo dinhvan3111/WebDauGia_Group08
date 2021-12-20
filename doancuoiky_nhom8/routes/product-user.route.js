@@ -10,7 +10,35 @@ import checkPermission from '../middlewares/permission.mdw.js';
 const router = express.Router();
 
 router.get('/', async function (req, res){
-    res.render('vwProduct/products');
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const result = await productModel.getAllProduct(sort);
+    moment.locale('vi');
+    var end_date = [];
+    for (let i =0 ; i < result.length; i++){
+        end_date.push(0);
+    }
+    for(let i =0 ; i < result.length; i++){
+        if(result[i].buy_now_price == 0){
+            delete result[i].buy_now_price;
+        }
+        end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+        if(end_date[i].diff(moment(), 'days') < 3){
+            result[i].price_color = false;
+            result[i].time_end = end_date[i].fromNow();
+        }
+        else{
+            result[i].price_color = true;
+            result[i].time_end = moment(result[i].time_end,
+                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        }
+        result[i].time_start = moment(result[i].time_start,
+            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
+        result[i].bidHistory = await productModel.getBidHistory(result[i].id);
+    }
+    res.render('vwProduct/products',{
+        result
+    });
 });
 
 router.get('/search_result', async function (req, res){
@@ -84,6 +112,41 @@ router.get('/:id', async function (req, res, next){
         canBid: info.canBid,
         startDate: info.startDate,
         notEnoughVotes: info.notEnoughVotes});
+});
+router.get('/list/:id', async function (req, res){
+	const cateID = req.params.id;
+	console.log(cateID);
+	const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+	const result = await productModel.getProductByIdCtg(cateID,sort);
+	moment.locale('vi');
+	var end_date = [];
+	for (let i =0 ; i < result.length; i++){
+		end_date.push(0);
+	}
+	for(let i =0 ; i < result.length; i++){
+		if(result[i].buy_now_price == 0){
+			delete result[i].buy_now_price;
+		}
+		end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+		if(end_date[i].diff(moment(), 'days') < 3){
+			result[i].price_color = false;
+			result[i].time_end = end_date[i].fromNow();
+		}
+		else{
+			result[i].price_color = true;
+			result[i].time_end = moment(result[i].time_end,
+				'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+		}
+		result[i].time_start = moment(result[i].time_start,
+			'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+		result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
+		result[i].bidHistory = await productModel.getBidHistory(result[i].id);
+	}
+	res.render('vwCategory/show-product', {
+		// layout: 'non_sidebar.hbs',
+		cateID,
+		result
+	});
 });
 
 router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){

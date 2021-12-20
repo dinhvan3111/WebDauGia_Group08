@@ -290,8 +290,47 @@ export default {
 			highestPrice: highestPrice
 		};
 	},
+	async getProductByIdCtg(cateID, sort) {
+		var result = null;
 
+		if (sort === '0') {
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(12);
+		} else if (sort === '1') { // Thời gian kết thúc giảm dần
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(12).orderBy('time_end', 'desc');
+		} else { // Giá tăng dần
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(12).orderBy('price', 'asc');
+		}
+		return result;
 
+	},
+	async getAllProduct( sort) {
+		var result = null;
+
+		if (sort === '0') {
+			result = await db.select()
+				.from('products')
+
+		} else if (sort === '1') { // Thời gian kết thúc giảm dần
+			result = await db.select()
+				.from('products')
+				.orderBy('time_end', 'desc');
+		} else { // Giá tăng dần
+			result = await db.select()
+				.from('products')
+				.orderBy('price', 'asc');
+		}
+		return result;
+
+	},
 
 	// Manage products
 	async addProduct(proObj){

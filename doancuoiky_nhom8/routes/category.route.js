@@ -1,12 +1,14 @@
 import express from 'express';
 import categoryModel from '../models/category.model.js';
 import checkPermission from "../middlewares/permission.mdw.js";
+import productModel from "../models/product.model.js";
+import moment from "moment";
+import fileModel from "../models/upload.model.js";
 const router = express.Router();
 
 router.get('/', async function (req, res){
 	const list = await categoryModel.getAllParent();
 	var isAdmin = false;
-	const ImAdmin = true;
 
 	if(req.session.passport.user!==undefined) {
 		if (req.session.passport.user.id_permission < 3) {
@@ -19,7 +21,41 @@ router.get('/', async function (req, res){
 		isAdmin
 	})
 });
-
+// router.get('/list-product/:id', async function (req, res){
+// 	const cateID = req.params.id;
+// 	console.log(cateID);
+// 	const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+// 	const result = await categoryModel.getProductByIdCtg(cateID,sort);
+// 	moment.locale('vi');
+// 	var end_date = [];
+// 	for (let i =0 ; i < result.length; i++){
+// 		end_date.push(0);
+// 	}
+// 	for(let i =0 ; i < result.length; i++){
+// 		if(result[i].buy_now_price == 0){
+// 			delete result[i].buy_now_price;
+// 		}
+// 		end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+// 		if(end_date[i].diff(moment(), 'days') < 3){
+// 			result[i].price_color = false;
+// 			result[i].time_end = end_date[i].fromNow();
+// 		}
+// 		else{
+// 			result[i].price_color = true;
+// 			result[i].time_end = moment(result[i].time_end,
+// 				'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+// 		}
+// 		result[i].time_start = moment(result[i].time_start,
+// 			'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+// 		result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
+// 		result[i].bidHistory = await productModel.getBidHistory(result[i].id);
+// 	}
+// 	res.render('vwCategory/show-product', {
+// 		// layout: 'non_sidebar.hbs',
+// 		cateID,
+// 		result
+// 	});
+// });
 router.get('/add_category', checkPermission.isNotAdmin,async function (req,res){
 	res.render('vwCategory/add_category',{
 		// layout:'non_sidebar.hbs'
@@ -165,7 +201,6 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 	console.log(parent_category);
 	console.log(current_parent);
 	if(parent_category===null){
-		console.log("vo 3");
 		return res.render('vwCategory/edit_childCategory', {
 			category,
 			parent:current_parent,
@@ -173,7 +208,7 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 		});
 	}
 	else if(parent_category!==null && parent_category.name !== current_parent.name){
-		console.log("vo 4");
+
 		const new_category = {
 			"id": id,
 			"name": name,
@@ -184,14 +219,12 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 	}
 	else {
 		if (category !== null && parent_category.name === current_parent.name) {
-			console.log("vo 1");
 			return res.render('vwCategory/edit_childCategory', {
 				category,
 				parent: current_parent,
 				err_message: "Thất bại! Tên danh mục đã được sử dụng!"
 			});
 		} else if (category === null && parent_category.name === current_parent.name) {
-			console.log("vo 2");
 			const new_category = {
 				"id": id,
 				"name": name,

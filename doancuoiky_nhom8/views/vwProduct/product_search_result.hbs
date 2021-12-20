@@ -10,6 +10,14 @@
         #frmSort {
             display: none;
         }
+        .card-body > a{
+            color: black;
+            text-decoration: none;
+        }
+        .card-body > a:hover{
+            color: black;
+            text-decoration: none;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -53,7 +61,9 @@
                             {{#each this.search_result}}
                                 <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
                                     <div class="card h-100">
+
                                         <div class="card-body">
+                                            <a href="/products/{{id}}">
                                             <img class="product-img-4-sidebar" src="../img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
                                             <h5 class="card-title">{{name}}</h5>
                                             <h6 class="card-title">Giá hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
@@ -78,7 +88,9 @@
                                                 <h6 class="card-title">Số lượt ra giá: <span
                                                         class="text-muted">Chưa có lượt ra giá nào</span></h6>
                                             {{/if}}
+                                            </a>
                                         </div>
+
                                         <div class="card-footer text-muted">
                                             <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
                                                 <i class="fa fa-gavel" aria-hidden="true"></i>
