@@ -106,6 +106,8 @@ router.post('/del', checkPermission.isNotAdmin,
 	async function(req, res){
 		const id = req.body.proID;
 		console.log(id);
+		const delList = await productModel.deleteWatchListByProID(id);
+		const delHis = await productModel.deleteBidHistoryByProID(id);
 		const product = await productModel.deleteProduct(id);
 		res.redirect(req.headers.referer);
 	});

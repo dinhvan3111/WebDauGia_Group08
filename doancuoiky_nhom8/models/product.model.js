@@ -334,7 +334,14 @@ export default {
 
 	// Manage products
 	async addProduct(proObj){
+
 		return await db('products').insert(proObj);
+	},
+	async deleteBidHistoryByProID(id_product){
+		return await db('bid_history').where({id_product: id_product}).del();
+	},
+	async deleteWatchListByProID(id_product){
+		return await db('watch_list').where({id_product: id_product}).del();
 	},
 	async deleteProduct(id_product){
 		return await db('products').where({id: id_product}).del();
