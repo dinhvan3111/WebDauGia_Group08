@@ -96,7 +96,20 @@ router.get('/:id', async function (req, res, next){
         product_info.priceSold = product_info.price;
     }
     const info = await productModel.getProductDetail(req, product_info, id_product);
-    
+    if(info.bidHistory){
+        for(let i =0; i < info.bidHistory.length; i++){
+            const starPercentage = accountModel.starPercentage(info.bidHistory[i].ratio);
+            // Làm tròn số sao
+            const starPercentageRounded = accountModel.starPercentageRounded(info.bidHistory[i].ratio);
+            info.bidHistory[i].starPercentage = starPercentage;
+            info.bidHistory[i].starPercentageRounded = starPercentageRounded;
+        }
+    }
+    var ratioSeller = await accountModel.getUpVoteRatio(info.seller.id);
+    const starPercentage = accountModel.starPercentage(ratioSeller.ratio);
+    const starPercentageRounded = accountModel.starPercentageRounded(ratioSeller.ratio);
+    info.seller.starPercentage = starPercentage;
+    info.seller.starPercentageRounded = starPercentageRounded;
     
     return res.render('vwProduct/product_detail',{
         layout: 'non_sidebar.hbs',

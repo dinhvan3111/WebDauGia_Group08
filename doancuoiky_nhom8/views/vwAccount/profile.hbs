@@ -7,6 +7,7 @@
     <link rel="icon" href="img/icon.png">
     {{#section 'css'}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <style>
             body{
                 margin-top: 20px;
@@ -68,6 +69,32 @@
             #frmUpgrade{
                 display: none;
             }
+            .stars-outer{
+                position: relative;
+                display: inline-block;
+            }
+
+            .stars-inner{
+                top: 0;
+                left: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                position: absolute;
+                width: 0;
+            }
+
+            .stars-outer::before{
+                content: "\f005 \f005 \f005 \f005 \f005";
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                color: #ccc;
+            }
+            .stars-inner::before{
+                content: "\f005 \f005 \f005 \f005 \f005";
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                color: #f8ce0b;
+            }
         </style>
     {{/section}}
     {{#section 'js'}}
@@ -100,16 +127,26 @@
         <div class="info col-md-8 mt-1">
             <div class="usr-info card text-center sidebar">
                 <div class="card-body">
-                    <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140"">
+                    <img src="/img/account/avatar.png"  class="rounded-circle" alt="Photo" width="140">
 
                     <!--                    <img src="https://www.seekpng.com/png/detail/41-410093_circled-user-icon-user-profile-icon-png.png" class="rounded-circle" alt="Photo" width="140">-->
                     <h3>{{user.username}}</h3>
                     <div class="rating">
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
-                        <i class="fa fa-star" aria-hidden="true"></i>
+                        <!--                        <i class="fa fa-star" aria-hidden="true"></i>-->
+                        <!--                        <i class="fa fa-star" aria-hidden="true"></i>-->
+                        <!--                        <i class="fa fa-star" aria-hidden="true"></i>-->
+                        <!--                        <i class="fa fa-star" aria-hidden="true"></i>-->
+                        <!--                        <i class="fa fa-star" aria-hidden="true"></i>-->
+                        <div class="stars-outer">
+                            <div class="stars-inner" style="width: {{user.starPercentageRounded}};"></div>
+                        </div>
+                        <div>
+                            {{#if (isNotRating user.starPercentage)}}
+                                <span class="ratio ml-1 " style="color: #000;">Chưa có lượt đánh giá nào</span>
+                            {{else}}
+                                <span class="ratio ml-1 " style="color: #000;">{{roundFloat user.starPercentage}}% lượt đánh giá tốt</span>
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
             </div>

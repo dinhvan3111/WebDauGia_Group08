@@ -173,6 +173,22 @@ export default{
 	    return user;
 	},
 
+	starPercentage(ratio){
+		const totalStars = 5;
+		// Tỉ lệ tích cực
+		const starPercentage = (Number.parseFloat(ratio) / totalStars) *100;
+		return starPercentage;
+	},
+	starPercentageRounded(ratio){
+		const totalStars = 5;
+		// Tỉ lệ tích cực
+		const starPercentage = (Number.parseFloat(ratio) / totalStars) *100;
+
+		// Làm tròn
+		const starPercentageRounded = `${Math.round(starPercentage/10)*10}%`;
+		return starPercentageRounded;
+	},
+
 	// Seller
 	async getSellerExpiredDate(seller_id){
 		const info = await db('seller_expired_day').where({id: seller_id});
@@ -181,4 +197,5 @@ export default{
 		}
 		return info[0];
 	},
+
 }

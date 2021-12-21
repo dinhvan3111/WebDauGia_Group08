@@ -158,9 +158,10 @@ router.post('/login', async function (req, res) {
 router.get('/profile', checkPermission.notLogin, async function(req, res){
 	const user = await accountModel.findID(req.user.id);
 	const isBidder = (user.id_permission === 3) ? false : true;
-	console.log(isBidder);
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
-	
+	const userRatio = await accountModel.getUpVoteRatio(user.id);
+	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
+	user.starPercentageRounded = await accountModel.starPercentageRounded(userRatio.ratio);
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		isBidder,
@@ -193,6 +194,9 @@ router.post('/profile', checkPermission.notLogin, async function(req, res){
 router.get('/profile/:id', async function(req, res, next){
 	const id = req.params.id;
 	const user = await accountModel.findID(id);
+	const userRatio = await accountModel.getUpVoteRatio(user.id);
+	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
+	user.starPercentageRounded = await accountModel.starPercentageRounded(userRatio.ratio);
 	if(user !== null){
 		if(typeof(req.user) !== 'undefined'){
 			if(user.id === req.user.id){
@@ -204,7 +208,9 @@ router.get('/profile/:id', async function(req, res, next){
 			name: user.name,
 			email: user.email,
 			dob: moment(user.dob, 'YYYY/MM/DD').format('DD-MM-YYYY'),
-			addr: user.addr
+			addr: user.addr,
+			starPercentage: user.starPercentage,
+			starPercentageRounded: user.starPercentageRounded,
 		}
 		return res.render('vwAccount/profile',{
 			layout: 'non_sidebar.hbs',
