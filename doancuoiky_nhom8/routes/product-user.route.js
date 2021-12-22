@@ -200,4 +200,170 @@ router.post('/:id/buy-now', checkPermission.notLogin, async function(req, res){
     res.redirect(req.headers.referer);
 });
 
+router.get('/watch-list',checkPermission.notLogin, async function (req, res){
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const id = req.session.passport.user.id;
+    const watch_list = await watchListModel.getWatchListById(id);
+    var result;
+    if(watch_list !== null) {
+        var products = [];
+        for (var i = 0; i < watch_list.length; i++) {
+            var product = await productModel.findID(watch_list[i].id_product);
+            products.push(product);
+        }
+        console.log(products);
+        moment.locale('vi');
+        var end_date = [];
+        for (let i = 0; i < products.length; i++) {
+            end_date.push(0);
+        }
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].buy_now_price == 0) {
+                delete products[i].buy_now_price;
+            }
+            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (end_date[i].diff(moment(), 'days') < 3) {
+                products[i].price_color = false;
+                products[i].time_end = end_date[i].fromNow();
+            } else {
+                products[i].price_color = true;
+                products[i].time_end = moment(products[i].time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+            products[i].time_start = moment(products[i].time_start,
+                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
+            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
+        }
+        result = products;
+    }
+    else{
+        result = null;
+    }
+    res.render('vwProduct/products',{
+        result,
+        title:"yêu thích"
+    });
+});
+router.get('/won',checkPermission.notLogin, async function (req, res){
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const id = req.session.passport.user.id;
+    const products = await productModel.getWonProductByIdAcc(id);
+    var result;
+    if(products !== null) {
+
+        moment.locale('vi');
+        var end_date = [];
+        for (let i = 0; i < products.length; i++) {
+            end_date.push(0);
+        }
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].buy_now_price == 0) {
+                delete products[i].buy_now_price;
+            }
+            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (end_date[i].diff(moment(), 'days') < 3) {
+                products[i].price_color = false;
+                products[i].time_end = end_date[i].fromNow();
+            } else {
+                products[i].price_color = true;
+                products[i].time_end = moment(products[i].time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+            products[i].time_start = moment(products[i].time_start,
+                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
+            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
+        }
+        result = products;
+    }
+    else{
+        result = null;
+    }
+    res.render('vwProduct/products',{
+        result,
+        title:"đã chiến thắng"
+    });
+});
+router.get('/posted',checkPermission.isNotSeller, async function (req, res){
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const id = req.session.passport.user.id;
+    const products = await productModel.getPostedProductByIdAcc(id);
+    var result;
+    if(products !== null) {
+
+        moment.locale('vi');
+        var end_date = [];
+        for (let i = 0; i < products.length; i++) {
+            end_date.push(0);
+        }
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].buy_now_price == 0) {
+                delete products[i].buy_now_price;
+            }
+            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (end_date[i].diff(moment(), 'days') < 3) {
+                products[i].price_color = false;
+                products[i].time_end = end_date[i].fromNow();
+            } else {
+                products[i].price_color = true;
+                products[i].time_end = moment(products[i].time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+            products[i].time_start = moment(products[i].time_start,
+                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
+            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
+        }
+        result = products;
+    }
+    else{
+        result = null;
+    }
+    res.render('vwProduct/products',{
+        result,
+        title:"đã đăng"
+    });
+});
+router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const id = req.session.passport.user.id;
+    const products = await productModel.getProductBiddingById(id);
+    console.log(products)
+    var result;
+    if(products !== null) {
+
+        moment.locale('vi');
+        var end_date = [];
+        for (let i = 0; i < products.length; i++) {
+            end_date.push(0);
+        }
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].buy_now_price == 0) {
+                delete products[i].buy_now_price;
+            }
+            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (end_date[i].diff(moment(), 'days') < 3) {
+                products[i].price_color = false;
+                products[i].time_end = end_date[i].fromNow();
+            } else {
+                products[i].price_color = true;
+                products[i].time_end = moment(products[i].time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+            products[i].time_start = moment(products[i].time_start,
+                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
+            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
+        }
+        result = products;
+    }
+    else{
+        result = null;
+    }
+    res.render('vwProduct/products',{
+        result,
+        title:" đang đấu giá"
+    });
+});
 export default router;

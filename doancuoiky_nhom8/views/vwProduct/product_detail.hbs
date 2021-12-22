@@ -115,37 +115,27 @@
                                                     </form>
 
 
-                                                    <a type="button" data-toggle="modal" href="#buyNowModal">
-                                                        <button class="btn bg-warning btn-long"
-                                                                onclick="javascript:$('#frmBuyNow').submit();">
-                                                            <i class="fa fa-money"></i> Mua ngay
-                                                        </button>
-                                                    </a>
 
-                                                    <div class="modal fade" id="buyNowModal" tabindex="-1">
+                                                    <button class="btn bg-warning btn-long" data-toggle="modal" data-target="#buyNowModal">
+                                                        <i class="fa fa-money"></i> Mua ngay
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="buyNowModal" tabindex="-1" aria-labelledby="buyNowModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="buyNowModalLabel">Mua
-                                                                        ngay sản phẩm</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                            data-bs-dismiss="modal"
-                                                                            aria-label="Close"></button>
+                                                                    <h5 class="modal-title" id="buyNowModalLabel">Mua ngay</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
                                                                 </div>
-                                                                <div class="modal-body">
+                                                                <div class="modal-body modal-body-buyNow">
                                                                     Bạn muốn mua ngay với giá {{format_number
                                                                         product.buy_now_price}} (VNĐ) ?
                                                                 </div>
                                                                 <div class="modal-footer">
-
-                                                                    <button type="button" class="btn btn-secondary"
-                                                                            data-bs-dismiss="modal">Đóng
-                                                                    </button>
-                                                                    <button type="button" class="btn btn-primary"><i
-                                                                            class="fa fa-check"
-                                                                            onclick="javascript:$('#frmBuyNow').submit();"></i>
-                                                                        Mua ngay
-                                                                    </button>
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                                                    <button type="button" class="btn btn-warning" id="confirmBuyNowBtn">Mua ngay</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -606,7 +596,11 @@
         }
 
     </script>
-
+    <script>
+        $('#confirmBuyNowBtn').on('click', function () {
+            $('#frmBuyNow').submit();
+        });
+    </script>
     <script>
         const bidHisEle = $('.bid-history tr');
         const subBidHisEle = [];

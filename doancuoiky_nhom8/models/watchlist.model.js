@@ -10,5 +10,8 @@ export default {
 			return null;
 		}
 		return line[0];
+	},
+	async getWatchListById(id){
+		return await db('watch_list').where('id_acc',id);
 	}
 }

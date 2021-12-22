@@ -1,5 +1,5 @@
 {{#section 'title'}}
-    <title>Danh sách sản phẩm</title>
+    <title>Danh sách sản phẩm {{title}}</title>
 {{/section}}
 {{#section 'css'}}
     <style>
@@ -20,7 +20,7 @@
         <blockquote class="blockquote mb-0">
             <div class="card">
                 <div class="card-header bg-warning font-bold">
-                    Danh sách sản phẩm
+                    Danh sách sản phẩm {{title}}
                 </div>
                 <div class="card-body">
                     <div class="dropdown text-right">
@@ -84,9 +84,16 @@
                                 </div>
                             {{/each}}
                         {{else}}
-                            <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
-                                Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
-                            </div>
+                            {{#if param}}
+                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                    Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
+                                </div>
+                            {{else}}
+                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                    Không tìm thấy sản phẩm
+                                </div>
+                            {{/if}}
+
                         {{/if}}
                     </div>
                     <ul class="pagination  mt-3 justify-content-end">

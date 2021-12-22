@@ -28,44 +28,44 @@
 <!-- Navbar -->
 
 <nav id = "nav" class="navbar navbar-expand-lg  bg-warning navbar-light shadow fixed-top">
-        <a class="navbar-brand" href="/">
-            <i class="fa fa-home fa-lg fa-md" aria-hidden="true"></i>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <a class="navbar-brand" href="/">
+        <i class="fa fa-home fa-lg fa-md" aria-hidden="true"></i>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse " id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item dropdown active ">
+                <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Sản phẩm
+                </a>
+                <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
+                    <a class="dropdown-item font-bold" href="/products">Danh sách sản phẩm</a>
+                    {{#if (isAdmin lcAuthUser.user.id_permission)}}
+                        <a class="dropdown-item font-bold" href="/products/management">Quản lý sản phẩm</a>
+                    {{/if}}
+                    {{#if (isSeller lcAuthUser.user.id_permission)}}
+                        <a class="dropdown-item font-bold" href="/products/posted">Danh sách sản phẩm đã đăng</a>
+                    {{/if}}
+                    <a class="dropdown-item font-bold" href="/products/watch-list">Danh sách sản phẩm yêu thích</a>
+                    <a class="dropdown-item font-bold" href="/products/bidding">Danh sách sản phẩm đang đấu giá </a>
+                    <a class="dropdown-item font-bold" href="/products/won">Danh sách sản phẩm đã chiến thắng</a>
+                </div>
+            </li>
+            {{#if (isAdmin lcAuthUser.user.id_permission)}}
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/admin/categories">Quản lý danh mục</a>
                 </li>
-
-                <li class="nav-item dropdown active ">
-                    <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        Sản phẩm
-                    </a>
-                    <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
-                        <a class="dropdown-item font-bold" href="/products">Danh sách sản phẩm</a>
-                        {{#if (isAdmin lcAuthUser.user.id_permission)}}
-                            <a class="dropdown-item font-bold" href="/products/management">Quản lý sản phẩm</a>
-                        {{/if}}
-                        {{#if (isSeller lcAuthUser.user.id_permission)}}
-                            <a class="dropdown-item font-bold" href="#">Danh sách sản phẩm đã đăng</a>
-                        {{/if}}
-                        <a class="dropdown-item font-bold" href="#">Danh sách sản phẩm yêu thích</a>
-                        <a class="dropdown-item font-bold" href="#">Danh sách sản phẩm đang đấu giá </a>
-                        <a class="dropdown-item font-bold" href="#">Danh sách sản phẩm đã chiến thắng</a>
-                    </div>
-                </li>
-                {{#if (isAdmin lcAuthUser.user.id_permission)}}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/admin/categories">Quản lý danh mục</a>
-                    </li>
-                {{/if}}
-                {{#if (isAdmin lcAuthUser.user.id_permission)}}
+            {{/if}}
+            {{#if (isAdmin lcAuthUser.user.id_permission)}}
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
@@ -77,45 +77,45 @@
                         <a class="dropdown-item font-bold" href="/admin/account-management">Khoá tài khoản người dùng</a>
                     </div>
                 </li>
-                {{/if}}
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">About us</a>
-                </li>
-            </ul>
-            <div class="navbar-nav ml-auto action-buttons">
-                <form action="/products/search_result" class="search-for-lg seach_form" method="post">
-                    <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
-                    <!--                           aria-label="Search">-->
-                    <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All</button>
-                            <div class="dropdown">
-                                <div class="dropdown-menu dropdown-menu-right dropdown-multicol" aria-labelledby="dropdownMenuButton">
-                                    {{#each lcCategories}}
-                                        <div class="dropdown-row">
-                                            <a category-id="{{id}}" class="parents-category category-field-item dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
-                                            {{#if subCate.length}}
-                                                {{#each subCate}}
-                                                    <a category-id="{{id}}" class="category-field-item dropdown-item text-center" href="#">{{name}}</a>
-                                                {{/each}}
-                                            {{else}}
+            {{/if}}
+            <li class="nav-item active">
+                <a class="nav-link" href="#">About us</a>
+            </li>
+        </ul>
+        <div class="navbar-nav ml-auto action-buttons">
+            <form action="/products/search_result" class="search-for-lg seach_form" method="post">
+                <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
+                <!--                           aria-label="Search">-->
+                <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All</button>
+                        <div class="dropdown">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-multicol" aria-labelledby="dropdownMenuButton">
+                                {{#each lcCategories}}
+                                    <div class="dropdown-row">
+                                        <a category-id="{{id}}" class="parents-category category-field-item dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
+                                        {{#if subCate.length}}
+                                            {{#each subCate}}
+                                                <a category-id="{{id}}" class="category-field-item dropdown-item text-center" href="#">{{name}}</a>
+                                            {{/each}}
+                                        {{else}}
 
-                                            {{/if}}
-                                        </div>
-                                    {{/each}}
-                                </div>
+                                        {{/if}}
+                                    </div>
+                                {{/each}}
                             </div>
                         </div>
-                        <input type="text" id="search_cateID" name="search_cateID" value="">
-                        <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
-                        <div class="input-group-append">
-                            <button class="btn btn-dark" type="submit">Search</button>
-                        </div>
                     </div>
-                </form>
-                {{#if lcAuthUser}}
-                    <li class="nav-item dropdown active">
+                    <input type="text" id="search_cateID" name="search_cateID" value="">
+                    <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+            {{#if lcAuthUser}}
+                <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Hi, {{lcAuthUser.user.name}}
@@ -127,190 +127,190 @@
                         <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();">Đăng xuất</a>
                     </div>
                 </li>
-                {{else}}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/register">Đăng kí</a>
-                    </li>
-                {{/if}}
-                <form action="/products/search_result" class="search-for-md seach_form" method="post">
-                    <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
-                    <!--                           aria-label="Search">-->
-                    <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">All</button>
-                            <div class="dropdown-menu">
-                                {{#each lcCategories}}
-                                    <a category-id="{{id}}" class="category-field-item dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
-                                    {{#if subCate.length}}
-                                        {{#each subCate}}
-                                            <a category-id="{{id}}" class="category-field-item dropdown-item" href="#">{{name}}</a>
-                                        {{/each}}
-                                    {{else}}
+            {{else}}
+                <li class="nav-item active">
+                    <a class="nav-link" href="/login">Đăng nhập</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/register">Đăng kí</a>
+                </li>
+            {{/if}}
+            <form action="/products/search_result" class="search-for-md seach_form" method="post">
+                <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
+                <!--                           aria-label="Search">-->
+                <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">All</button>
+                        <div class="dropdown-menu">
+                            {{#each lcCategories}}
+                                <a category-id="{{id}}" class="category-field-item dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
+                                {{#if subCate.length}}
+                                    {{#each subCate}}
+                                        <a category-id="{{id}}" class="category-field-item dropdown-item" href="#">{{name}}</a>
+                                    {{/each}}
+                                {{else}}
 
-                                    {{/if}}
-                                {{/each}}
-                                <div role="separator" class="dropdown-divider"></div>
-                                <a category-id="0" class="category-field-item dropdown-item" href="#">Tất cả</a>
-                            </div>
-                        </div>
-                        <input type="text" id="search_cateID" name="search_cateID" value="">
-                        <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
-                        <div class="input-group-append">
-                            <button class="btn btn-dark" type="submit" style="height: 38px">Search</button>
+                                {{/if}}
+                            {{/each}}
+                            <div role="separator" class="dropdown-divider"></div>
+                            <a category-id="0" class="category-field-item dropdown-item" href="#">Tất cả</a>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </nav>
-
-    <!-- End Navbar -->
-
-    <!-- Content -->
-    <div class="container-fluid mt-6">
-        <div class="row">
-
-            <!-- Main content -->
-            {{{body}}}
-            <!-- End Main content -->
-
+                    <input type="text" id="search_cateID" name="search_cateID" value="">
+                    <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit" style="height: 38px">Search</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-    <!-- End Content -->
+</nav>
 
-    <!-- Footer -->
-    <footer class="text-center text-lg-start bg-light text-muted mt-3">
-        <!-- Section: Social media -->
-        <section
-                class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
-        >
-            <!-- Left -->
-            <div class="me-5 d-none d-lg-block">
-                <span>Get connected with us on social networks:</span>
-            </div>
-            <!-- Left -->
+<!-- End Navbar -->
 
-            <!-- Right -->
-            <div>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-facebook" aria-hidden="true"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-twitter" aria-hidden="true"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-google" aria-hidden="true"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-instagram" aria-hidden="true"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-linkedin" aria-hidden="true"></i>
-                </a>
-                <a href="" class="me-4 text-reset">
-                    <i class="fa fa-github" aria-hidden="true"></i>
-                </a>
-            </div>
-            <!-- Right -->
-        </section>
-        <!-- End Section: Social media -->
+<!-- Content -->
+<div class="container-fluid mt-6">
+    <div class="row">
 
-        <!-- Section: Links  -->
-        <section class="">
-            <div class="container text-center text-md-start mt-2">
-                <!-- Grid row -->
-                <div class="row mt-3">
-                    <!-- Grid column -->
-                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                        <!-- Content -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            <i class="fas fa-gem me-3"></i>Tên nhóm
-                        </h6>
-                        <p>
-                            Nhóm 8 - PTUDW19CLC
-                        </p>
-                    </div>
-                    <!-- Grid column -->
+        <!-- Main content -->
+        {{{body}}}
+        <!-- End Main content -->
 
-                    <!-- Grid column -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            Thành viên nhóm
-                        </h6>
-                        <p>19127610 - Nguyễn Trần Ngọc Tú</p>
-                        <p>19127387 - Vũ Tuấn Hải</p>
-                        <p>19127624 - Đỗ Đình Văn</p>
-                    </div>
-                    <!-- Grid column -->
+    </div>
+</div>
+<!-- End Content -->
 
-                    <!-- Grid column -->
-                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-                        <!-- Links -->
-                        <h6 class="text-uppercase fw-bold mb-4">
-                            Email
-                        </h6>
-                        <p><a href="" class="text-reset">19127610@student.hcmus.edu.vn</a></p>
-                        <p><a href="" class="text-reset">19127387@student.hcmus.edu.vn</a></p>
-                        <p><a href="" class="text-reset">19127624@student.hcmus.edu.vn</a></p>
-                    </div>
-                    <!-- Grid column -->
-                </div>
-                <!-- Grid row -->
-            </div>
-        </section>
-        <!-- End Section: Links  -->
-
-        <!-- Copyright -->
-        <div class="copyright text-center p-4" style="background-color: black;">
-            © 2021 Copyright:
-            <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted mt-3">
+    <!-- Section: Social media -->
+    <section
+            class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom"
+    >
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+            <span>Get connected with us on social networks:</span>
         </div>
-        <!-- Copyright -->
-    </footer>
-    <!-- End Footer -->
+        <!-- Left -->
 
-    <script>
-        const collapse_items = document.querySelectorAll('.side-bar .collapse-items');
-        const collapse_content = document.querySelectorAll('.collapse-content');
-        collapse_items.forEach((item,index)=>{
-            var content = collapse_content[index];
-            item.onclick = function (){
-                var temp = document.querySelector('.collapse-items.list-group-item.list-group-item-action:not(.collapsed)');
-                var temp_content = document.querySelector('.collapse-content.collapse.show');
-                if(temp != item){
+        <!-- Right -->
+        <div>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-google" aria-hidden="true"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+            </a>
+            <a href="" class="me-4 text-reset">
+                <i class="fa fa-github" aria-hidden="true"></i>
+            </a>
+        </div>
+        <!-- Right -->
+    </section>
+    <!-- End Section: Social media -->
 
-                    temp.classList.add('collapsed');
-                    temp.ariaExpanded = false;
-                    temp_content.classList.remove('show');
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-2">
+            <!-- Grid row -->
+            <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem me-3"></i>Tên nhóm
+                    </h6>
+                    <p>
+                        Nhóm 8 - PTUDW19CLC
+                    </p>
+                </div>
+                <!-- Grid column -->
 
-                    item.classList.remove('collapsed');
-                    item.ariaExpanded = true;
-                    // content.classList.add('show');
-                }
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Thành viên nhóm
+                    </h6>
+                    <p>19127610 - Nguyễn Trần Ngọc Tú</p>
+                    <p>19127387 - Vũ Tuấn Hải</p>
+                    <p>19127624 - Đỗ Đình Văn</p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        Email
+                    </h6>
+                    <p><a href="" class="text-reset">19127610@student.hcmus.edu.vn</a></p>
+                    <p><a href="" class="text-reset">19127387@student.hcmus.edu.vn</a></p>
+                    <p><a href="" class="text-reset">19127624@student.hcmus.edu.vn</a></p>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row -->
+        </div>
+    </section>
+    <!-- End Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="copyright text-center p-4" style="background-color: black;">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- End Footer -->
+
+<script>
+    const collapse_items = document.querySelectorAll('.side-bar .collapse-items');
+    const collapse_content = document.querySelectorAll('.collapse-content');
+    collapse_items.forEach((item,index)=>{
+        var content = collapse_content[index];
+        item.onclick = function (){
+            var temp = document.querySelector('.collapse-items.list-group-item.list-group-item-action:not(.collapsed)');
+            var temp_content = document.querySelector('.collapse-content.collapse.show');
+            if(temp != item){
+
+                temp.classList.add('collapsed');
+                temp.ariaExpanded = false;
+                temp_content.classList.remove('show');
+
+                item.classList.remove('collapsed');
+                item.ariaExpanded = true;
+                // content.classList.add('show');
             }
-        })
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
-            crossorigin="anonymous"></script>
-    <script>
-        $('.category-field-item').on('click',function (e){
-            e.preventDefault();
-            var param = $(this).attr('category-id');
-            console.log($(this).attr("href").replace("#",""));
-            var content = $(this).text();
-            $('.category-field').text(content);
-            $('.input-group #search_cateID').attr("value",param);
-        });
-    </script>
-    {{{_sections.js}}}
+        }
+    })
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+<script>
+    $('.category-field-item').on('click',function (e){
+        e.preventDefault();
+        var param = $(this).attr('category-id');
+        console.log($(this).attr("href").replace("#",""));
+        var content = $(this).text();
+        $('.category-field').text(content);
+        $('.input-group #search_cateID').attr("value",param);
+    });
+</script>
+{{{_sections.js}}}
 </body>
 </html>

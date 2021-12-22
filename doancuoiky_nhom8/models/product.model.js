@@ -528,5 +528,20 @@ export default {
 			}
 		}
 		return productList;
-	}
+	},
+	async getWonProductByIdAcc(id_acc){
+		const sql = `SELECT * from products p
+					 where p.time_end < now() and p.id_win_bidder = ` + id_acc;
+		const raw = await db.raw(sql);
+		return raw[0];
+	},
+	async getPostedProductByIdAcc(id_acc){
+		return await db('products').where('id_seller',id_acc);
+	},
+	async getProductBiddingById(id) {
+		const sql = `SELECT DISTINCT p.* from products as p, bid_history as b
+					 where p.id = b.id_product and p.time_end > now() and b.id_acc = ` + id;
+		const raw = await db.raw(sql);
+		return raw[0];
+	},
 }
