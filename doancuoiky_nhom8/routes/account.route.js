@@ -269,21 +269,24 @@ router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
 		const userByEmail = await accountModel.findEmail(email);
 		// email incorrect or third party account's email
 		if(userByEmail !== null){
-			
-				return res.render('vwAccount/edit_profile', {
-					layout: 'non_sidebar.hbs',
-					err_message: "Thất bại!Email đã được sử dụng trong hệ thống!",
-					user
-				});
+
+			return res.render('vwAccount/edit_profile', {
+				layout: 'non_sidebar.hbs',
+				err_message: "Thất bại!Email đã được sử dụng trong hệ thống!",
+				user
+			});
 
 		}
 		else {
-			await accountModel.updateEmail(email, id_acc);
+
 			const token = cryptoRandomString({length: 100});
-			const host = req.headers.host ;
-			//var exprD = await mailingModel.getNewExpiredDate();
-			//await accountModel.addToNotVerifiedEmail({id_acc: id_acc, token: token, expired_date: exprD});
+
+			var exprD = await mailingModel.getNewExpiredDate();
+			await accountModel.addToNotVerifiedEmail({id_acc: id_acc, token: token, expired_date: exprD});
+
+			const host = req.headers.host;
 			await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, id_acc, token, 24);
+			await accountModel.updateEmail(email, id_acc);
 			req.session.passport.user.email = email;
 		}
 	}
