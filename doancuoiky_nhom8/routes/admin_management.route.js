@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import moment from 'moment';
 import cryptoRandomString from 'crypto-random-string';
 import envVar from '../utils/envVar.js';
+import pagingInfo from '../utils/paging.helper.js';
 import mailingModel from '../models/mailing.OTP.model.js';
 import adminManagement from '../models/admin_management.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
@@ -16,50 +17,24 @@ router.get('/accept_request', checkPermission.isNotAdmin, async function(req, re
 	const page = req.query.page || 1;
 	const offset = (page -1) * limit;
 	const total = await adminManagement.countRequests();
-	let nPages = Math.floor(total / limit);
-	if(total % limit > 0) nPages++;
-	var nextPage, prePage, disableNext, disablePre;
-	if(nPages === 0 || nPages === 1){
-		disableNext = true;
-		disablePre = true;
-	}
-	else if(+page === 1){
-		prePage = +page;
-		nextPage = +page + 1;
-		disableNext = false;
-		disablePre = true;
-	}
-	else if(+page === nPages){
-		prePage = +page - 1;
-		nextPage = +page;
-		disableNext = true;
-		disablePre = false;
-	}
-	else{
-		nextPage = +page + 1;
-		prePage = +page - 1;
-		disableNext = false;
-		disablePre = false;
-	}
-	const pageNumber = [];
-	for(let i =1; i<= nPages; i++){
-		pageNumber.push({
-			value: i,
-			isCurrent: +page == i
-		});
-	}
+
+	const paging = pagingInfo.getPagingInfo(limit, page, total);
+
 	const getRequests = await adminManagement.getAllRequest(limit,offset);
 	const allRequests = []
-	for(let i =0; i < getRequests.length;i++){
+	for(let i = 0; i < getRequests.length; i++){
 		const userRequest = await adminManagement.findID(getRequests[i].id_acc);
 		allRequests.push(userRequest);
 	}
 	res.render('vwAccount/accept_request',{
-		page,
-		nextPage, prePage, disableNext, disablePre,
-		pageNumber,
-		requests: allRequests,
-		layout: 'non_sidebar.hbs'
+				page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+				requests: allRequests,
+				layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/accept_request', checkPermission.isNotAdmin, async function(req, res){
@@ -84,52 +59,28 @@ router.get('/seller-management', checkPermission.isNotAdmin, async function(req,
 	const page = req.query.page || 1;
 	const offset = (page -1) * limit;
 	const total = await adminManagement.countSellerExpiredDay();
-	let nPages = Math.floor(total / limit);
-	if(total % limit > 0) nPages++;
-	var nextPage, prePage, disableNext, disablePre;
-	if(nPages === 0 || nPages === 1){
-		disableNext = true;
-		disablePre = true;
-	}
-	else if(+page === 1){
-		prePage = +page;
-		nextPage = +page + 1;
-		disableNext = false;
-		disablePre = true;
-	}
-	else if(+page === nPages){
-		prePage = +page - 1;
-		nextPage = +page;
-		disableNext = true;
-		disablePre = false;
-	}
-	else{
-		nextPage = +page + 1;
-		prePage = +page - 1;
-		disableNext = false;
-		disablePre = false;
-	}
-	const pageNumber = [];
-	for(let i =1; i<= nPages; i++){
-		pageNumber.push({
-			value: i,
-			isCurrent: +page == i
-		});
-	}
+
+	const paging = pagingInfo.getPagingInfo(limit, page, total);
+
 	const getSellersExpiredDay = await adminManagement.getAllSellerExpiredDay(limit,offset);
 	const allSellers = []
 	for(let i =0; i < getSellersExpiredDay.length;i++){
-		const expiredTime = getSellersExpiredDay[i].time;
+		const expiredTime = moment(getSellersExpiredDay[i].time,
+								'YYYY/MM/DD HH:mm:ss').format('HH:mm:ss DD/MM/YYYY');
 		const sellers = await adminManagement.findID(getSellersExpiredDay[i].id);
 		sellers.time = expiredTime;
 		allSellers.push(sellers);
 	}
 	res.render('vwAccount/sellers_expired_day',{
-		page,
-		nextPage, prePage, disableNext, disablePre,
-		pageNumber,
-		allSellers,
-		layout: 'non_sidebar.hbs'
+				page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+				
+				allSellers,
+				layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/seller-management', checkPermission.isNotAdmin, async function(req, res){
@@ -142,38 +93,9 @@ router.get('/account-management', checkPermission.isNotAdmin, async function(req
 	const page = req.query.page || 1;
 	const offset = (page -1) * limit;
 	const total = await adminManagement.countAccounts();
-	let nPages = Math.floor(total / limit);
-	if(total % limit > 0) nPages++;
-	var nextPage, prePage, disableNext, disablePre;
-	if(nPages === 0 || nPages === 1){
-		disableNext = true;
-		disablePre = true;
-	}
-	else if(+page === 1){
-		prePage = +page;
-		nextPage = +page + 1;
-		disableNext = false;
-		disablePre = true;
-	}
-	else if(+page === nPages){
-		prePage = +page - 1;
-		nextPage = +page;
-		disableNext = true;
-		disablePre = false;
-	}
-	else{
-		nextPage = +page + 1;
-		prePage = +page - 1;
-		disableNext = false;
-		disablePre = false;
-	}
-	const pageNumber = [];
-	for(let i =1; i<= nPages; i++){
-		pageNumber.push({
-			value: i,
-			isCurrent: +page == i
-		});
-	}
+
+	const paging = pagingInfo.getPagingInfo(limit, page, total);
+
 	const accountList = await adminManagement.getAllAccounts(limit,offset);
 	for(let i =0; i < accountList.length; i++){
 		if(accountList[i].id_permission === 2){
@@ -188,11 +110,14 @@ router.get('/account-management', checkPermission.isNotAdmin, async function(req
 		}
 	}
 	res.render('vwAccount/account_management',{
-		page,
-		nextPage, prePage, disableNext, disablePre,
-		pageNumber,
-		accountList,
-		layout: 'non_sidebar.hbs'
+				page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+				accountList,
+				layout: 'non_sidebar.hbs'
 	});
 });
 router.post('/account-management', checkPermission.isNotAdmin, async function(req, res){

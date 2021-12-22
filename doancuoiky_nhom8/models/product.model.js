@@ -407,6 +407,37 @@ export default {
 		return result;
 	},
 
+	async getProductsDisplayByCard(productList){
+		moment.locale('vi');
+	    var end_date = [];
+	    for (let i =0 ; i < productList.length; i++){
+	        end_date.push(0);
+	    }
+	    for(let i =0 ; i < productList.length; i++){
+	        if(productList[i].buy_now_price == 0){
+	            delete productList[i].buy_now_price;
+	        }
+	        end_date[i] = moment(productList[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+	        if(end_date[i].diff(moment(), 'days') < 3){
+	            productList[i].price_color = false;
+	            productList[i].time_end = end_date[i].fromNow();
+	        }
+	        else{
+	            productList[i].price_color = true;
+	            productList[i].time_end = moment(productList[i].time_end,
+	                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+	        }
+	        productList[i].time_start = moment(productList[i].time_start,
+	            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+	        productList[i].img = fileModel.getAllFileName('./public/img/products/' 
+	        								+ productList[i].id, productList[i].id);
+	        productList[i].bidHistory = await this.getBidHistory(productList[i].id);
+	    }
+	    return productList;
+	},
+
+
+
 	// Manage products
 	async addProduct(proObj){
 
@@ -636,11 +667,11 @@ export default {
 		const raw = await db.raw(sql);
 		return raw[0];
 	},
-	// async countProductBiddingById(id) {
-	// 	const sql = `SELECT DISTINCT p.* from products as p, bid_history as b
-	// 				 where p.id = b.id_product and p.time_end > now() and b.id_acc = ${id}
-	// 				 limit ${limit} offset ${offset}`;
-	// 	const raw = await db.raw(sql);
-	// 	return raw[0];
-	// },
+	async countProductBiddingById(id_acc) {
+		const sql = `SELECT count(*) from products as p
+					 where p.id_win_bidder = ${id_acc} 
+					 		and p.time_end > now()`;
+		const raw = await db.raw(sql);
+		return raw[0][0]['count(*)'];
+	},
 }

@@ -184,6 +184,8 @@ router.post('/profile', checkPermission.notLogin, async function(req, res){
 	}
 	const user = await accountModel.findID(req.user.id);
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
+	const userRatio = await accountModel.getUpVoteRatio(user.id);
+	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		user: user,

@@ -44,10 +44,12 @@
             <tbody>
             {{#if this.requests}}
                 {{#each this.requests}}
-                    <tr class="">
-                        <td>{{id}}</td>
+                    <tr class=""> 
+                        
+                        <td><a href="/profile/{{id}}">{{id}}</a></td>
                         <td>{{username}}</td>
                         <td>{{email}}</td>
+                        
                         <td>
                             <a data-id="{{id}}" data-isAccept="true" class="acceptBtn btn btn-sm btn-success font-bold btn-long" href="#" role="button">
                                 <i class="fa fa-check" aria-hidden="true"></i>
@@ -56,6 +58,7 @@
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
                         </td>
+
                     </tr>
                 {{/each}}
             {{else}}

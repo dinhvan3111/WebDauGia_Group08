@@ -36,14 +36,16 @@ export default function(app){
 				return false;
 			},
 			isNotRating(ratio){
-				if(ratio === 0){
+				if(ratio == 0){
 					return true
 				}
 				return false;
 			},
 			roundFloat(percentage){
-				var rounded = percentage.toFixed();
-				return rounded;
+				if(typeof(percentage) !== 'undefined'){
+					var rounded = percentage.toFixed();
+					return rounded;
+				}
 			}
 	    }
 	}));

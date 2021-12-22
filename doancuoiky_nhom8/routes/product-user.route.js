@@ -1,5 +1,6 @@
 import express from 'express';
 import moment from 'moment';
+import pagingInfo from '../utils/paging.helper.js';
 import productModel from '../models/product.model.js';
 import accountModel from '../models/account.model.js';
 import fileModel from '../models/upload.model.js';
@@ -14,69 +15,20 @@ router.get('/', async function (req, res){
     const page = req.query.page || 1;
     const offset = (page -1) * limit;
     const total = await productModel.countPageByAll();
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
+
     const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-    const result = await productModel.findPageAllProduct(limit,offset,sort);
-    moment.locale('vi');
-    var end_date = [];
-    for (let i =0 ; i < result.length; i++){
-        end_date.push(0);
-    }
-    for(let i =0 ; i < result.length; i++){
-        if(result[i].buy_now_price == 0){
-            delete result[i].buy_now_price;
-        }
-        end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-        if(end_date[i].diff(moment(), 'days') < 3){
-            result[i].price_color = false;
-            result[i].time_end = end_date[i].fromNow();
-        }
-        else{
-            result[i].price_color = true;
-            result[i].time_end = moment(result[i].time_end,
-                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        }
-        result[i].time_start = moment(result[i].time_start,
-            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
-        result[i].bidHistory = await productModel.getBidHistory(result[i].id);
-    }
+    var result = await productModel.findPageAllProduct(limit,offset,sort);
+    result = await productModel.getProductsDisplayByCard(result);
     res.render('vwProduct/products',{
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        result
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result
     });
 });
 
@@ -93,72 +45,23 @@ router.post('/search_result', async function (req, res){
     const page = req.query.page || 1;
     const offset = (page -1) * limit;
     const total = await productModel.countSearchProduct(cateID,param);
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
+
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-    const search_result = await productModel.searchProduct(cateID,param,limit,offset,sort);
-    moment.locale('vi');
-    var end_date = [];
-    for (let i =0 ; i < search_result.length; i++){
-        end_date.push(0);
-    }
-    for(let i =0 ; i < search_result.length; i++){
-        if(search_result[i].buy_now_price == 0){
-            delete search_result[i].buy_now_price;
-        }
-        end_date[i] = moment(search_result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-        if(end_date[i].diff(moment(), 'days') < 3){
-            search_result[i].price_color = false;
-            search_result[i].time_end = end_date[i].fromNow();
-        }
-        else{
-            search_result[i].price_color = true;
-            search_result[i].time_end = moment(search_result[i].time_end,
-                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        }
-        search_result[i].time_start = moment(search_result[i].time_start,
-            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        search_result[i].img = fileModel.getAllFileName('./public/img/products/' + search_result[i].id, search_result[i].id);
-        search_result[i].bidHistory = await productModel.getBidHistory(search_result[i].id);
-    }
+    var search_result = await productModel.searchProduct(cateID,param,limit,offset,sort);
+    search_result = await productModel.getProductsDisplayByCard(search_result);
     res.render('vwProduct/product_search_result', {
-        layout: 'non_sidebar.hbs',
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        cateID,
-        param,
-        search_result
+                layout: 'non_sidebar.hbs',
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                cateID,
+                param,
+                search_result
     });
 });
 
@@ -210,73 +113,23 @@ router.get('/list/:id', async function (req, res){
     const page = req.query.page || 1;
     const offset = (page -1) * limit;
     const total = await productModel.countPageByIdCtg(cateID);
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
 
     const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-    const result = await productModel.findPagebyCatId(cateID,limit,offset, sort);
-    console.log(result);
-    moment.locale('vi');
-    var end_date = [];
-    for (let i =0 ; i < result.length; i++){
-        end_date.push(0);
-    }
-    for(let i =0 ; i < result.length; i++){
-        if(result[i].buy_now_price == 0){
-            delete result[i].buy_now_price;
-        }
-        end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-        if(end_date[i].diff(moment(), 'days') < 3){
-            result[i].price_color = false;
-            result[i].time_end = end_date[i].fromNow();
-        }
-        else{
-            result[i].price_color = true;
-            result[i].time_end = moment(result[i].time_end,
-                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        }
-        result[i].time_start = moment(result[i].time_start,
-            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-        result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
-        result[i].bidHistory = await productModel.getBidHistory(result[i].id);
-    }
+    var result = await productModel.findPagebyCatId(cateID,limit,offset, sort);
+    
+    result = await productModel.getProductsDisplayByCard(result);
+
     res.render('vwCategory/show-product', {
-        // layout: 'non_sidebar.hbs',
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        cateID,
-        result
+                // layout: 'non_sidebar.hbs',
+            
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result,
     });
 });
 
@@ -326,81 +179,31 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
     const offset = (page -1) * limit;
     var total;
     total = await watchListModel.countWatchProductById(id);
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
     const watch_list = await watchListModel.getWatchListById(id,limit,offset);
-    var result;
+    var result = null;
     if(watch_list !== null) {
         var products = [];
         for (var i = 0; i < watch_list.length; i++) {
             var product = await productModel.findID(watch_list[i].id_product);
             products.push(product);
         }
-        console.log(products);
-        moment.locale('vi');
-        var end_date = [];
-        for (let i = 0; i < products.length; i++) {
-            end_date.push(0);
-        }
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].buy_now_price == 0) {
-                delete products[i].buy_now_price;
-            }
-            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-            if (end_date[i].diff(moment(), 'days') < 3) {
-                products[i].price_color = false;
-                products[i].time_end = end_date[i].fromNow();
-            } else {
-                products[i].price_color = true;
-                products[i].time_end = moment(products[i].time_end,
-                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            }
-            products[i].time_start = moment(products[i].time_start,
-                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
-            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
-        }
-        result = products;
+        result = await productModel.getProductsDisplayByCard(products);
+        // result = products;
     }
-    else{
-        result = null;
-    }
+
+
+
     res.render('vwProduct/products',{
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        result,
-        title:"yêu thích"
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result,
+                title:"yêu thích"
     });
 });
 router.get('/won',checkPermission.notLogin, async function (req, res){
@@ -411,76 +214,25 @@ router.get('/won',checkPermission.notLogin, async function (req, res){
     const offset = (page -1) * limit;
     var total;
     total = await productModel.countWonProductByIdAcc(id);
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getWonProductByIdAcc(id,limit,offset);
-    var result;
+    var result = null;
     if(products !== null) {
 
-        moment.locale('vi');
-        var end_date = [];
-        for (let i = 0; i < products.length; i++) {
-            end_date.push(0);
-        }
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].buy_now_price == 0) {
-                delete products[i].buy_now_price;
-            }
-            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-            if (end_date[i].diff(moment(), 'days') < 3) {
-                products[i].price_color = false;
-                products[i].time_end = end_date[i].fromNow();
-            } else {
-                products[i].price_color = true;
-                products[i].time_end = moment(products[i].time_end,
-                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            }
-            products[i].time_start = moment(products[i].time_start,
-                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
-            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
-        }
-        result = products;
+        result = await productModel.getProductsDisplayByCard(products);
+        // result = products;
     }
-    else{
-        result = null;
-    }
+
+
     res.render('vwProduct/products',{
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        result,
-        title:"đã chiến thắng"
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result,
+                title:"đã chiến thắng"
     });
 });
 router.get('/posted',checkPermission.isNotSeller, async function (req, res){
@@ -491,157 +243,60 @@ router.get('/posted',checkPermission.isNotSeller, async function (req, res){
     const offset = (page -1) * limit;
     var total;
     total = await productModel.countPostedProductByIdAcc(id);
-    let nPages = Math.floor(total / limit);
-    if(total % limit > 0) nPages++;
-    var nextPage, prePage, disableNext, disablePre;
-    if(nPages === 0 || nPages === 1){
-        disableNext = true;
-        disablePre = true;
-    }
-    else if(+page === 1){
-        prePage = +page;
-        nextPage = +page + 1;
-        disableNext = false;
-        disablePre = true;
-    }
-    else if(+page === nPages){
-        prePage = +page - 1;
-        nextPage = +page;
-        disableNext = true;
-        disablePre = false;
-    }
-    else{
-        nextPage = +page + 1;
-        prePage = +page - 1;
-        disableNext = false;
-        disablePre = false;
-    }
-    const pageNumber = [];
-    for(let i =1; i<= nPages; i++){
-        pageNumber.push({
-            value: i,
-            isCurrent: +page == i
-        });
-    }
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getPostedProductByIdAcc(id,limit,offset);
-    var result;
+    var result = null;
     if(products !== null) {
 
-        moment.locale('vi');
-        var end_date = [];
-        for (let i = 0; i < products.length; i++) {
-            end_date.push(0);
-        }
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].buy_now_price == 0) {
-                delete products[i].buy_now_price;
-            }
-            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-            if (end_date[i].diff(moment(), 'days') < 3) {
-                products[i].price_color = false;
-                products[i].time_end = end_date[i].fromNow();
-            } else {
-                products[i].price_color = true;
-                products[i].time_end = moment(products[i].time_end,
-                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            }
-            products[i].time_start = moment(products[i].time_start,
-                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
-            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
-        }
-        result = products;
+        result = await productModel.getProductsDisplayByCard(products);
+        // result = products;
     }
-    else{
-        result = null;
-    }
+
+
+
+
     res.render('vwProduct/products',{
-        page,
-        nextPage, prePage, disableNext, disablePre,
-        pageNumber,
-        result,
-        title:"đã đăng"
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result,
+                title:"đã đăng"
     });
 });
+
 router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
-    // const limit = 9;
-    // const page = req.query.page || 1;
-    // const offset = (page -1) * limit;
-    // var total;
-    // total = await productModel.countProductBiddingById(id);
-    // let nPages = Math.floor(total / limit);
-    // if(total % limit > 0) nPages++;
-    // var nextPage, prePage, disableNext, disablePre;
-    // if(nPages === 0 || nPages === 1){
-    //     disableNext = true;
-    //     disablePre = true;
-    // }
-    // else if(+page === 1){
-    //     prePage = +page;
-    //     nextPage = +page + 1;
-    //     disableNext = false;
-    //     disablePre = true;
-    // }
-    // else if(+page === nPages){
-    //     prePage = +page - 1;
-    //     nextPage = +page;
-    //     disableNext = true;
-    //     disablePre = false;
-    // }
-    // else{
-    //     nextPage = +page + 1;
-    //     prePage = +page - 1;
-    //     disableNext = false;
-    //     disablePre = false;
-    // }
-    // const pageNumber = [];
-    // for(let i =1; i<= nPages; i++){
-    //     pageNumber.push({
-    //         value: i,
-    //         isCurrent: +page == i
-    //     });
-    // }
-    const products = await productModel.getProductBiddingById(id,limit,offset);
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    var total = await productModel.countProductBiddingById(id);
+    console.log('total::::::;', total)
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
+    const products = await productModel.getProductBiddingById(id, limit, offset);
     console.log(products)
-    var result;
+    var result = null;
     if(products !== null) {
 
-        moment.locale('vi');
-        var end_date = [];
-        for (let i = 0; i < products.length; i++) {
-            end_date.push(0);
-        }
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].buy_now_price == 0) {
-                delete products[i].buy_now_price;
-            }
-            end_date[i] = moment(products[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-            if (end_date[i].diff(moment(), 'days') < 3) {
-                products[i].price_color = false;
-                products[i].time_end = end_date[i].fromNow();
-            } else {
-                products[i].price_color = true;
-                products[i].time_end = moment(products[i].time_end,
-                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            }
-            products[i].time_start = moment(products[i].time_start,
-                'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-            products[i].img = fileModel.getAllFileName('./public/img/products/' + products[i].id, products[i].id);
-            products[i].bidHistory = await productModel.getBidHistory(products[i].id);
-        }
-        result = products;
+        result = await productModel.getProductsDisplayByCard(products);
+        // result = products;
     }
-    else{
-        result = null;
-    }
+
+
+    
     res.render('vwProduct/products',{
-        // page,
-        // nextPage, prePage, disableNext, disablePre,
-        // pageNumber,
-        result,
-        title:" đang đấu giá"
+                page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                result,
+                title:" đang đấu giá"
     });
 });
+
 export default router;
