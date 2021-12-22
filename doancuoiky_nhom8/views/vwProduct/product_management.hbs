@@ -47,6 +47,9 @@
             text-decoration: none;
             cursor: pointer;
         }
+        .clickable-row:hover{
+            cursor: pointer;
+        }
         /*.modal{*/
         /*    position: fixed;*/
         /*    top: 0;*/
@@ -66,6 +69,9 @@
         });
         $('#confirmDeleteBtn').on('click', function () {
             $('#frmDelete').submit();
+        });
+        $(".clickable-row").on('click',function() {
+            window.location = $(this).data("href");
         });
     </script>
 {{/section}}
@@ -110,7 +116,7 @@
                 {{#if this.list_product.length}}
                     {{#each this.list_product}}
 
-                        <tr class="">
+                        <tr class="clickable-row" data-href="/products/{{proID}}">
 
                             <td><a href="/products/{{proID}}">{{proID}}</a></td>
                             <td style="vertical-align: center;" class="name-column"><a href="/products/{{proID}}">{{proName}}</a></td>

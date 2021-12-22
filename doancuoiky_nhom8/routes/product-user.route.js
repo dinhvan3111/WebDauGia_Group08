@@ -33,14 +33,8 @@ router.get('/', async function (req, res){
 });
 
 router.get('/search_result', async function (req, res){
-    res.render('vwProduct/product_search_result', {
-        layout: 'non_sidebar.hbs'
-    });
-});
-
-router.post('/search_result', async function (req, res){
-    const cateID = req.body.search_cateID;
-    const param = req.body.search_param;
+    const cateID = req.query.cateID;
+    const param = req.query.param;
     const limit = 8;
     const page = req.query.page || 1;
     const offset = (page -1) * limit;
@@ -52,18 +46,19 @@ router.post('/search_result', async function (req, res){
     var search_result = await productModel.searchProduct(cateID,param,limit,offset,sort);
     search_result = await productModel.getProductsDisplayByCard(search_result);
     res.render('vwProduct/product_search_result', {
-                layout: 'non_sidebar.hbs',
-                page,
-                nextPage: paging.nextPage, 
-                prePage: paging.prePage, 
-                disableNext: paging.disableNext, 
-                disablePre: paging.disablePre,
-                pageNumber: paging.pageNumber,
-                cateID,
-                param,
-                search_result
+        layout: 'non_sidebar.hbs',
+        page,
+        nextPage: paging.nextPage,
+        prePage: paging.prePage,
+        disableNext: paging.disableNext,
+        disablePre: paging.disablePre,
+        pageNumber: paging.pageNumber,
+        cateID,
+        param,
+        search_result
     });
 });
+
 
 router.get('/:id', async function (req, res, next){
     const id_product = req.params.id;

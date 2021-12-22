@@ -3,6 +3,9 @@
         #frmDownGradeSeller{
             display: none;
         }
+        .clickable-row:hover{
+            cursor: pointer;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -13,7 +16,10 @@
         });
         $('#confirmBtn').on('click',function (){
             $('#frmDownGradeSeller').submit();
-        })
+        });
+        $(".clickable-row").on('click',function() {
+            window.location = $(this).data("href");
+        });
     </script>
 {{/section}}
 <div class="col-sm-12 mt-3">
@@ -35,7 +41,7 @@
                 <tbody>
                 {{#if this.allSellers}}
                     {{#each this.allSellers}}
-                        <tr class="">
+                        <tr class="clickable-row" data-href="/profile/{{id}}">
                             <td>{{id}}</td>
                             <td>{{username}}</td>
                             <td>{{email}}</td>

@@ -9,7 +9,10 @@
           integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        .input-group #search_cateID{
+        .input-group .search_cateID{
+            display: none;
+        }
+        .input-group .search_cateID_temp{
             display: none;
         }
         div.dropdown-multicol{
@@ -82,10 +85,7 @@
             </li>
         </ul>
         <div class="navbar-nav ml-auto action-buttons">
-            <form action="/products/search_result" class="search-for-lg seach_form" method="post">
-                <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
-                <!--                           aria-label="Search">-->
-                <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
+            <div class="search-for-lg seach_form">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tất cả</button>
@@ -106,13 +106,13 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" id="search_cateID" name="search_cateID" value="">
-                    <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    <input type="text" class="search_cateID" name="search_cateID" value="">
+                    <input type="text" name="search_param" class="search_param form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
                     <div class="input-group-append">
-                        <button class="btn btn-dark" type="submit">Search</button>
+                        <a href="#" class="search-btn btn btn-dark">Search</a>
                     </div>
                 </div>
-            </form>
+            </div>
             {{#if lcAuthUser}}
                 <li class="nav-item dropdown active">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -136,35 +136,30 @@
                     <a class="nav-link" href="/register">Đăng kí</a>
                 </li>
             {{/if}}
-            <form action="/products/search_result" class="search-for-md seach_form" method="post">
-                <!--                    <input class="form-control col-lg-7 col-xl-8 mr-sm-2" type="search" placeholder="Nhập vào đây"-->
-                <!--                           aria-label="Search">-->
-                <!--                    <button class="btn btn-dark my-2 my-sm-0 mr-0" type="submit">Tìm kiếm</button>-->
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">Tất cả</button>
-                        <div class="dropdown-menu">
-                            {{#each lcCategories}}
-                                <a category-id="{{id}}" class="category-field-item dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
-                                {{#if subCate.length}}
-                                    {{#each subCate}}
-                                        <a category-id="{{id}}" class="category-field-item dropdown-item" href="#">{{name}}</a>
-                                    {{/each}}
-                                {{else}}
+            <div class="input-group search-for-md seach_form">
+                <div class="input-group-prepend">
+                    <button class="category-field-temp btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">Tất cả</button>
+                    <div class="dropdown-menu">
+                        {{#each lcCategories}}
+                            <a category-id="{{id}}" class="category-field-item-temp dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
+                            {{#if subCate.length}}
+                                {{#each subCate}}
+                                    <a category-id="{{id}}" class="category-field-item-item dropdown-item" href="#">{{name}}</a>
+                                {{/each}}
+                            {{else}}
 
-                                {{/if}}
-                            {{/each}}
-                            <div role="separator" class="dropdown-divider"></div>
-                            <a category-id="0" class="category-field-item dropdown-item" href="#">Tất cả</a>
-                        </div>
-                    </div>
-                    <input type="text" id="search_cateID" name="search_cateID" value="">
-                    <input type="text" id="search_param" name="search_param" class="form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
-                    <div class="input-group-append">
-                        <button class="btn btn-dark" type="submit" style="height: 38px">Search</button>
+                            {{/if}}
+                        {{/each}}
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a category-id="0" class="category-field-item-temp dropdown-item" href="#">Tất cả</a>
                     </div>
                 </div>
-            </form>
+                <input type="text" class="search_cateID_temp" name="search_cateID" value="">
+                <input type="text" name="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                <div class="input-group-append">
+                    <a href="#" class="search-btn-temp btn btn-dark" style="height: 38px">Search</a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -343,7 +338,40 @@
         console.log($(this).attr("href").replace("#",""));
         var content = $(this).text();
         $('.category-field').text(content);
-        $('.input-group #search_cateID').attr("value",param);
+        $('.input-group .search_cateID').attr("value",param);
+    });
+
+    $('.search-btn').on('click',function (e){
+        var search_cateID = $('.input-group .search_cateID')[0].value;
+        var search_param = $('.input-group .search_param')[0].value;
+        if(search_cateID === ''){
+            search_cateID = 0;
+        }
+        console.log(search_cateID);
+        console.log(search_param);
+        $(this).attr("href","/products/search_result?cateID=" + search_cateID +"&param="+ search_param);
+        $(this).off('click').click();
+    });
+
+    $('.category-field-item-temp').on('click',function (e){
+        e.preventDefault();
+        var param = $(this).attr('category-id');
+        console.log($(this).attr("href").replace("#",""));
+        var content = $(this).text();
+        $('.category-field-temp').text(content);
+        $('.input-group .search_cateID_temp').attr("value",param);
+    });
+
+    $('.search-btn-temp').on('click',function (e){
+        var search_cateID = $('.input-group .search_cateID_temp')[0].value;
+        var search_param = $('.input-group .search_param_temp')[0].value;
+        if(search_cateID === ''){
+            search_cateID = 0;
+        }
+        console.log(search_cateID);
+        console.log(search_param);
+        $(this).attr("href","/products/search_result?cateID=" + search_cateID +"&param="+ search_param);
+        $(this).off('click').click();
     });
 </script>
 {{{_sections.js}}}

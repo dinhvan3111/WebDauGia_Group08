@@ -7,6 +7,9 @@
         #frmAccept{
             display: none;
         }
+        .clickable-row:hover{
+            cursor: pointer;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -24,6 +27,9 @@
             $('#txtUserID').val(id);
             $('#txtIsAccept').val(isAccept);
             $('#frmAccept').submit();
+        });
+        $(".clickable-row").on('click',function() {
+            window.location = $(this).data("href");
         });
     </script>
 {{/section}}
@@ -44,7 +50,7 @@
             <tbody>
             {{#if this.requests}}
                 {{#each this.requests}}
-                    <tr class=""> 
+                    <tr class="clickable-row" data-href="/profile/{{id}}">
                         
                         <td><a href="/profile/{{id}}">{{id}}</a></td>
                         <td>{{username}}</td>
