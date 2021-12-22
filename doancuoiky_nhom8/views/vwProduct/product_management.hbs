@@ -134,7 +134,7 @@
                     {{/each}}
                 {{else}}
                     <tr class="">
-                        <td colspan="5" class="text-center">
+                        <td colspan="8" class="text-center">
                             <p>Không có sản phẩm phù hợp</p>
                         </td>
                     </tr>
@@ -174,17 +174,31 @@
     </div>
     <nav style="position: relative;" class="mt-1 mb-2 float-right">
         <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link">Previous</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="#">Next</a>
-            </li>
+            {{#if this.disablePre}}
+                <li class="page-item disabled">
+                    <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>
+                </li>
+            {{else}}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{this.prePage}}" tabindex="-1">Previous</a>
+                </li>
+            {{/if}}
+            {{#each this.pageNumber}}
+                {{#if isCurrent}}
+                    <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>
+                {{else}}
+                    <li class="page-item"><a class="page-link" href="?page={{value}}">{{value}}</a></li>
+                {{/if}}
+            {{/each}}
+            {{#if this.disableNext}}
+                <li class="page-item disabled">
+                    <a class="page-link" href="javascript:;">Next</a>
+                </li>
+            {{else}}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{this.nextPage}}">Next</a>
+                </li>
+            {{/if}}
         </ul>
     </nav>
 

@@ -11,7 +11,11 @@ export default {
 		}
 		return line[0];
 	},
-	async getWatchListById(id){
-		return await db('watch_list').where('id_acc',id);
+	async getWatchListById(id, limit, offset){
+		return await db('watch_list').where('id_acc',id).limit(limit).offset(offset);
+	},
+	async countWatchProductById(id){
+		const result = await db('watch_list').where('id_acc',id).count({amount: 'id_product'});
+		return result[0].amount;
 	}
 }

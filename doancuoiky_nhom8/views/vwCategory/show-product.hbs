@@ -30,10 +30,10 @@
                                 aria-expanded="false">
                             Sắp xếp theo
                         </button>
-                        <div class="dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
+                        <div class="sort-function dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
                              aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
-                            <a class="dropdown-item" href="#">Giá tăng dần</a>
+                            <a class="sort-function-time dropdown-item" href="?sort=1">Thời gian kết thúc giảm dần</a>
+                            <a class="sort-function-price dropdown-item" href="?sort=2">Giá tăng dần</a>
                         </div>
                     </div>
                     <div class="row">
@@ -91,15 +91,31 @@
                         {{/if}}
                     </div>
                     <ul class="pagination  mt-3 justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
+                        {{#if this.disablePre}}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>
+                            </li>
+                        {{else}}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{this.prePage}}" tabindex="-1">Previous</a>
+                            </li>
+                        {{/if}}
+                        {{#each this.pageNumber}}
+                            {{#if isCurrent}}
+                                <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>
+                            {{else}}
+                                <li class="page-item"><a class="page-link" href="?page={{value}}">{{value}}</a></li>
+                            {{/if}}
+                        {{/each}}
+                        {{#if this.disableNext}}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="javascript:;">Next</a>
+                            </li>
+                        {{else}}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{this.nextPage}}">Next</a>
+                            </li>
+                        {{/if}}
                     </ul>
                 </div>
             </div>

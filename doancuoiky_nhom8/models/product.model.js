@@ -49,26 +49,26 @@ export default {
 		}
 		return res;
 	},
-	async searchProduct(cateID, param, sort){
+	async searchProduct(cateID, param,limit,offset, sort){
 		var search_result = null;
 		if(cateID == '' || cateID == '0'){
 			if(sort === '0'){
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('MATCH(name,description) AGAINST(?)', param)
-					.limit(12);
+					.limit(limit).offset(offset);
 			}
 			else if(sort === '1'){ // Thời gian kết thúc giảm dần
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('MATCH(name,description) AGAINST(?)', param)
-					.limit(12).orderBy('time_end', 'desc');
+					.limit(limit).orderBy('time_end', 'desc').offset(offset);
 			}
 			else{ // Giá tăng dần
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('MATCH(name,description) AGAINST(?)', param)
-					.limit(12).orderBy('price', 'asc');
+					.limit(limit).orderBy('price', 'asc').offset(offset);
 			}
 			return search_result;
 		}
@@ -77,21 +77,38 @@ export default {
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
-					.limit(12);
+					.limit(limit).offset(offset);
 			}
 			else if(sort === '1'){ // Thời gian kết thúc giảm dần
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
-					.limit(12).orderBy('time_end', 'desc');
+					.limit(limit).orderBy('time_end', 'desc').offset(offset);
 			}
 			else{ // Giá tăng dần
 				search_result = await db.select()
 					.from('products')
 					.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
-					.limit(12).orderBy('price', 'asc');
+					.limit(limit).orderBy('price', 'asc').offset(offset);
 			}
 			return search_result;
+		}
+	},
+	async countSearchProduct(cateID, param){
+		var search_result = null;
+		if(cateID == '' || cateID == '0'){
+			search_result = await db.select()
+				.from('products')
+				.whereRaw('MATCH(name,description) AGAINST(?)', param)
+				.count({amount: 'id'});
+			return search_result[0].amount;
+		}
+		else{
+			search_result = await db.select()
+				.from('products')
+				.whereRaw('id_category = ? AND MATCH(name,description) AGAINST(?)', [cateID,param])
+				.count({amount: 'id'});
+			return search_result[0].amount;
 		}
 	},
 	async getProductDetail(req, product_info, id_product){
@@ -312,6 +329,37 @@ export default {
 		return result;
 
 	},
+	async countPageByIdCtg(cateID) {
+		const result = await db.select()
+			.from('products')
+			.where("id_category", cateID)
+			.count({amount :'id'});
+		return result[0].amount;
+
+	},
+	async findPagebyCatId(cateID, limit, offset,sort) {
+		var result = null;
+
+		if (sort === '0') {
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(limit).offset(offset);
+		} else if (sort === '1') { // Thời gian kết thúc giảm dần
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(limit).orderBy('time_end', 'desc').offset(offset);
+		} else { // Giá tăng dần
+			result = await db.select()
+				.from('products')
+				.where("id_category", cateID)
+				.limit(limit).orderBy('price', 'asc').offset(offset);
+		}
+
+		return result;
+
+	},
 	async getAllProduct( sort) {
 		var result = null;
 
@@ -330,6 +378,33 @@ export default {
 		}
 		return result;
 
+	},
+	async countPageByAll() {
+		const result = await db.select()
+			.from('products')
+			.count({amount :'id'});
+		return result[0].amount;
+
+	},
+	async findPageAllProduct(limit,offset, sort) {
+		var result = null;
+
+		if (sort === '0') {
+			result = await db.select()
+				.from('products').limit(limit).offset(offset);
+
+		} else if (sort === '1') { // Thời gian kết thúc giảm dần
+			result = await db.select()
+				.from('products')
+				.limit(limit).offset(offset)
+				.orderBy('time_end', 'desc');
+		} else { // Giá tăng dần
+			result = await db.select()
+				.from('products')
+				.limit(limit).offset(offset)
+				.orderBy('price', 'asc');
+		}
+		return result;
 	},
 
 	// Manage products
@@ -499,11 +574,12 @@ export default {
 					product_info.name, link_product, 
 					numeral(bidderPrice).format('0,0'));
 	},
-	async getListProductToManage(catID){
+	async getListProductToManage(catID, limit, offset){
 		if(catID === 0){
 			var productList =  await db('products')
 				.join('accounts', 'products.id_seller', 'accounts.id')
-				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end');
+				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end')
+				.limit(limit).offset(offset);
 			if(productList === null){
 				return null;
 			}
@@ -517,7 +593,8 @@ export default {
 			var productList =  await db('products')
 				.where('products.id_category',catID)
 				.join('accounts', 'products.id_seller', 'accounts.id')
-				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end');
+				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end')
+				.limit(limit).offset(offset);;
 			if(productList === null){
 				return null;
 			}
@@ -529,19 +606,41 @@ export default {
 		}
 		return productList;
 	},
-	async getWonProductByIdAcc(id_acc){
+	async getWonProductByIdAcc(id_acc, limit,offset){
 		const sql = `SELECT * from products p
-					 where p.time_end < now() and p.id_win_bidder = ` + id_acc;
+					 where p.time_end < now() and p.id_win_bidder =  ${id_acc} 
+					 limit ${limit} offset ${offset}`;
 		const raw = await db.raw(sql);
 		return raw[0];
 	},
-	async getPostedProductByIdAcc(id_acc){
-		return await db('products').where('id_seller',id_acc);
+	async countWonProductByIdAcc(id_acc){
+		const sql = `SELECT COUNT(id) as amount from products p
+					 where p.time_end < now() and p.id_win_bidder =  ${id_acc}`;
+		const raw = await db.raw(sql);
+		return raw[0][0].amount;
 	},
-	async getProductBiddingById(id) {
+	async getPostedProductByIdAcc(id_acc, limit, offset){
+		return await db('products').where('id_seller',id_acc).limit(limit).offset(offset);
+	},
+	async countPostedProductByIdAcc(id_acc){
+		const result = await db().select()
+			.from('products')
+			.where('id_seller',id_acc)
+			.count({amount: 'id'});
+		return result[0].amount;
+	},
+	async getProductBiddingById(id, limit, offset) {
 		const sql = `SELECT DISTINCT p.* from products as p, bid_history as b
-					 where p.id = b.id_product and p.time_end > now() and b.id_acc = ` + id;
+					 where p.id = b.id_product and p.time_end > now() and b.id_acc = ${id} 
+					 limit ${limit} offset ${offset}`;
 		const raw = await db.raw(sql);
 		return raw[0];
 	},
+	// async countProductBiddingById(id) {
+	// 	const sql = `SELECT DISTINCT p.* from products as p, bid_history as b
+	// 				 where p.id = b.id_product and p.time_end > now() and b.id_acc = ${id}
+	// 				 limit ${limit} offset ${offset}`;
+	// 	const raw = await db.raw(sql);
+	// 	return raw[0];
+	// },
 }

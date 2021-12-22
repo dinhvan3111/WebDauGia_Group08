@@ -10,8 +10,44 @@ import checkPermission from '../middlewares/permission.mdw.js';
 const router = express.Router();
 
 router.get('/', async function (req, res){
-    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-    const result = await productModel.getAllProduct(sort);
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    const total = await productModel.countPageByAll();
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
+    const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const result = await productModel.findPageAllProduct(limit,offset,sort);
     moment.locale('vi');
     var end_date = [];
     for (let i =0 ; i < result.length; i++){
@@ -37,6 +73,9 @@ router.get('/', async function (req, res){
         result[i].bidHistory = await productModel.getBidHistory(result[i].id);
     }
     res.render('vwProduct/products',{
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
         result
     });
 });
@@ -50,8 +89,44 @@ router.get('/search_result', async function (req, res){
 router.post('/search_result', async function (req, res){
     const cateID = req.body.search_cateID;
     const param = req.body.search_param;
+    const limit = 8;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    const total = await productModel.countSearchProduct(cateID,param);
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-    const search_result = await productModel.searchProduct(cateID,param,sort);
+    const search_result = await productModel.searchProduct(cateID,param,limit,offset,sort);
     moment.locale('vi');
     var end_date = [];
     for (let i =0 ; i < search_result.length; i++){
@@ -76,9 +151,11 @@ router.post('/search_result', async function (req, res){
         search_result[i].img = fileModel.getAllFileName('./public/img/products/' + search_result[i].id, search_result[i].id);
         search_result[i].bidHistory = await productModel.getBidHistory(search_result[i].id);
     }
-    console.log(search_result);
     res.render('vwProduct/product_search_result', {
         layout: 'non_sidebar.hbs',
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
         cateID,
         param,
         search_result
@@ -127,39 +204,80 @@ router.get('/:id', async function (req, res, next){
         notEnoughVotes: info.notEnoughVotes});
 });
 router.get('/list/:id', async function (req, res){
-	const cateID = req.params.id;
-	console.log(cateID);
-	const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-	const result = await productModel.getProductByIdCtg(cateID,sort);
-	moment.locale('vi');
-	var end_date = [];
-	for (let i =0 ; i < result.length; i++){
-		end_date.push(0);
-	}
-	for(let i =0 ; i < result.length; i++){
-		if(result[i].buy_now_price == 0){
-			delete result[i].buy_now_price;
-		}
-		end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-		if(end_date[i].diff(moment(), 'days') < 3){
-			result[i].price_color = false;
-			result[i].time_end = end_date[i].fromNow();
-		}
-		else{
-			result[i].price_color = true;
-			result[i].time_end = moment(result[i].time_end,
-				'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-		}
-		result[i].time_start = moment(result[i].time_start,
-			'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-		result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
-		result[i].bidHistory = await productModel.getBidHistory(result[i].id);
-	}
-	res.render('vwCategory/show-product', {
-		// layout: 'non_sidebar.hbs',
-		cateID,
-		result
-	});
+    const cateID = req.params.id;
+
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    const total = await productModel.countPageByIdCtg(cateID);
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
+
+    const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const result = await productModel.findPagebyCatId(cateID,limit,offset, sort);
+    console.log(result);
+    moment.locale('vi');
+    var end_date = [];
+    for (let i =0 ; i < result.length; i++){
+        end_date.push(0);
+    }
+    for(let i =0 ; i < result.length; i++){
+        if(result[i].buy_now_price == 0){
+            delete result[i].buy_now_price;
+        }
+        end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+        if(end_date[i].diff(moment(), 'days') < 3){
+            result[i].price_color = false;
+            result[i].time_end = end_date[i].fromNow();
+        }
+        else{
+            result[i].price_color = true;
+            result[i].time_end = moment(result[i].time_end,
+                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        }
+        result[i].time_start = moment(result[i].time_start,
+            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+        result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
+        result[i].bidHistory = await productModel.getBidHistory(result[i].id);
+    }
+    res.render('vwCategory/show-product', {
+        // layout: 'non_sidebar.hbs',
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
+        cateID,
+        result
+    });
 });
 
 router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, res){
@@ -203,7 +321,44 @@ router.post('/:id/buy-now', checkPermission.notLogin, async function(req, res){
 router.get('/watch-list',checkPermission.notLogin, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
-    const watch_list = await watchListModel.getWatchListById(id);
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    var total;
+    total = await watchListModel.countWatchProductById(id);
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
+    const watch_list = await watchListModel.getWatchListById(id,limit,offset);
     var result;
     if(watch_list !== null) {
         var products = [];
@@ -241,6 +396,9 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
         result = null;
     }
     res.render('vwProduct/products',{
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
         result,
         title:"yêu thích"
     });
@@ -248,7 +406,44 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
 router.get('/won',checkPermission.notLogin, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
-    const products = await productModel.getWonProductByIdAcc(id);
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    var total;
+    total = await productModel.countWonProductByIdAcc(id);
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
+    const products = await productModel.getWonProductByIdAcc(id,limit,offset);
     var result;
     if(products !== null) {
 
@@ -281,6 +476,9 @@ router.get('/won',checkPermission.notLogin, async function (req, res){
         result = null;
     }
     res.render('vwProduct/products',{
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
         result,
         title:"đã chiến thắng"
     });
@@ -288,7 +486,44 @@ router.get('/won',checkPermission.notLogin, async function (req, res){
 router.get('/posted',checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
-    const products = await productModel.getPostedProductByIdAcc(id);
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    var total;
+    total = await productModel.countPostedProductByIdAcc(id);
+    let nPages = Math.floor(total / limit);
+    if(total % limit > 0) nPages++;
+    var nextPage, prePage, disableNext, disablePre;
+    if(nPages === 0 || nPages === 1){
+        disableNext = true;
+        disablePre = true;
+    }
+    else if(+page === 1){
+        prePage = +page;
+        nextPage = +page + 1;
+        disableNext = false;
+        disablePre = true;
+    }
+    else if(+page === nPages){
+        prePage = +page - 1;
+        nextPage = +page;
+        disableNext = true;
+        disablePre = false;
+    }
+    else{
+        nextPage = +page + 1;
+        prePage = +page - 1;
+        disableNext = false;
+        disablePre = false;
+    }
+    const pageNumber = [];
+    for(let i =1; i<= nPages; i++){
+        pageNumber.push({
+            value: i,
+            isCurrent: +page == i
+        });
+    }
+    const products = await productModel.getPostedProductByIdAcc(id,limit,offset);
     var result;
     if(products !== null) {
 
@@ -321,6 +556,9 @@ router.get('/posted',checkPermission.isNotSeller, async function (req, res){
         result = null;
     }
     res.render('vwProduct/products',{
+        page,
+        nextPage, prePage, disableNext, disablePre,
+        pageNumber,
         result,
         title:"đã đăng"
     });
@@ -328,7 +566,44 @@ router.get('/posted',checkPermission.isNotSeller, async function (req, res){
 router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
-    const products = await productModel.getProductBiddingById(id);
+    // const limit = 9;
+    // const page = req.query.page || 1;
+    // const offset = (page -1) * limit;
+    // var total;
+    // total = await productModel.countProductBiddingById(id);
+    // let nPages = Math.floor(total / limit);
+    // if(total % limit > 0) nPages++;
+    // var nextPage, prePage, disableNext, disablePre;
+    // if(nPages === 0 || nPages === 1){
+    //     disableNext = true;
+    //     disablePre = true;
+    // }
+    // else if(+page === 1){
+    //     prePage = +page;
+    //     nextPage = +page + 1;
+    //     disableNext = false;
+    //     disablePre = true;
+    // }
+    // else if(+page === nPages){
+    //     prePage = +page - 1;
+    //     nextPage = +page;
+    //     disableNext = true;
+    //     disablePre = false;
+    // }
+    // else{
+    //     nextPage = +page + 1;
+    //     prePage = +page - 1;
+    //     disableNext = false;
+    //     disablePre = false;
+    // }
+    // const pageNumber = [];
+    // for(let i =1; i<= nPages; i++){
+    //     pageNumber.push({
+    //         value: i,
+    //         isCurrent: +page == i
+    //     });
+    // }
+    const products = await productModel.getProductBiddingById(id,limit,offset);
     console.log(products)
     var result;
     if(products !== null) {
@@ -362,6 +637,9 @@ router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
         result = null;
     }
     res.render('vwProduct/products',{
+        // page,
+        // nextPage, prePage, disableNext, disablePre,
+        // pageNumber,
         result,
         title:" đang đấu giá"
     });

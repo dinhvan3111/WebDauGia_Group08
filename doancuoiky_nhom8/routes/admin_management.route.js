@@ -12,13 +12,52 @@ import checkPermission from '../middlewares/permission.mdw.js';
 const router = express.Router();
 
 router.get('/accept_request', checkPermission.isNotAdmin, async function(req, res){
-	const getRequests = await adminManagement.getAllRequest();
+	const limit = 10;
+	const page = req.query.page || 1;
+	const offset = (page -1) * limit;
+	const total = await adminManagement.countRequests();
+	let nPages = Math.floor(total / limit);
+	if(total % limit > 0) nPages++;
+	var nextPage, prePage, disableNext, disablePre;
+	if(nPages === 0 || nPages === 1){
+		disableNext = true;
+		disablePre = true;
+	}
+	else if(+page === 1){
+		prePage = +page;
+		nextPage = +page + 1;
+		disableNext = false;
+		disablePre = true;
+	}
+	else if(+page === nPages){
+		prePage = +page - 1;
+		nextPage = +page;
+		disableNext = true;
+		disablePre = false;
+	}
+	else{
+		nextPage = +page + 1;
+		prePage = +page - 1;
+		disableNext = false;
+		disablePre = false;
+	}
+	const pageNumber = [];
+	for(let i =1; i<= nPages; i++){
+		pageNumber.push({
+			value: i,
+			isCurrent: +page == i
+		});
+	}
+	const getRequests = await adminManagement.getAllRequest(limit,offset);
 	const allRequests = []
 	for(let i =0; i < getRequests.length;i++){
 		const userRequest = await adminManagement.findID(getRequests[i].id_acc);
 		allRequests.push(userRequest);
 	}
 	res.render('vwAccount/accept_request',{
+		page,
+		nextPage, prePage, disableNext, disablePre,
+		pageNumber,
 		requests: allRequests,
 		layout: 'non_sidebar.hbs'
 	});
@@ -41,7 +80,43 @@ router.post('/accept_request', checkPermission.isNotAdmin, async function(req, r
 });
 
 router.get('/seller-management', checkPermission.isNotAdmin, async function(req, res){
-	const getSellersExpiredDay = await adminManagement.getAllSellerExpiredDay();
+	const limit = 10;
+	const page = req.query.page || 1;
+	const offset = (page -1) * limit;
+	const total = await adminManagement.countSellerExpiredDay();
+	let nPages = Math.floor(total / limit);
+	if(total % limit > 0) nPages++;
+	var nextPage, prePage, disableNext, disablePre;
+	if(nPages === 0 || nPages === 1){
+		disableNext = true;
+		disablePre = true;
+	}
+	else if(+page === 1){
+		prePage = +page;
+		nextPage = +page + 1;
+		disableNext = false;
+		disablePre = true;
+	}
+	else if(+page === nPages){
+		prePage = +page - 1;
+		nextPage = +page;
+		disableNext = true;
+		disablePre = false;
+	}
+	else{
+		nextPage = +page + 1;
+		prePage = +page - 1;
+		disableNext = false;
+		disablePre = false;
+	}
+	const pageNumber = [];
+	for(let i =1; i<= nPages; i++){
+		pageNumber.push({
+			value: i,
+			isCurrent: +page == i
+		});
+	}
+	const getSellersExpiredDay = await adminManagement.getAllSellerExpiredDay(limit,offset);
 	const allSellers = []
 	for(let i =0; i < getSellersExpiredDay.length;i++){
 		const expiredTime = getSellersExpiredDay[i].time;
@@ -50,6 +125,9 @@ router.get('/seller-management', checkPermission.isNotAdmin, async function(req,
 		allSellers.push(sellers);
 	}
 	res.render('vwAccount/sellers_expired_day',{
+		page,
+		nextPage, prePage, disableNext, disablePre,
+		pageNumber,
 		allSellers,
 		layout: 'non_sidebar.hbs'
 	});
@@ -60,7 +138,43 @@ router.post('/seller-management', checkPermission.isNotAdmin, async function(req
 	res.redirect('/admin/seller-management');
 });
 router.get('/account-management', checkPermission.isNotAdmin, async function(req, res){
-	const accountList = await adminManagement.getAllAccounts();
+	const limit = 10;
+	const page = req.query.page || 1;
+	const offset = (page -1) * limit;
+	const total = await adminManagement.countAccounts();
+	let nPages = Math.floor(total / limit);
+	if(total % limit > 0) nPages++;
+	var nextPage, prePage, disableNext, disablePre;
+	if(nPages === 0 || nPages === 1){
+		disableNext = true;
+		disablePre = true;
+	}
+	else if(+page === 1){
+		prePage = +page;
+		nextPage = +page + 1;
+		disableNext = false;
+		disablePre = true;
+	}
+	else if(+page === nPages){
+		prePage = +page - 1;
+		nextPage = +page;
+		disableNext = true;
+		disablePre = false;
+	}
+	else{
+		nextPage = +page + 1;
+		prePage = +page - 1;
+		disableNext = false;
+		disablePre = false;
+	}
+	const pageNumber = [];
+	for(let i =1; i<= nPages; i++){
+		pageNumber.push({
+			value: i,
+			isCurrent: +page == i
+		});
+	}
+	const accountList = await adminManagement.getAllAccounts(limit,offset);
 	for(let i =0; i < accountList.length; i++){
 		if(accountList[i].id_permission === 2){
 			accountList[i].permissionName = 'Seller';
@@ -74,6 +188,9 @@ router.get('/account-management', checkPermission.isNotAdmin, async function(req
 		}
 	}
 	res.render('vwAccount/account_management',{
+		page,
+		nextPage, prePage, disableNext, disablePre,
+		pageNumber,
 		accountList,
 		layout: 'non_sidebar.hbs'
 	});

@@ -83,7 +83,49 @@ router.post('/:product_id/ignore', checkPermission.isNotSeller,
 });
 router.get('/management', checkPermission.isNotAdmin, async function(req, res){
 	const catID = req.query.id || 0;
-	const list_product = await productModel.getListProductToManage(catID);
+	const limit = 10;
+	const page = req.query.page || 1;
+	const offset = (page -1) * limit;
+	var total;
+	if(catID === 0){
+		total = await productModel.countPageByAll();
+	}
+	else{
+		total = await productModel.countPageByIdCtg(catID);
+	}
+	let nPages = Math.floor(total / limit);
+	if(total % limit > 0) nPages++;
+	var nextPage, prePage, disableNext, disablePre;
+	if(nPages === 0 || nPages === 1){
+		disableNext = true;
+		disablePre = true;
+	}
+	else if(+page === 1){
+		prePage = +page;
+		nextPage = +page + 1;
+		disableNext = false;
+		disablePre = true;
+	}
+	else if(+page === nPages){
+		prePage = +page - 1;
+		nextPage = +page;
+		disableNext = true;
+		disablePre = false;
+	}
+	else{
+		nextPage = +page + 1;
+		prePage = +page - 1;
+		disableNext = false;
+		disablePre = false;
+	}
+	const pageNumber = [];
+	for(let i =1; i<= nPages; i++){
+		pageNumber.push({
+			value: i,
+			isCurrent: +page == i
+		});
+	}
+	const list_product = await productModel.getListProductToManage(catID, limit, offset);
 	var choseCtg = "Tất cả";
 	if(catID !==0){
 		choseCtg = await cateModel.findById(catID);
@@ -96,6 +138,9 @@ router.get('/management', checkPermission.isNotAdmin, async function(req, res){
 		list_product[i].end = moment(list_product[i].end).format('HH:mm DD-MM-YYYY');
 	}
 	res.render('vwProduct/product_management',{
+		page,
+		nextPage, prePage, disableNext, disablePre,
+		pageNumber,
 		list_product,
 		layout:'non_sidebar.hbs',
 		categories,

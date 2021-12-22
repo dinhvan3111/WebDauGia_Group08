@@ -28,14 +28,26 @@ export default{
 	async removeRequest(id_acc){
 		await db('request_upgrade').where('id_acc', id_acc).del();
 	},
-	getAllRequest(){
-		return db('request_upgrade').select();
+	getAllRequest(limit, offset){
+		return db('request_upgrade').select().limit(limit).offset(offset);
 	},
-	getAllSellerExpiredDay(){
-		return db('seller_expired_day').select();
+	async countRequests(){
+		const result = await db.select().from('request_upgrade').count({amount: 'id_acc'});
+		return result[0].amount;
 	},
-	getAllAccounts(){
-		return db('accounts').select();
+	getAllSellerExpiredDay(limit,offset){
+		return db('seller_expired_day').select().limit(limit).offset(offset);
+	},
+	async countSellerExpiredDay(){
+		const result = await db.select().from('seller_expired_day').count({amount: 'id'});
+		return result[0].amount;
+	},
+	getAllAccounts(limit,offset){
+		return db('accounts').select().limit(limit).offset(offset);
+	},
+	async countAccounts(){
+		const result = await db.select().from('accounts').count({amount: 'id'});
+		return result[0].amount;
 	},
 	async acceptRequest(id,isAccept){
 		if(isAccept === 'true') {
