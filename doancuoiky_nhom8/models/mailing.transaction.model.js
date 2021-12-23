@@ -200,4 +200,45 @@ export default {
 	},
 
 	//////////////////////////////////////////////////
+
+	// Sản phẩm bị xoá
+	async deletedProduct_sendSeller(email, name, product_name){
+		const mailMsg = {
+			to: email,
+			from: fromEmail,
+			subject: `Sản phẩm ${product_name} của bạn đã bị xoá`,
+			templateId: TRANSACTION_TEMPLATE,
+			dynamic_template_data: {
+				subject: `Sản phẩm ${product_name} của bạn đã bị xoá`,
+				template3: true,
+				
+			    name: name,
+			    header: 'SẢN PHẨM BỊ XOÁ',
+			    description: `Xin lỗi, sản phẩm ${product_name} của bạn đã bị quản trị viên xoá khỏi hệ thống`,
+			    product_name: product_name
+			}
+		};
+		return await sendEmail(mailMsg);
+	},
+
+	async deletedProduct_sendBidder(email, name, product_name, bid_price){
+		const mailMsg = {
+			to: email,
+			from: fromEmail,
+			subject: `Sản phẩm ${product_name} bạn đang tham gia đấu giá đã bị xoá`,
+			templateId: TRANSACTION_TEMPLATE,
+			dynamic_template_data: {
+				subject: `Sản phẩm ${product_name} bạn đang tham gia đấu giá đã bị xoá`,
+				template3: true,
+				
+			    name: name,
+			    header: 'SẢN PHẨM BỊ XOÁ',
+			    description: `Xin lỗi, sản phẩm ${product_name} mà bạn đang tham gia 
+			    				đấu giá đã bị quản trị viên xoá khỏi hệ thống`,
+			    product_name: product_name,
+			    bid_price_1: `Giá bạn đã đặt: ${bid_price} VNĐ`
+			}
+		};
+		return await sendEmail(mailMsg);
+	},
 }

@@ -452,6 +452,7 @@ export default {
 	async deleteProduct(id_product){
 		return await db('products').where({id: id_product}).del();
 	},
+	
 	async updateProduct(proObj){
 		return await db('products').where({id: proObj.id}).update(proObj);
 	},

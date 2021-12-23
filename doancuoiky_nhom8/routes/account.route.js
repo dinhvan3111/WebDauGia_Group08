@@ -144,6 +144,13 @@ router.post('/login', async function (req, res) {
 			err_message: "Tài khoản hoặc mật khẩu không chính xác!"
 		})
 	}
+	if(user.is_locked == 1){
+		return res.render('vwAccount/login',{
+			layout: false,
+			username: req.body.username,
+			err_message: "Tài khoản của bạn đã bị khoá"
+		})
+	}
 	delete user.pwd;
 	user.dob = moment(user.dob, 'DD/MM/YYYY').format('DD-MM-YYYY');
 	// console.log(user);
@@ -288,6 +295,7 @@ router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
 			await mailingModel.sendVerifyEmail(name, email, host, req.protocol + '://' + host, id_acc, token, 24);
 			await accountModel.updateEmail(email, id_acc);
 			req.session.passport.user.email = email;
+			req.user.email = email;
 		}
 	}
 	const reuser = await accountModel.findID(id_acc);

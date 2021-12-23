@@ -4,8 +4,14 @@ import upload from '../models/upload.model.js';
 import accountModel from '../models/account.model.js';
 import productModel from '../models/product.model.js';
 import cateModel from '../models/category.model.js';
+import biddingModel from '../models/bidding.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
 import moment from 'moment';
+import numeral from 'numeral';
+import mailing from '../models/mailing.transaction.model.js';
+import pagingInfo from '../utils/paging.helper.js';
+
+
 const router = express.Router();
 
 router.get('/add', checkPermission.isNotSeller, async function(req, res){
@@ -93,38 +99,7 @@ router.get('/management', checkPermission.isNotAdmin, async function(req, res){
 	else{
 		total = await productModel.countPageByIdCtg(catID);
 	}
-	let nPages = Math.floor(total / limit);
-	if(total % limit > 0) nPages++;
-	var nextPage, prePage, disableNext, disablePre;
-	if(nPages === 0 || nPages === 1){
-		disableNext = true;
-		disablePre = true;
-	}
-	else if(+page === 1){
-		prePage = +page;
-		nextPage = +page + 1;
-		disableNext = false;
-		disablePre = true;
-	}
-	else if(+page === nPages){
-		prePage = +page - 1;
-		nextPage = +page;
-		disableNext = true;
-		disablePre = false;
-	}
-	else{
-		nextPage = +page + 1;
-		prePage = +page - 1;
-		disableNext = false;
-		disablePre = false;
-	}
-	const pageNumber = [];
-	for(let i =1; i<= nPages; i++){
-		pageNumber.push({
-			value: i,
-			isCurrent: +page == i
-		});
-	}
+	const paging = pagingInfo.getPagingInfo(limit, page, total);
 	const list_product = await productModel.getListProductToManage(catID, limit, offset);
 	var choseCtg = "Tất cả";
 	if(catID !==0){
@@ -138,22 +113,49 @@ router.get('/management', checkPermission.isNotAdmin, async function(req, res){
 		list_product[i].end = moment(list_product[i].end).format('HH:mm DD-MM-YYYY');
 	}
 	res.render('vwProduct/product_management',{
-		page,
-		nextPage, prePage, disableNext, disablePre,
-		pageNumber,
-		list_product,
-		layout:'non_sidebar.hbs',
-		categories,
-		choseCtg
+				page,
+                nextPage: paging.nextPage, 
+                prePage: paging.prePage, 
+                disableNext: paging.disableNext, 
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+				list_product,
+				layout:'non_sidebar.hbs',
+				categories,
+				choseCtg
 	})
 });
 router.post('/del', checkPermission.isNotAdmin,
-	async function(req, res){
-		const id = req.body.proID;
-		console.log(id);
-		const delList = await productModel.deleteWatchListByProID(id);
-		const delHis = await productModel.deleteBidHistoryByProID(id);
-		const product = await productModel.deleteProduct(id);
-		res.redirect(req.headers.referer);
-	});
+						async function(req, res){
+	const id = req.body.proID;
+	// console.log(id);
+	const product = await productModel.findID(id);
+	if(product !== null){
+		if(product.id_win_bidder !== null && product.not_sold == 1){
+			const bidder = await accountModel.findID(product.id_win_bidder);
+			await mailing.deletedProduct_sendBidder(bidder.email, 
+					bidder.name, 
+					product.name, 
+					numeral(product.price).format('0,0'));
+		}
+
+
+		const seller = await accountModel.findID(product.id_seller);
+
+		await productModel.deleteWatchListByProID(id);
+		await productModel.deleteBidHistoryByProID(id);
+		await productModel.deleteProduct(id);
+		await biddingModel.deleteBidderBidsOfProduct(id);
+		
+		await mailing.deletedProduct_sendSeller(seller.email, 
+												seller.name,
+												product.name);
+	}
+	
+
+
+	res.redirect(req.headers.referer);
+});
+
+
 export default router;

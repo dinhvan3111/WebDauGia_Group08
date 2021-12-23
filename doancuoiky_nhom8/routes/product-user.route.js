@@ -46,16 +46,16 @@ router.get('/search_result', async function (req, res){
     var search_result = await productModel.searchProduct(cateID,param,limit,offset,sort);
     search_result = await productModel.getProductsDisplayByCard(search_result);
     res.render('vwProduct/product_search_result', {
-        layout: 'non_sidebar.hbs',
-        page,
-        nextPage: paging.nextPage,
-        prePage: paging.prePage,
-        disableNext: paging.disableNext,
-        disablePre: paging.disablePre,
-        pageNumber: paging.pageNumber,
-        cateID,
-        param,
-        search_result
+                layout: 'non_sidebar.hbs',
+                page,
+                nextPage: paging.nextPage,
+                prePage: paging.prePage,
+                disableNext: paging.disableNext,
+                disablePre: paging.disablePre,
+                pageNumber: paging.pageNumber,
+                cateID,
+                param,
+                search_result
     });
 });
 
