@@ -116,15 +116,15 @@
                 {{#if this.list_product.length}}
                     {{#each this.list_product}}
 
-                        <tr class="clickable-row" data-href="/products/{{proID}}">
+                        <tr data-href="/products/{{proID}}">
 
                             <td><a href="/products/{{proID}}">{{proID}}</a></td>
                             <td style="vertical-align: center;" class="name-column"><a href="/products/{{proID}}">{{proName}}</a></td>
                             <td><a href="/products/{{proID}}"><img class="img-avt" src="/img/products/{{proID}}/thumb/{{img}}"></a></td>
-                            <td><a href="/products/{{proID}}">{{accName}}</a></td>
-                            <td><a href="/products/{{proID}}">{{format_number price}} VNĐ</a></td>
-                            <td><a href="/products/{{proID}}">{{start}}</a></td>
-                            <td><a href="/products/{{proID}}">{{end}}</a></td>
+                            <td>{{accName}}</td>
+                            <td>{{format_number price}} VNĐ</td>
+                            <td>{{start}}</td>
+                            <td>{{end}}</td>
 
                             <td class="btn-delete">
 

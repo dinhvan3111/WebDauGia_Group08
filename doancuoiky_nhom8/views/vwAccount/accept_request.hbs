@@ -10,6 +10,15 @@
         .clickable-row:hover{
             cursor: pointer;
         }
+        td>a{
+            color: black;
+            text-decoration: none;
+        }
+        td>a:hover{
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -50,10 +59,10 @@
             <tbody>
             {{#if this.requests}}
                 {{#each this.requests}}
-                    <tr class="clickable-row" data-href="/profile/{{id}}">
+                    <tr data-href="/profile/{{id}}">
                         
-                        <td><a href="/profile/{{id}}">{{id}}</a></td>
-                        <td>{{username}}</td>
+                        <td>{{id}}</td>
+                        <td><a href="/profile/{{id}}">{{username}}</a></td>
                         <td>{{email}}</td>
                         
                         <td>

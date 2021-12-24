@@ -6,6 +6,15 @@
         .clickable-row:hover{
             cursor: pointer;
         }
+        td>a{
+            color: black;
+            text-decoration: none;
+        }
+        td>a:hover{
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -58,9 +67,9 @@
                 <tbody>
                 {{#if this.accountList}}
                     {{#each this.accountList}}
-                        <tr class="clickable-row" data-href="/profile/{{id}}">
+                        <tr data-href="/profile/{{id}}">
                             <td>{{id}}</td>
-                            <td>{{username}}</td>
+                            <td><a href="/profile/{{id}}">{{username}}</a></td>
                             <td>{{email}}</td>
                             <td>{{permissionName}}</td>
                             <td>
