@@ -1,3 +1,7 @@
+{{#section 'title'}}
+    <title>Danh sách người bán</title>
+{{/section}}
+
 {{#section 'css'}}
     <style>
         #frmDownGradeSeller{
@@ -44,18 +48,18 @@
                     <th scope="col">Tên người dùng</th>
                     <th scope="col">Email</th>
                     <th scope="col">Thời gian hết hạn</th>
-                    <th scope="col">Hạ cấp tài khoản</th>
+                    <th class="text-center" scope="col">Hạ cấp tài khoản</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{#if this.allSellers}}
                     {{#each this.allSellers}}
                         <tr data-href="/profile/{{id}}">
-                            <td>{{id}}</td>
-                            <td><a href="/profile/{{id}}">{{username}}</a></td>
+                            <td >{{id}}</td>
+                            <td ><a style="color: blue;" href="/profile/{{id}}" target="_blank" >{{username}}</a></td>
                             <td>{{email}}</td>
                             <td>{{time}}</td>
-                            <td>
+                            <td class="text-center">
                                 <a data-id="{{id}}" class="down-grade-btn btn btn-sm btn-danger font-bold btn-long" href="#" role="button" data-toggle="modal" data-target="#exampleModal">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>

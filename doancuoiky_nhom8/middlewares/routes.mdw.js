@@ -8,6 +8,7 @@ import productManagementRoute from '../routes/product-management.route.js';
 import adminManagementRoute from '../routes/admin_management.route.js';
 import checkVerifiedEmail from './verifiedEmail.mdw.js';
 import adminManagement from "../models/admin_management.model.js";
+import checkLockedAccMdw from './lockedAcc.mdw.js';
 
 export default function(app){
 
@@ -21,7 +22,11 @@ export default function(app){
 	});
 
 	app.use('/mailing', mailingRoute);
+	
 	checkVerifiedEmail(app);
+
+	checkLockedAccMdw(app);
+
 	app.get('/', async function (req, res) {
 		const productList = await productModel.getTopProduct();
 		// console.log(productList);
