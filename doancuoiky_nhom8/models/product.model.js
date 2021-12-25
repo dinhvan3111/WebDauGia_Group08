@@ -406,7 +406,6 @@ export default {
 		}
 		return result;
 	},
-
 	async getProductsDisplayByCard(productList){
 		moment.locale('vi');
 	    var end_date = [];
@@ -435,7 +434,15 @@ export default {
 	    }
 	    return productList;
 	},
-
+	async isComment(id_assessor,id_acc,id_product){
+		const sql = `SELECT * from rate_history
+					 where id = ${id_product} and id_acc=${id_acc} and id_assessor = ${id_assessor}`;
+		const raw = await db.raw(sql);
+		if(raw[0].length === 0){
+			return null;
+		}
+		return raw[0];
+	},
 
 
 	// Manage products
@@ -674,5 +681,18 @@ export default {
 					 		and p.time_end > now()`;
 		const raw = await db.raw(sql);
 		return raw[0][0]['count(*)'];
+	},
+	async getSoldProductByIdAcc(id_acc, limit,offset){
+		const sql = `SELECT * from products p
+					 where p.time_end < now() and p.id_seller =  ${id_acc}  and p.id_win_bidder != ""
+					 limit ${limit} offset ${offset}`;
+		const raw = await db.raw(sql);
+		return raw[0];
+	},
+	async countSoldProductByIdAcc(id_acc){
+		const sql = `SELECT COUNT(id) as amount from products p
+					 where p.time_end < now() and p.id_seller =  ${id_acc}  and id_win_bidder != NULL`;
+		const raw = await db.raw(sql);
+		return raw[0][0].amount;
 	},
 }

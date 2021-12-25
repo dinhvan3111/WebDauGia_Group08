@@ -87,13 +87,13 @@ nav .search-for-lg {
     height:100vh;
     display: flex;
 }
-#max_bid_price{
+#max_bid_price,#comment{
     width: 100%;
     border-radius: 20px;
     padding:6px;
 
 }
-#bidModalLabel{
+#bidModalLabel,#commentModalLabel{
     font-style: italic;
 }
 .modal-content .modal-footer button{

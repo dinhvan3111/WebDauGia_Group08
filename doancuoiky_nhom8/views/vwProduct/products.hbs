@@ -12,7 +12,29 @@
             color: black;
             text-decoration: none;
         }
+        .reactbtn{
+            font-size: 30px;
+            color: #ffcc37;
+        }
     </style>
+{{/section}}
+{{#section 'js'}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JDMcKinstry/JavaScriptDateFormat@master/dateFormat.min.js">
+    <script>
+        $('.comment-btn').on('click', function () {
+            const id = $(this).attr('data-id');
+            const id_seller = $(this).attr('data-id-seller');
+            const id_bidder = $(this).attr('data-id-win-bidder');
+            $('#txtProID').val(id);
+            $('#txtIdSeller').val(id_seller);
+            $('#txtIdBidder').val(id_bidder);
+            const time =new Date($.now());
+            $('#txtTime').val(time);
+        });
+        $('#commentBtn').on('click', function () {
+            $('#frmComment').submit();
+        });
+    </script>
 {{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10">
 
@@ -72,14 +94,30 @@
                                         </div>
 
                                         <div class="card-footer text-muted">
-                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
-                                                <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                Đấu giá ngay
-                                            </a>
+                                            {{#if isComment}}
+<!--                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">-->
+<!--                                                    <i class="fa fa-comments" aria-hidden="true"></i>-->
+<!--                                                    Đánh giá ngay-->
+<!--                                                </a>-->
+
+                                                <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
+                                                        data-target="#commentModal" class="btn btn-sm btn-outline-success comment-btn"><i
+                                                        class="fa fa-comments"
+                                                        aria-hidden="true"></i> Đánh giá ngay</button>
+
+
+                                            {{else}}
+                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                                    <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                    Đấu giá ngay
+                                                </a>
+                                            {{/if}}
+
                                             <a class="btn btn-sm btn-outline-danger" href="#" role="button">
                                                 <i class="fa fa-heart" aria-hidden="true"></i>
-                                                Quan tâm
+                                                Yêu thích
                                             </a>
+
                                         </div>
                                     </div>
                                 </div>
@@ -96,6 +134,60 @@
                             {{/if}}
 
                         {{/if}}
+<!--                        Modal-->
+                        <form id="frmComment" action="/products/comment" method="post">
+                            <input type="hidden" id="txtProID" name="id" value="">
+                            <input type="hidden" id="txtIdSeller" name="id_assessor" value="">
+                            <input type="hidden" id="txtIdBidder" name="id_acc" value="">
+                        <div class="modal fade" id="commentModal" tabindex="-1"
+                             aria-labelledby="commentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="commentModalLabel">Đánh giá của bạn về sản phẩm </h5>
+                                        <button type="button" class="close"
+                                                data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+
+                                        <div class="modal-body">
+                                            <input type="text" name="comment"
+                                                   id="comment"
+                                                   placeholder="Nhập đánh giá của bạn..."
+                                                   data-type="currency" value required/>
+                                            <div class="m-2 d-flex">
+                                                <div class="mr-3">
+
+                                                    <input class="mt-10" name="mark" type="radio" value="1" required="required" />&nbspThích <i class="reactbtn fa fa-thumbs-up"></i>
+                                                </div>
+                                                <div>
+                                                    <input name="mark" type="radio" value="0" required="required" />&nbsp Không thích <i class="reactbtn fa fa-thumbs-down"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Đóng
+                                            </button>
+                                            <a href="javascript:;">
+                                                <button type="button" id="commentBtn"
+                                                        class="btn btn-success"><i
+                                                        class="fa fa-comments"></i> Đánh giá
+                                                </button>
+                                            </a>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                            <input type="hidden" id="txtTime" name="time" value="">
+                        </form>
                     </div>
                     <ul class="pagination  mt-3 justify-content-end">
                         {{#if this.disablePre}}

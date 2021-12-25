@@ -3,6 +3,7 @@ import moment from 'moment';
 import pagingInfo from '../utils/paging.helper.js';
 import productModel from '../models/product.model.js';
 import accountModel from '../models/account.model.js';
+import rateModel from '../models/rate.model.js';
 import fileModel from '../models/upload.model.js';
 import watchListModel from '../models/watchlist.model.js';
 import biddingModel from '../models/bidding.model.js';
@@ -141,6 +142,7 @@ router.post('/add-to-watch-list', checkPermission.notLogin, async function(req, 
     else{
         return res.redirect(req.headers.referer);
     }
+    //const url = req.headers.referer || '/';
     return res.redirect('/products/' + id);
 });
 
@@ -187,8 +189,14 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
         result = await productModel.getProductsDisplayByCard(products);
         // result = products;
     }
-
-
+    // const OnWatchList = [];
+    // for(var i = 0;i<requests.length;i++){
+    //     const likeProduct = await watchListModel.IsProductOnWatchList(result[i].id,requests[i].id_product);
+    //     console.log()
+    //     if(likeProduct != NULL){
+    //         OnWatchList[i] = true;
+    //     }
+    // }
 
     res.render('vwProduct/products',{
                 page,
@@ -198,7 +206,8 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
                 disablePre: paging.disablePre,
                 pageNumber: paging.pageNumber,
                 result,
-                title:"yêu thích"
+                title:"yêu thích",
+                inWatchList:true
     });
 });
 router.get('/won',checkPermission.notLogin, async function (req, res){
@@ -218,7 +227,15 @@ router.get('/won',checkPermission.notLogin, async function (req, res){
         // result = products;
     }
 
-
+    for(var i = 0;i<result.length;i++){
+        const likeProduct = await productModel.isComment(result[i].id_seller,result[i].id_win_bidder,result[i].id);
+        //console.log(likeProduct)
+        result[i].isComment = false;
+        if(likeProduct === null){//chưa đánh giá
+            result[i].isComment = true;//hiện nút đánh giá
+        }
+    }
+    //console.log(result);
     res.render('vwProduct/products',{
                 page,
                 nextPage: paging.nextPage, 
@@ -261,7 +278,46 @@ router.get('/posted',checkPermission.isNotSeller, async function (req, res){
                 title:"đã đăng"
     });
 });
+router.get('/sold',checkPermission.isNotSeller, async function (req, res){
+    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const id = req.session.passport.user.id;
+    const limit = 9;
+    const page = req.query.page || 1;
+    const offset = (page -1) * limit;
+    var total;
+    total = await productModel.countSoldProductByIdAcc(id);
+    const paging = pagingInfo.getPagingInfo(limit, page, total);
+    const products = await productModel.getSoldProductByIdAcc(id,limit,offset);
 
+    var result = null;
+    if(products !== null) {
+
+        result = await productModel.getProductsDisplayByCard(products);
+        // result = products;
+    }
+    for(var i = 0;i<result.length;i++){
+        const likeProduct = await productModel.isComment(result[i].id_seller,result[i].id_win_bidder,result[i].id);
+        console.log(likeProduct)
+        result[i].isComment = false;
+        if(likeProduct === null){
+            result[i].isComment = true;
+        }
+    }
+    console.log(result);
+
+
+    res.render('vwProduct/products',{
+        page,
+        nextPage: paging.nextPage,
+        prePage: paging.prePage,
+        disableNext: paging.disableNext,
+        disablePre: paging.disablePre,
+        pageNumber: paging.pageNumber,
+        result,
+        title:"đã được đấu giá thành công",
+        isSold:true
+    });
+});
 router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
@@ -293,5 +349,18 @@ router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
                 title:" đang đấu giá"
     });
 });
+router.post('/comment', checkPermission.notLogin, async function(req, res){
 
+    req.body.time = moment(req.body.time).format('YYYY-MM-DD HH:mm:ss');
+    const comment = req.body.comment;
+    if(comment.length === 0){
+        req.body.comment = "Tốt";
+    }
+    if(req.body.mark === undefined){
+        req.body.mark = 1;
+    }
+    const ret = await rateModel.add(req.body);
+
+    res.redirect(req.headers.referer);
+});
 export default router;

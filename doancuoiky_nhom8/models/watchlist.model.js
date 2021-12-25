@@ -14,6 +14,14 @@ export default {
 	async getWatchListById(id, limit, offset){
 		return await db('watch_list').where('id_acc',id).limit(limit).offset(offset);
 	},
+	async IsProductOnWatchList(id_acc,id_product){
+		const product = await db('watch-list')
+			.where("id_acc",id_acc,"id_product",id_product);
+		if(product.length == 0){
+			return null;
+		}
+		return product[0];
+	},
 	async countWatchProductById(id){
 		const result = await db('watch_list').where('id_acc',id).count({amount: 'id_product'});
 		return result[0].amount;
