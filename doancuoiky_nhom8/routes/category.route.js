@@ -191,16 +191,19 @@ router.get('/childctg/edit_category', checkPermission.isNotAdmin,async function 
 	const id =  req.query.id||0;
 	const category = await categoryModel.findById(id);
 	const parent = await categoryModel.findById(category.parent_id);
+	const AllParent = await categoryModel.getAllParent();
+	console.log(AllParent);
 	res.render('vwCategory/edit_childCategory',{
 		layout:'non_sidebar.hbs',
 		category,
-		parent
+		parent,
+		AllParent
 	});
 })
 router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function(req, res){
 	console.log(req.body);
 	const id = req.body.id;
-	const parent_name = req.body.parent_name;
+	const parent_name = req.body.parent_name[0];
 	const name = req.body.name;
 	const old_category = await categoryModel.findById(id);
 	const parent_category = await categoryModel.findByName(parent_name);

@@ -2,44 +2,80 @@
     <title>Sửa danh mục</title>
 {{/section}}
 {{#section 'css'}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
 
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        .card-body .title{
+        .card-body .title {
             font-weight: bold;
         }
-        .card-body{
+
+        .card-body {
             padding: 20px 20px 0 20px;
         }
-        .form-add-ctg{
+
+        .form-add-ctg {
             width: 450px;
             margin: auto;
             margin-top: 0px;
             margin-bottom: 100px;
         }
-        .btn-add-ctg{
+
+        .btn-add-ctg {
             font-weight: bold;
             border-radius: 16px;
 
         }
-        .text-field{
+
+        .text-field {
             padding: 6px;
             border-radius: 16px;
         }
-        .card-footer{
+
+        .card-footer {
             padding: 6px 20px;
         }
-        .btn-block{
+
+        .btn-block {
             text-align: center;
         }
-        .err_message{
+
+        .err_message {
             font-style: italic;
             color: #f14646;
             font-size: 16px;
             text-align: center;
         }
+        .form-group .dropdown button{
+            width: 100%;
+            background-color: white;
+            color: black;
+            border-radius: 16px;
+            padding: 6px;
+            margin-bottom: 5px;
+            text-align: left;
+            border: 1px solid #ced4da;
+        }
+        .show>.btn-secondary.dropdown-toggle{
+            background-color: white;
+            color: black;
+        }
+        .dropdown-menu-ctg.show{
+            width: 100%;
+        }
+        .dropdown-item{
+            padding: 6px;
+        }
     </style>
+{{/section}}
+{{#section 'js'}}
+    <script>
+        $('.category-item').on('click',function (e){
+            e.preventDefault();
+            var param = $(this).attr('category-name');
+            $('#txtParentName').attr("value",param);
+        });
+    </script>
 {{/section}}
 
 <div class="col-xl mt-3">
@@ -52,34 +88,55 @@
         <form id="frmEditCtg" method="post">
             <div class="card-body">
                 <div class="form-group">
-                    <label  class="title">ID</label>
-                    <input type="text" class="text-field form-control" id="txtId" name="id" value="{{this.category.id}}" readonly >
+                    <label class="title">ID</label>
+                    <input type="text" class="text-field form-control" id="txtId" name="id" value="{{this.category.id}}"
+                           readonly>
                 </div>
                 <div class="form-group">
-                    <label  class="title">Tên danh mục</label>
-                    <input type="text" class="text-field form-control" id="txtName" name="name" value="{{this.category.name}}">
+                    <label class="title">Tên danh mục</label>
+                    <input type="text" class="text-field form-control" id="txtName" name="name"
+                           value="{{this.category.name}}">
                 </div>
                 <div class="form-group">
-                    <label  class="title">Tên danh mục cha</label>
-                    <input type="text" class="text-field form-control" id="txtParentName" name="parent_name" value="{{this.parent.name}}">
+                    <div>
+                        <label class="title">Tên danh mục cha</label>
+                        <!--                    <input type="text" class="text-field form-control" id="txtParentName" name="parent_name" value="{{this.parent.name}}">-->
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonCtg"
+                                data-toggle="dropdown" aria-expanded="false">
+                            {{this.parent.name}}
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-ctg" aria-labelledby="dropdownMenuButtonCtg">
+                            <hr class="m-0">
+                            {{#each AllParent}}
+                                <a category-name ="{{name}}" class="dropdown-item category-item" href="javascript:;">{{name}}</a>
+                                <input type="hidden"id="txtParentName" name="parent_name" value="">
+                                <hr class="m-0">
+                            {{/each}}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            {{#if err_message}}
-                <p class="err_message"><i class="fas fa-sad-tear"></i></i> {{err_message}}</p>
-            {{/if}}
-            <div class="card-footer text-muted">
-                <div class="btn-block">
-                    <a class="btn-add-ctg btn btn-outline-success" href="/admin/categories" role="button">
-                        <i class="fa fa-backward" aria-hidden="true"></i>
-                        List
-                    </a>
-                    <button type="submit" class="btn-add-ctg btn btn-primary"formaction="/admin/categories/childctg/edit_category">
-                        <i class="fa fa-check" aria-hidden="true"></i>
-                        Save
-                    </button>
+                {{#if err_message}}
+                    <p class="err_message"><i class="fas fa-sad-tear"></i></i> {{err_message}}</p>
+                {{/if}}
+                <div class="">
+                    <div class="btn-block mb-2">
+                        <a class="btn-add-ctg btn btn-outline-success" href="/admin/categories" role="button">
+                            <i class="fa fa-backward" aria-hidden="true"></i>
+                            List
+                        </a>
+                        <button type="submit" class="btn-add-ctg btn btn-primary"
+                                formaction="/admin/categories/childctg/edit_category">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                            Save
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
+
     </div>
     </form>
 
