@@ -75,7 +75,7 @@ export default{
 			imgsExtra: imgsExtra
 		};
 	},
-	deletePath(path){
-		deleteDir(path);
+	async deletePath(path){
+		await deleteDir(path);
 	}
 }

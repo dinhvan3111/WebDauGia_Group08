@@ -168,7 +168,7 @@ router.post('/:id/buy-now', checkPermission.notLogin, async function(req, res){
     res.redirect(req.headers.referer);
 });
 
-router.get('/watch-list',checkPermission.notLogin, async function (req, res){
+router.get('/watch-list', checkPermission.notLogin, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
@@ -210,7 +210,7 @@ router.get('/watch-list',checkPermission.notLogin, async function (req, res){
                 inWatchList:true
     });
 });
-router.get('/won',checkPermission.notLogin, async function (req, res){
+router.get('/won', checkPermission.notLogin, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
@@ -247,7 +247,7 @@ router.get('/won',checkPermission.notLogin, async function (req, res){
                 title:"đã chiến thắng"
     });
 });
-router.get('/posted',checkPermission.isNotSeller, async function (req, res){
+router.get('/posted', checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
@@ -278,7 +278,7 @@ router.get('/posted',checkPermission.isNotSeller, async function (req, res){
                 title:"đã đăng"
     });
 });
-router.get('/sold',checkPermission.isNotSeller, async function (req, res){
+router.get('/sold', checkPermission.isNotSeller, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
@@ -318,14 +318,14 @@ router.get('/sold',checkPermission.isNotSeller, async function (req, res){
         isSold:true
     });
 });
-router.get('/bidding',checkPermission.isNotSeller, async function (req, res){
+router.get('/bidding', checkPermission.notLogin, async function (req, res){
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
     const page = req.query.page || 1;
     const offset = (page -1) * limit;
     var total = await productModel.countProductBiddingById(id);
-    console.log('total::::::;', total)
+    // console.log('total::::::;', total)
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getProductBiddingById(id, limit, offset);
     console.log(products)

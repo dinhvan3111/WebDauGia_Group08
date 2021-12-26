@@ -33,10 +33,11 @@ export default {
 	},
 	async isNotSeller(req, res, next){
 		if(notLogin(req, res) !== true){
-			notLogin(req, res);
+			// notLogin(req, res);
 			const user = await accountModel.findID(req.user.id);
 			// console.log(user);
 			if(user.id_permission > 2){
+				console.log('Khong phai seller', user.id_permission, req.user.id, user.id);
 				return res.render('404', {layout: false});
 			}
 			next();
@@ -44,7 +45,7 @@ export default {
 	},
 	async isNotAdmin(req,res,next){
 		if(notLogin(req, res) !== true){
-			notLogin(req, res);
+			// notLogin(req, res);
 			const user = await accountModel.findID(req.user.id);
 			// console.log(user);
 			if(user.id_permission !== 1){

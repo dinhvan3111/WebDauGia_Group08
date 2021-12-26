@@ -71,6 +71,7 @@
                         <a class="dropdown-item font-bold" href="/products/management">Quản lý sản phẩm</a>
                     {{/if}}
                     {{#if (isSeller lcAuthUser.user.id_permission)}}
+                        <a class="dropdown-item font-bold" href="/products/add">Đăng sản phẩm</a>
                         <a class="dropdown-item font-bold" href="/products/posted">Danh sách sản phẩm đã đăng</a>
                         <a class="dropdown-item font-bold" href="/products/sold">Danh sách sản phẩm có người chiến thắng</a>
                     {{/if}}
@@ -95,7 +96,7 @@
                 </li>
             {{/if}}
             <li class="nav-item active">
-                <a class="nav-link" href="#">About us</a>
+                <a class="nav-link" href="/about-us">About us</a>
             </li>
         </ul>
         <div class="navbar-nav ml-auto action-buttons">
@@ -305,9 +306,7 @@
         }
     })
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
         crossorigin="anonymous"></script>

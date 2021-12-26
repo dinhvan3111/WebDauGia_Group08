@@ -29,7 +29,7 @@ export default function(app){
 				return false;
 			},
 			isSeller(permission){
-				console.log(permission);
+				console.log('permission: ', permission);
 				if(permission <= 2){
 					return true;
 				}

@@ -68,7 +68,11 @@ export default function(app){
 	app.use('/products',productUserRoute);
 	app.use('/products', productManagementRoute);
 	app.use('/admin', adminManagementRoute);
-
+	app.get('/about-us', function(req, res){
+		return res.render('aboutUs', {
+			layout: 'non_sidebar.hbs'
+		})
+	});
 
 
 	app.get('/err', function(req, res){

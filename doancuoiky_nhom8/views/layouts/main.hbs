@@ -68,9 +68,11 @@
                 <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
                     <a class="dropdown-item font-bold" href="/products">Danh sách sản phẩm</a>
                     {{#if (isAdmin lcAuthUser.user.id_permission)}}
+
                         <a class="dropdown-item font-bold" href="/products/management">Quản lý sản phẩm</a>
                     {{/if}}
                     {{#if (isSeller lcAuthUser.user.id_permission)}}
+                        <a class="dropdown-item font-bold" href="/products/add">Đăng sản phẩm</a>
                         <a class="dropdown-item font-bold" href="/products/posted">Danh sách sản phẩm đã đăng</a>
                         <a class="dropdown-item font-bold" href="/products/sold">Danh sách sản phẩm có người chiến thắng</a>
                     {{/if}}
@@ -95,7 +97,7 @@
                 </li>
             {{/if}}
             <li class="nav-item active">
-                <a class="nav-link" href="#">About us</a>
+                <a class="nav-link" href="about-us">About us</a>
             </li>
         </ul>
         <div class="navbar-nav ml-auto action-buttons">

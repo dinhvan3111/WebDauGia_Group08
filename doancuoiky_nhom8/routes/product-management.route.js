@@ -146,7 +146,7 @@ router.post('/del', checkPermission.isNotAdmin,
 		await productModel.deleteBidHistoryByProID(id);
 		await productModel.deleteProduct(id);
 		await biddingModel.deleteBidderBidsOfProduct(id);
-		
+		await upload.deletePath('./public/img/products/' + product.id);
 		await mailing.deletedProduct_sendSeller(seller.email, 
 												seller.name,
 												product.name);
