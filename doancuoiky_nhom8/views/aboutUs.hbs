@@ -1,72 +1,135 @@
+{{#section 'title'}}
+    <title>About Us</title>
+{{/section}}
+{{#section 'css'}}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <style>
+        .user-pic {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 100%;
+            margin: 20px auto 20px;
+            border-left: 3px solid #ddd;
+            border-right: 3px solid #ddd;
+            border-top: 3px solid #eec438;
+            border-bottom: 3px solid #e5c766;
+            transform: rotate(-10deg);
+            transition: 0.5s;
+        }
+        .card-box:hover .user-pic {
+            transform: rotate(0deg);
+            transform: scale(1.1);
+        }
+        .card-box {
+            padding: 15px;
+            background-color: #fdfdfd;
+            margin: 20px 0px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            box-shadow: 0px 0px 8px 0px #d4d4d4;
+            transition: 0.5s;
+        }
+        .card-box:hover {
+            border: 2px solid #eec438;
+            /*background-color: #ffedbe;*/
+            box-shadow: 0px 0px 8px 0px #e5c766;
+        }
+        .card-box p {
+            color: #808080;
+        }
+        .icon-fb{
+            border-radius: 100%;
 
+            color: #5454ef;
+            font-size: 35px;
+        }
+        .icon-git{
+            color: #000;
+            font-size: 35px;
+        }
+        .icon-fb:hover, .icon-git:hover{
 
-<!-- team area wrapper start -->
-<div class="team-area pt-60 pt-sm-44">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="li-section-title capitalize mb-25">
-                    <h2><span>Các thành viên trong nhóm</span></h2>
+            opacity: 0.8;
+        }
+    </style>
+{{/section}}
+{{#section 'js'}}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/js/all.min.js"></script>-->
+{{/section}}
+<div class="container">
+
+        <div class="col-sm-6 offset-sm-3 mt-4 mb-4">
+            <h2 class="text-center">Thành viên</h2>
+        </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <div class="user-pic">
+                    <img src="/img/ourteam/Van.jpg" class="img-fluid" alt="User Pic">
+                </div>
+                <h4>Đỗ Đình Văn</h4>
+                <h6>Web Developer</h6>
+                <hr>
+                <p><i class="fa fa-user" aria-hidden="true"></i> MSSV: 19127624</p>
+                <p><i class="fa fa-leanpub" aria-hidden="true"></i> Phát triển ứng dụng Web - 19KTPM2</p>
+                <p><i class="fa fa-university" aria-hidden="true"></i> Đại học Khoa học Tự Nhiên TP.HCM</p>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> dinhvan3111@gmail.com</p>
+                <hr>
+                <div>
+                    <a target="_blank" class="bg-fb" href="https://www.facebook.com/profile.php?id=100006387013405"><i class="icon-fb fa fa-facebook-square"></i></a>
+                    <a target="_blank" class="bg-git" href="https://github.com/dinhvan3111"><i class="icon-git fa fa-github" aria-hidden="true"></i></a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <div class="user-pic">
+                    <img src="/img/ourteam/Tu.jpg" class="img-fluid" alt="User Pic">
+                </div>
+                <h4>Nguyễn Trần Ngọc Tú</h4>
+                <h6>Web Developer</h6>
+                <hr>
+                <p><i class="fa fa-user" aria-hidden="true"></i> MSSV: 19127610</p>
+                <p><i class="fa fa-leanpub" aria-hidden="true"></i> Phát triển ứng dụng Web - 19KTPM2</p>
+                <p><i class="fa fa-university" aria-hidden="true"></i> Đại học Khoa học Tự Nhiên TP.HCM</p>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> ngoctu.280801@gmail.com</p>
+                <hr>
+                <div>
+                    <a target="_blank" class="bg-fb" href="https://www.facebook.com/nguyentranngoctu.2808/"><i class="icon-fb fa fa-facebook-square"></i></a>
+                    <a target="_blank" class="bg-git" href="https://github.com/ngoctu280801"><i class="icon-git fa fa-github" aria-hidden="true"></i></a>
                 </div>
             </div>
-        </div> <!-- section title end -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="team-member mb-60 mb-sm-30 mb-xs-30">
-                    <div class="team-thumb">
-                        <img src="<?php echo base_url(); ?>images/team/Tu.jpg" alt="Our Team Member">
-                    </div>
-                    <div class="team-content text-center">
-                        <h3>Nguyễn Trần Ngọc Tú</h3>
-                        <p>MSSV: 19127610</p>
-                        <p>ngoctu.280801@gmail.com</p>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/nguyentranngoctu.2808"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-google-plus"></i></a>
-                        </div>
-                    </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box text-center">
+                <div class="user-pic">
+                    <img src="/img/ourteam/Hai.jpg" class="img-fluid" alt="User Pic">
                 </div>
-            </div> <!-- end single team member -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="team-member mb-60 mb-sm-30 mb-xs-30">
-                    <div class="team-thumb">
-                        <img src="<?php echo base_url(); ?>images/team/Van.jpg" alt="Our Team Member">
-                    </div>
-                    <div class="team-content text-center">
-                        <h3>Đỗ Đình Văn</h3>
-                        <p>MSSV: 19127624</p>
-                        <p>dinhvan3111@gmail.com</p>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/profile.php?id=100006387013405"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-google-plus"></i></a>
-                        </div>
-                    </div>
+                <h4>Vũ Tuấn Hải</h4>
+                <h6>Web Developer</h6>
+                <hr>
+                <p><i class="fa fa-user" aria-hidden="true"></i> MSSV: 19127387</p>
+                <p><i class="fa fa-leanpub" aria-hidden="true"></i> Phát triển ứng dụng Web - 19KTPM2</p>
+                <p><i class="fa fa-university" aria-hidden="true"></i> Đại học Khoa học Tự Nhiên TP.HCM</p>
+                <p><i class="fa fa-envelope" aria-hidden="true"></i> vutuanhaigk@gmail.com</p>
+
+                <hr>
+                <div>
+                    <a target="_blank" class="bg-fb" href="https://www.facebook.com/Kaitou.VuTuanHai"><i class="icon-fb fa fa-facebook-square"></i></a>
+                    <a target="_blank" class="bg-git" href="https://github.com/vutuanhaigk123"><i class="icon-git fa fa-github" aria-hidden="true"></i></a>
                 </div>
-            </div> <!-- end single team member -->
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="team-member mb-30 mb-sm-60">
-                    <div class="team-thumb">
-                        <img src="<?php echo base_url(); ?>images/team/Hai.jpg" alt="Our Team Member">
-                    </div>
-                    <div class="team-content text-center">
-                        <h3>Vũ Tuấn Hải</h3>
-                        <p>MSSV: 19127387</p>
-                        <p>vutuanhaigk123@gmail.com</p>
-                        <div class="team-social">
-                            <a href="https://www.facebook.com/Kaitou.VuTuanHai"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                            <a href="#"><i class="fa fa-google-plus"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div> <!-- end single team member -->
-            
+            </div>
         </div>
     </div>
 </div>
-<!-- team area wrapper end -->

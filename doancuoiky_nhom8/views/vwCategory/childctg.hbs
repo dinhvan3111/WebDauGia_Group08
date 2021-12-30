@@ -26,9 +26,7 @@
                         <td>{{name}}</td>
                     <form action="/admin/categories/del" method="post">
                         <td class="text-right">
-                            <a class="btn btn-sm btn-success font-bold" href="#" role="button">
-                                Xem thêm
-                            </a>
+
                             {{#if @root/isAdmin}}
 
                                 <input type="hidden" name="id" value="{{id}}">
