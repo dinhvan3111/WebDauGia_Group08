@@ -41,13 +41,13 @@
 
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Trang chủ<span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Trang chủ</a>
             </li>
 
             {{#if (isAdmin lcAuthUser.user.id_permission)}}
                 
-                <li class="nav-item dropdown active">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="CateDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Danh mục
@@ -60,7 +60,7 @@
             {{/if}}
 
 
-            <li class="nav-item dropdown active ">
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                     Sản phẩm
@@ -84,7 +84,7 @@
             
 
             {{#if (isAdmin lcAuthUser.user.id_permission)}}
-                <li class="nav-item dropdown active">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Tài khoản
@@ -96,7 +96,7 @@
                     </div>
                 </li>
             {{/if}}
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/about-us">About us</a>
             </li>
         </ul>
@@ -132,7 +132,7 @@
                 </div>
             </div>
             {{#if lcAuthUser}}
-                <li class="nav-item dropdown active">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         Hi, {{lcAuthUser.user.name}}
@@ -147,10 +147,10 @@
                     </div>
                 </li>
             {{else}}
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/login">Đăng nhập</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/register">Đăng kí</a>
                 </li>
             {{/if}}
@@ -196,7 +196,7 @@
                 </h4>
                 <div class="list-group list-group-flush">
                     {{#each lcCategories}}
-                        <a class="collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
+                        <a class="parents-category collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
                            role="button" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             {{name}}
@@ -206,7 +206,7 @@
 
                                 {{#each subCate}}
 
-                                    <a href="/products/list/{{id}}" class="list-group-item list-group-item-action">{{name}}</a>
+                                    <a href="/products/list/{{id}}" class="sub-category list-group-item list-group-item-action">{{name}}</a>
 
                                 {{/each}}
 
@@ -321,7 +321,12 @@
     <!-- Copyright -->
 </footer>
 <!-- End Footer -->
-
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
 <script>
     const collapse_items = document.querySelectorAll('.side-bar .collapse-items');
     const collapse_content = document.querySelectorAll('.collapse-content');
@@ -343,13 +348,61 @@
         }
     })
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
-        crossorigin="anonymous"></script>
 <script>
+    $('.parents-category').on('click',function (){
+        if($(this)[0].ariaExpanded === 'false'){
+            $(this).children()[0].classList.remove('fa-caret-right');
+            $(this).children()[0].classList.add('fa-caret-down');
+        }
+        else{
+            $(this).children()[0].classList.remove('fa-caret-down');
+            $(this).children()[0].classList.add('fa-caret-right');
+        }
+    })
+    // var navItems = $('.nav-item');
+    // for(let i =0; i < navItems.length; i++ ){
+    //     if(navItems[i].innerText.includes(localStorage['active-nav'])){
+    //         navItems[i].classList.add('active-nav');
+    //     }
+    // }
+    // for(let i =0; i < navItems.length; i++ ){
+    //     navItems[i].addEventListener('click',function (e){
+    //         localStorage['active-nav'] = navItems[i].innerText;
+    //     });
+    // }
+    var pagePath = window.location.pathname;
+    $('.sub-category').on('click',function (e){
+        // e.preventDefault();
+        localStorage['hrefParentsCate'] = $(this).parent().prev()[0].href;
+        localStorage['hrefSubCate'] = $(this)[0].href;
+        var listParents = $('.parents-category.collapse-items');
+        var listSub = $('.sub-category');
+        console.log(listSub.parent()[0].classList);
+    })
+    $(document).ready(function() {
+
+        if (pagePath.includes('/products/list')) {
+            var hrefPrarentsCate = localStorage['hrefParentsCate'];
+            var hrefSubCate = localStorage['hrefSubCate'];
+            var listParents = $('.parents-category.collapse-items');
+            var listSub = $('.sub-category');
+            for (let i = 0; i < listParents.length; i++) {
+                if (listParents[i].href === hrefPrarentsCate) {
+                    listParents[i].ariaExpanded = true;
+                    listParents[i].classList.add('collapsed');
+                }
+            }
+            for (let i = 0; i < listParents.length; i++) {
+                if (listSub[i].href === hrefSubCate) {
+                    listSub.parent()[0].classList.add('show');
+                    listSub[i].classList.add('active');
+                }
+            }
+        }
+        else{
+            localStorage.clear();
+        }
+    })
     $('.category-field-item').on('click',function (e){
         e.preventDefault();
         var param = $(this).attr('category-id');

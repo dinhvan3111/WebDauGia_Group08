@@ -11,6 +11,12 @@
     background: #ffd66c !important;
 }
 
+.active{
+    background: #ffd66c !important;
+    border-color: #ffd66c !important;
+    color: #000000 !important;
+}
+
 /* Navbar */
 nav {
     font-weight: bold;
@@ -21,6 +27,10 @@ nav {
     display:inline-block;
     /*height:56px;*/
 
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #000000 !important;
 }
 
 .navbar-nav > li:hover >a {

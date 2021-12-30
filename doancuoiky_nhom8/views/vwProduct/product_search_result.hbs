@@ -22,6 +22,14 @@
 {{/section}}
 {{#section 'js'}}
     <script>
+        var sortElement = $('.sort-function-price');
+        console.log(window.location.href);
+        if(window.location.href.includes('?sort=1')){
+            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
+        }
+        if(window.location.href.includes('?sort=2')){
+            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
+        }
         $('.sort-function .sort-function-time').on('click',function (){
             $('#txtSort').val('1');
             $('#frmSort').submit();

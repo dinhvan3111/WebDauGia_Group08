@@ -16,11 +16,40 @@
             font-size: 30px;
             color: #ffcc37;
         }
+        .react-group input{
+            display: none;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JDMcKinstry/JavaScriptDateFormat@master/dateFormat.min.js">
     <script>
+        if($('#like')[0].checked){
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+        }
+        else{
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+        }
+        if($('#dislike')[0].checked){
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+        }
+        else{
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+        }
+        $('.react-group').on('click',function (){
+            if($('#like')[0].checked){
+                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+            }
+            else{
+                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+            }
+            if($('#dislike')[0].checked){
+                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+            }
+            else{
+                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+            }
+        })
         $('.comment-btn').on('click', function () {
             const id = $(this).attr('data-id');
             const id_seller = $(this).attr('data-id-seller');
@@ -34,6 +63,14 @@
         $('#commentBtn').on('click', function () {
             $('#frmComment').submit();
         });
+        var sortElement = $('.sort-function-price');
+        console.log(window.location.href);
+        if(window.location.href.includes('?sort=1')){
+            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
+        }
+        if(window.location.href.includes('?sort=2')){
+            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
+        }
     </script>
 {{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10">
@@ -164,13 +201,14 @@
                                                    id="comment"
                                                    placeholder="Nhập đánh giá của bạn..."
                                                    data-type="currency" value required/>
-                                            <div class="m-2 d-flex">
+                                            <div class="react-group m-2 d-flex">
                                                 <div class="mr-3">
-
-                                                    <input class="mt-10" name="mark" type="radio" value="1" required="required" />&nbspThích <i class="reactbtn fa fa-thumbs-up"></i>
+                                                    <label for="like"><i class="reactbtn fa fa-thumbs-o-up"></i></label>
+                                                    <input id="like" class="mt-10" name="mark" type="radio" value="1" checked required="required" />&nbspThích
                                                 </div>
                                                 <div>
-                                                    <input name="mark" type="radio" value="0" required="required" />&nbsp Không thích <i class="reactbtn fa fa-thumbs-down"></i>
+                                                    <label for="dislike"><i class="reactbtn fa fa-thumbs-o-down"></i></label>
+                                                    <input id="dislike" name="mark" type="radio" value="0" required="required" />&nbsp Không thích
                                                 </div>
                                             </div>
                                         </div>
