@@ -20,13 +20,13 @@ export default {
 	async getBidHistory(id_product){
 		const bidHistory = await db('bid_history as bidHis')
 				.select(['bidHis.time as time', 'bidHis.in_bid_price as in_bid_price',
-						 'acc.name as bidder_name', 'acc.id as bidder_id', 
+						 'acc.name as bidder_name', 'acc.id as bidder_id',
 						 'bidHis.id as id_bid_his'])
 				.join('accounts as acc', 'acc.id', 'bidHis.id_acc')
 				.join('products as p', 'p.id', 'bidHis.id_product')
 				.where({'p.id': id_product})
 				.orderBy('bidHis.id', 'desc');
-		
+
 		if(bidHistory.length == 0){
 			return null;
 		}
@@ -124,7 +124,7 @@ export default {
 	        product_info.time_end = end_date.fromNow();
 	    }
 	    else{
-	        product_info.time_end = moment(product_info.time_end, 
+	        product_info.time_end = moment(product_info.time_end,
 	                        'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
 	    }
 
@@ -137,10 +137,10 @@ export default {
 	    	startDate = start_date.fromNow();
 	    }
 
-	    
-	    product_info.time_start = moment(product_info.time_start, 
+
+	    product_info.time_start = moment(product_info.time_start,
 	                        'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-	    
+
 	    var seller = await accountModel.findID(product_info.id_seller);
 	    const sellerVoteRatio = await accountModel.getUpVoteRatio(seller.id);
 	    // console.log(sellerVoteRatio);
@@ -150,7 +150,7 @@ export default {
 	        for(let i = 0; i < bidHistory.length; i++){
 	            let bidderVoteRatio = await accountModel.getUpVoteRatio(bidHistory[i].bidder_id);
 	            bidHistory[i].ratio = bidderVoteRatio.ratio
-	            bidHistory[i].time = moment(bidHistory[i].time, 
+	            bidHistory[i].time = moment(bidHistory[i].time,
 	                            'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
 	        }
 	    }
@@ -179,7 +179,7 @@ export default {
 	            if(holdingPriceBidder !== null){
 	            	max_bid_price = holdingPriceBidder[0].max_bid_price;
 	            }
-	            
+
 	        }
 
 	        // not enough votes
@@ -197,7 +197,7 @@ export default {
 	        ignored: ignored,
 	        isHoldingPrice: isHoldingPrice,
 	        max_bid_price: max_bid_price,
-	        canBid: canBid, 
+	        canBid: canBid,
 	        startDate: startDate,
 	        notEnoughVotes: notEnoughVotes
 	    }
@@ -207,7 +207,7 @@ export default {
 		const seller = await accountModel.findID(product_info.id_seller);
 
 		await biddingModel.deletePriceOfBidder({id_product: product_info.id});
-		await biddingModel.addNewAuction(bidder_info.id, 
+		await biddingModel.addNewAuction(bidder_info.id,
 							product_info.id, product_info.buy_now_price);
 
 		const linkNewBidder = domain + '/profile/' + bidder_info.id;
@@ -224,19 +224,19 @@ export default {
 
 		if(bidder_info.id != product_info.id_win_bidder && product_info.id_win_bidder !== null){
 			const oldBidder = await accountModel.findID(product_info.id_win_bidder);
-			await mailing.bidSuccess_sendOldBidder(oldBidder.name, 
+			await mailing.bidSuccess_sendOldBidder(oldBidder.name,
 							oldBidder.email, product_info.name, link_product,
 							numeral(product_info.price).format('0,0'),
 							numeral(product_info.buy_now_price).format('0,0'));
 		}
 		await this.updateProduct(newProductInfo);
-		await mailing.endBidding_sendSeller(seller.name, seller.email, 
+		await mailing.endBidding_sendSeller(seller.name, seller.email,
 							product_info.name, link_product,
 							bidder_info.name, linkNewBidder,
 							formattedPrice);
-		await mailing.endBidding_sendBidder(bidder_info.name, bidder_info.email, 
-							product_info.name, 
-							link_product, 
+		await mailing.endBidding_sendBidder(bidder_info.name, bidder_info.email,
+							product_info.name,
+							link_product,
 							formattedPrice)
 	},
 	async topProductsNearTimeEnd(numOfProducts){
@@ -274,9 +274,9 @@ export default {
 			return null;
 		}
 		for(let i = 0; i < productList.length; i++){
-			productList[i].img = fileModel.getAllFileName('./public/img/products/' 
-															+ productList[i].id, 
-															productList[i].id);	
+			productList[i].img = fileModel.getAllFileName('./public/img/products/'
+															+ productList[i].id,
+															productList[i].id);
 		}
 		return productList;
 	},
@@ -428,7 +428,7 @@ export default {
 	        }
 	        productList[i].time_start = moment(productList[i].time_start,
 	            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-	        productList[i].img = fileModel.getAllFileName('./public/img/products/' 
+	        productList[i].img = fileModel.getAllFileName('./public/img/products/'
 	        								+ productList[i].id, productList[i].id);
 	        productList[i].bidHistory = await this.getBidHistory(productList[i].id);
 	    }
@@ -436,7 +436,7 @@ export default {
 	},
 	async isComment(id_assessor,id_acc,id_product){
 		const sql = `SELECT * from rate_history
-					 where id = ${id_product} and id_acc=${id_acc} and id_assessor = ${id_assessor}`;
+					 where id_product = ${id_product} and id_acc=${id_acc} and id_assessor = ${id_assessor}`;
 		const raw = await db.raw(sql);
 		if(raw[0].length === 0){
 			return null;
@@ -459,17 +459,17 @@ export default {
 	async deleteProduct(id_product){
 		return await db('products').where({id: id_product}).del();
 	},
-	
+
 	async updateProduct(proObj){
 		return await db('products').where({id: proObj.id}).update(proObj);
 	},
 	async getLastID(){
-		const product = 
+		const product =
 			await db.raw('select p.id from products p where p.id >= all (select other.id from products other)');
 		if(product[0].length == 0){
 			return null;
 		}
-		return product[0][0].id;	
+		return product[0][0].id;
 	},
 	async createNewProduct(req, id, id_seller){
 		const product = {
@@ -545,7 +545,7 @@ export default {
 	async getAuctionHistoryOfBidder(bidder_id, product_id){
 		const res = db('bid_history').where({id_product: product_id, id_acc: bidder_id})
 									.orderBy([
-										{ column: 'in_bid_price', order: 'desc'}, 
+										{ column: 'in_bid_price', order: 'desc'},
 										{ column: 'time', order: 'asc' }]);
 		if(res.length == 0){
 			return null;
@@ -573,19 +573,19 @@ export default {
 			if(auctionHistory.length == 1){
 				await this.updateInPrice(product_info.id, auctionHistory[0].in_bid_price);
 				await this.updatePriceHoldingBidder(product_info.id, null);
-				
+
 			}
 			else{
 				let newPrice = 0;
-				
+
 				for(let i = 1; i < auctionHistory.length; i++){
 					let beIgnored = await this.findIgnoredBidders({
 								id_product: product_info.id,
 								id_acc: auctionHistory[i].bidder_id});
 					if(beIgnored === null){
 						newPrice = auctionHistory[i].in_bid_price;
-						await this.updatePriceHoldingBidder(product_info.id, 
-									auctionHistory[i].bidder_id);		
+						await this.updatePriceHoldingBidder(product_info.id,
+									auctionHistory[i].bidder_id);
 						break;
 					}
 					else{
@@ -593,24 +593,24 @@ export default {
 							newPrice = auctionHistory[i].in_bid_price;
 							await this.updatePriceHoldingBidder(product_info.id, null);
 						}
-						await this.deleteAuctionHistory({id_acc: auctionHistory[i].bidder_id, 
+						await this.deleteAuctionHistory({id_acc: auctionHistory[i].bidder_id,
 								id_product: product_info.id,
 								id: auctionHistory[i].id_bid_his});
-						
+
 					}
 
 				}
-				await this.updateInPrice(product_info.id, newPrice); 
+				await this.updateInPrice(product_info.id, newPrice);
 			}
-			await this.deleteAuctionHistory({id_acc: bidder_info.id, 
+			await this.deleteAuctionHistory({id_acc: bidder_info.id,
 								id_product: product_info.id,
 								id: auctionHistory[0].id_bid_his});
 		}
-		await biddingModel.deletePriceOfBidder({id_acc: bidder_info.id, 
+		await biddingModel.deletePriceOfBidder({id_acc: bidder_info.id,
 							id_product: product_info.id});
 		await db('ignore_bidder').insert({id_product: product_info.id, id_acc: bidder_info.id});
-		await mailing.rejectBidder(bidder_info.name, bidder_info.email, 
-					product_info.name, link_product, 
+		await mailing.rejectBidder(bidder_info.name, bidder_info.email,
+					product_info.name, link_product,
 					numeral(bidderPrice).format('0,0'));
 	},
 	async getListProductToManage(catID, limit, offset){

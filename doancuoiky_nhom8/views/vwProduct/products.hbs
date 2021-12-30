@@ -136,9 +136,16 @@
                         {{/if}}
 <!--                        Modal-->
                         <form id="frmComment" action="/products/comment" method="post">
-                            <input type="hidden" id="txtProID" name="id" value="">
-                            <input type="hidden" id="txtIdSeller" name="id_assessor" value="">
-                            <input type="hidden" id="txtIdBidder" name="id_acc" value="">
+                            <input type="hidden" id="txtProID" name="id_product" value="">
+                            {{#if isSold}}
+                                <input type="hidden" id="txtIdSeller" name="id_assessor" value="">
+                                <input type="hidden" id="txtIdBidder" name="id_acc" value="">
+                            {{/if}}
+                            {{#if isWon}}
+                                <input type="hidden" id="txtIdSeller" name="id_acc" value="">
+                                <input type="hidden" id="txtIdBidder" name="id_assessor" value="">
+                            {{/if}}
+
                         <div class="modal fade" id="commentModal" tabindex="-1"
                              aria-labelledby="commentModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -153,7 +160,7 @@
 
 
                                         <div class="modal-body">
-                                            <input type="text" name="comment"
+                                            <input  type="text" name="comment"
                                                    id="comment"
                                                    placeholder="Nhập đánh giá của bạn..."
                                                    data-type="currency" value required/>
