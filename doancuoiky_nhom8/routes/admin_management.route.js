@@ -33,6 +33,7 @@ router.get('/accept_request', checkPermission.isNotAdmin, async function(req, re
                 disableNext: paging.disableNext, 
                 disablePre: paging.disablePre,
                 pageNumber: paging.pageNumber,
+				totalPage: paging.totalPage,
 				requests: allRequests,
 				layout: 'non_sidebar.hbs'
 	});
@@ -78,7 +79,7 @@ router.get('/seller-management', checkPermission.isNotAdmin, async function(req,
                 disableNext: paging.disableNext, 
                 disablePre: paging.disablePre,
                 pageNumber: paging.pageNumber,
-				
+				totalPage: paging.totalPage,
 				allSellers,
 				layout: 'non_sidebar.hbs'
 	});
@@ -116,6 +117,7 @@ router.get('/account-management', checkPermission.isNotAdmin, async function(req
                 disableNext: paging.disableNext, 
                 disablePre: paging.disablePre,
                 pageNumber: paging.pageNumber,
+				totalPage: paging.totalPage,
 				accountList,
 				layout: 'non_sidebar.hbs'
 	});

@@ -29,6 +29,7 @@ router.get('/', async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result
     });
 });
@@ -54,6 +55,7 @@ router.get('/search_result', async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         cateID,
         param,
         search_result
@@ -126,6 +128,7 @@ router.get('/list/:id', async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
     });
 });
@@ -206,6 +209,7 @@ router.get('/watch-list', checkPermission.notLogin, async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
         title: "yêu thích",
         inWatchList: true
@@ -243,6 +247,7 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
         title: "đã chiến thắng",
         isWon: true
@@ -273,6 +278,7 @@ router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
         title: "đã đăng"
     });
@@ -311,6 +317,7 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
         title: "đã được đấu giá thành công",
         isSold: true
@@ -342,6 +349,7 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
         disableNext: paging.disableNext,
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
+        totalPage: paging.totalPage,
         result,
         title: " đang đấu giá"
     });

@@ -54,7 +54,8 @@ export default {
 	    	prePage: prePage, 
 	    	disableNext: disableNext, 
 	    	disablePre: disablePre,
-	    	pageNumber: pageNumber
+	    	pageNumber: pageNumber,
+			totalPage: nPages
 	    }
 	},
 

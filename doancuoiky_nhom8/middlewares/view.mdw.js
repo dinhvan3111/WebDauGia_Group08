@@ -35,6 +35,13 @@ export default function(app){
 				}
 				return false;
 			},
+			isBidder(permission){
+
+				if(permission <= 3){
+					return true;
+				}
+				return false;
+			},
 			isNotRating(ratio){
 				if(ratio == 0){
 					return true

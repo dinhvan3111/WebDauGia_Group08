@@ -119,6 +119,7 @@ router.get('/management', checkPermission.isNotAdmin, async function(req, res){
                 disableNext: paging.disableNext, 
                 disablePre: paging.disablePre,
                 pageNumber: paging.pageNumber,
+				totalPage: paging.totalPage,
 				list_product,
 				layout:'non_sidebar.hbs',
 				categories,
