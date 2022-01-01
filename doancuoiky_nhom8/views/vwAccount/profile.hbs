@@ -144,7 +144,8 @@
                             {{#if (isNotRating user.starPercentage)}}
                                 <span class="ratio ml-1 " style="color: #000;">Chưa có lượt đánh giá nào</span>
                             {{else}}
-                                <span class="ratio ml-1 " style="color: #000;">{{roundFloat user.starPercentage}}% lượt đánh giá tốt</span>
+                                <span class="ratio ml-1 " style="color: #000;">{{roundFloat user.starPercentage}}% lượt đánh giá tốt.
+                                    <a href="/rating/{{user.id}}">Xem chi tiết</a></span>
                             {{/if}}
                         </div>
                     </div>

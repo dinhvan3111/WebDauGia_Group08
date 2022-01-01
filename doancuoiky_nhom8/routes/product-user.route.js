@@ -89,6 +89,18 @@ router.get('/:id', async function (req, res, next) {
     info.seller.starPercentage = starPercentage;
     info.seller.starPercentageRounded = starPercentageRounded;
 
+    var bidder_win_now = null;
+    if (info.bidHistory !== null){
+        bidder_win_now = info.bidHistory[0].bidder_id;
+    }
+    var id_now = undefined;
+    if(req.session.passport.user !== undefined){
+        id_now = req.session.passport.user.id;
+    }
+    var isWinner = false;
+    if(bidder_win_now === id_now){
+        isWinner = true;
+    }
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',
         id: id_product,
@@ -102,7 +114,8 @@ router.get('/:id', async function (req, res, next) {
         max_bid_price: info.max_bid_price,
         canBid: info.canBid,
         startDate: info.startDate,
-        notEnoughVotes: info.notEnoughVotes
+        notEnoughVotes: info.notEnoughVotes,
+        isWinner
     });
 });
 router.get('/list/:id', async function (req, res) {
@@ -153,7 +166,32 @@ router.post('/:id/bidding', checkPermission.notLogin, async function (req, res) 
     await biddingModel.autoAuction(req);
     return res.redirect(req.headers.referer);
 });
-
+router.post('/:id/rebidding', checkPermission.notLogin, async function (req, res) {
+    var date = new Date();
+    var min = date.getMinutes();
+    if(String(min).length === 1){
+        min = "0" + min;
+    }
+    var hour = date.getHours();
+    if(String(hour).length === 1){
+        hour = "0" + hour;
+    }
+    var second = date.getSeconds();
+    if(String(second).length === 1){
+        second = "0" + second;
+    }
+    var day = date.getDate();
+    if(String(day).length === 1){
+        day = "0" + day;
+    }
+    var month = date.getMonth() + 1;
+    if(String(month).length === 1){
+        month = "0" + month;
+    }
+    const now = date.getFullYear() + "-" + month + "-" + day + " " + hour+ ":" + min + ":" + second;
+    await biddingModel.ediMaxBidPrice(req,now);
+    return res.redirect(req.headers.referer);
+});
 router.post('/:id/buy-now', checkPermission.notLogin, async function (req, res) {
     const product_info = await productModel.findID(req.params.id);
     if (product_info !== null && product_info.buy_now_price !== null &&
@@ -233,7 +271,7 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
     }
     for (var i = 0; i < result.length; i++) {
         const likeProduct = await productModel.isComment(result[i].id_win_bidder, result[i].id_seller, result[i].id);
-        console.log(likeProduct)
+
         result[i].isComment = false;
         if (likeProduct === null) {//chưa đánh giá
             result[i].isComment = true;//hiện nút đánh giá
@@ -279,6 +317,7 @@ router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
+        totalPage: paging.totalPage,
         result,
         title: "đã đăng"
     });
@@ -302,7 +341,7 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
     }
     for (var i = 0; i < result.length; i++) {
         const likeProduct = await productModel.isComment(result[i].id_seller, result[i].id_win_bidder, result[i].id);
-        console.log(likeProduct)
+
         result[i].isComment = false;
         if (likeProduct === null) {//chưa đánh giá
             result[i].isComment = true;//hiện nút đánh giá
@@ -358,7 +397,6 @@ router.post('/comment', checkPermission.notLogin, async function (req, res) {
 
     req.body.time = moment(req.body.time).format('YYYY-MM-DD HH:mm:ss');
     const comment = req.body.comment;
-    console.log(req.body);
     if (comment.length === 0) {
         req.body.comment = "Tốt";
     }
@@ -367,6 +405,44 @@ router.post('/comment', checkPermission.notLogin, async function (req, res) {
     }
     const ret = await rateModel.add(req.body);
 
+    res.redirect(req.headers.referer);
+});
+router.post('/:id/cancel-transaction', checkPermission.isNotSeller, async function (req, res) {
+    const id = req.params.id;
+
+    const product = await productModel.findID(id);
+    await productModel.cancelTranProduct(req.params.id);
+    var date = new Date();
+    var min = date.getMinutes();
+    if(String(min).length === 1){
+        min = "0" + min;
+    }
+    var hour = date.getHours();
+    if(String(hour).length === 1){
+        hour = "0" + hour;
+    }
+    var second = date.getSeconds();
+    if(String(second).length === 1){
+        second = "0" + second;
+    }
+    var day = date.getDate();
+    if(String(day).length === 1){
+        day = "0" + day;
+    }
+    var month = date.getMonth() + 1;
+    if(String(month).length === 1){
+        month = "0" + month;
+    }
+    const now = date.getFullYear() + "-" + month + "-" + day + " " + hour+ ":" + min + ":" + second;
+    const rate = {
+        "id_assessor": product.id_seller,
+        "id_acc": product.id_win_bidder,
+        "mark":0,
+        "time":now,
+        "comment":"Người thắng không thanh toán",
+        "id_product":product.id
+    }
+    const ret = await rateModel.add(rate);
     res.redirect(req.headers.referer);
 });
 export default router;

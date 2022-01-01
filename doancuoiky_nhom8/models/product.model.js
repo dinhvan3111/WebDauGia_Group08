@@ -443,6 +443,9 @@ export default {
 		}
 		return raw[0];
 	},
+	async cancelTranProduct(id_product){
+		return await db('products').where({id: id_product}).update({id_win_bidder:null ,not_sold: 1});
+	},
 
 
 	// Manage products

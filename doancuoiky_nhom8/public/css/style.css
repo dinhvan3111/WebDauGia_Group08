@@ -97,7 +97,7 @@ nav .search-for-lg {
     height:100vh;
     display: flex;
 }
-#max_bid_price,#comment{
+#max_bid_price,#remax_bid_price,#comment{
     width: 100%;
     border-radius: 20px;
     padding:6px;

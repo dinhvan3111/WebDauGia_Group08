@@ -19,6 +19,11 @@
         .react-group input{
             display: none;
         }
+        .modal-content .cancel-modal-body{
+            padding:8px;
+            font-size: 16px;
+            font-style: italic;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
@@ -64,10 +69,8 @@
                 else{
                     location.href = this.href;
                 }
-
             });
         }
-
         if($('#like')[0].checked){
             $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
         }
@@ -94,6 +97,27 @@
                 $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
             }
         })
+
+        var sortElement = $('.sort-function-price');
+        console.log(window.location.href);
+        if(window.location.href.includes('?sort=1')){
+            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
+        }
+        if(window.location.href.includes('?sort=2')){
+            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
+        }
+    </script>
+    <script>
+        $('.comment-btn').on('click', function () {
+            const id = $(this).attr('data-id');
+            const id_seller = $(this).attr('data-id-seller');
+            const id_bidder = $(this).attr('data-id-win-bidder');
+            $('#txtProID').val(id);
+            $('#txtIdSeller').val(id_seller);
+            $('#txtIdBidder').val(id_bidder);
+            const time =new Date($.now());
+            $('#txtTime').val(time);
+        });
         $('.comment-btn').on('click', function () {
             const id = $(this).attr('data-id');
             const id_seller = $(this).attr('data-id-seller');
@@ -107,14 +131,9 @@
         $('#commentBtn').on('click', function () {
             $('#frmComment').submit();
         });
-        var sortElement = $('.sort-function-price');
-        console.log(window.location.href);
-        if(window.location.href.includes('?sort=1')){
-            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
-        }
-        if(window.location.href.includes('?sort=2')){
-            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
-        }
+        $('#cancel-transaction').on('click', function () {
+            $('#frmCancel').submit();
+        });
     </script>
 {{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10">
@@ -176,10 +195,10 @@
 
                                         <div class="card-footer text-muted">
                                             {{#if isComment}}
-<!--                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">-->
-<!--                                                    <i class="fa fa-comments" aria-hidden="true"></i>-->
-<!--                                                    Đánh giá ngay-->
-<!--                                                </a>-->
+                                                <!--                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">-->
+                                                <!--                                                    <i class="fa fa-comments" aria-hidden="true"></i>-->
+                                                <!--                                                    Đánh giá ngay-->
+                                                <!--                                                </a>-->
 
                                                 <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
                                                         data-target="#commentModal" class="btn btn-sm btn-outline-success comment-btn"><i
@@ -187,17 +206,45 @@
                                                         aria-hidden="true"></i> Đánh giá ngay</button>
 
 
+
                                             {{else}}
-                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
-                                                    <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                    Đấu giá ngay
+
+                                                {{#if @root/isSold}}
+                                                    <button class="btn btn-sm btn-outline-success"disabled>
+                                                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                        Đã đánh giá
+                                                    </button>
+                                                {{else}}
+                                                    {{#if @root/isWon}}
+                                                        <button class="btn btn-sm btn-outline-success"disabled>
+                                                            <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                            Đã đánh giá
+                                                        </button>
+                                                    {{else}}
+                                                        <a class="btn btn-sm btn-outline-success" href="/products/{{id}}">
+                                                            <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                            Đấu giá ngay
+                                                        </a>
+                                                    {{/if}}
+                                                {{/if}}
+
+                                            {{/if}}
+                                            {{#if @root/isSold}}
+                                                {{#if isComment}}
+                                                    <a  data-toggle="modal" data-target="#cancelModal" class="btn btn-sm btn-outline-danger" href="javascript:;" role="button">
+                                                        <i class="fa fa-ban" aria-hidden="true"></i>
+                                                        Hủy giao dịch
+                                                    </a>
+                                                    <form id="frmCancel" action="/products/{{id}}/cancel-transaction" method="post">
+                                                    </form>
+                                                {{/if}}
+                                            {{else}}
+                                                <a class="btn btn-sm btn-outline-danger" href="javascript:;" role="button">
+                                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                                    Yêu thích
                                                 </a>
                                             {{/if}}
 
-                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                                <i class="fa fa-heart" aria-hidden="true"></i>
-                                                Yêu thích
-                                            </a>
 
                                         </div>
                                     </div>
@@ -215,7 +262,31 @@
                             {{/if}}
 
                         {{/if}}
-<!--                        Modal-->
+                        <!--                        Modal Cancel transaction-->
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelModalLabel"><b>Xác nhận</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="cancel-modal-body modal-body">
+                                        Bạn có chắc chắn muốn hủy giao dịch này?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                        <button id="cancel-transaction" type="button" class="btn btn-danger">Hủy giao dịch</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--                        Modal-->
                         <form id="frmComment" action="/products/comment" method="post">
                             <input type="hidden" id="txtProID" name="id_product" value="">
                             {{#if isSold}}
@@ -227,24 +298,24 @@
                                 <input type="hidden" id="txtIdBidder" name="id_assessor" value="">
                             {{/if}}
 
-                        <div class="modal fade" id="commentModal" tabindex="-1"
-                             aria-labelledby="commentModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="commentModalLabel">Đánh giá của bạn về sản phẩm </h5>
-                                        <button type="button" class="close"
-                                                data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
+                            <div class="modal fade" id="commentModal" tabindex="-1"
+                                 aria-labelledby="commentModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="commentModalLabel">Đánh giá của bạn về sản phẩm </h5>
+                                            <button type="button" class="close"
+                                                    data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
 
 
                                         <div class="modal-body">
                                             <input  type="text" name="comment"
-                                                   id="comment"
-                                                   placeholder="Nhập đánh giá của bạn..."
-                                                   data-type="currency" value required/>
+                                                    id="comment"
+                                                    placeholder="Nhập đánh giá của bạn..."
+                                                    data-type="currency" value required/>
                                             <div class="react-group m-2 d-flex">
                                                 <div class="mr-3">
                                                     <label for="like"><i class="reactbtn fa fa-thumbs-o-up"></i></label>
@@ -268,9 +339,9 @@
                                             </a>
                                         </div>
 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
 
 

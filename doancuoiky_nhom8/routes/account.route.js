@@ -7,9 +7,11 @@ import cryptoRandomString from 'crypto-random-string';
 import envVar from '../utils/envVar.js';
 import mailingModel from '../models/mailing.OTP.model.js';
 import acceptRequestModel from '../models/admin_management.model.js';
+import rateModel from '../models/rate.model.js';
 import checkPermission from '../middlewares/permission.mdw.js';
 
 const router = express.Router();
+
 
 router.get('/register', checkPermission.isLogon, function(req, res){
 	res.render('vwAccount/register');
@@ -17,7 +19,7 @@ router.get('/register', checkPermission.isLogon, function(req, res){
 
 router.post('/register', checkPermission.isLogon, async function(req, res){
 	const username = req.body.username;
-	
+
 	const isNull = await accountModel.findUsername(username);
 	if(isNull !== null){
 		return res.render('vwAccount/register', {
@@ -74,11 +76,11 @@ router.post('/register', checkPermission.isLogon, async function(req, res){
 	const hashedPwd = bcrypt.hashSync(pwd, salt);
 
 	const usrObj = {
-		username: username, 
+		username: username,
 		pwd: hashedPwd,
-		name: name, 
-		email: email, 
-		dob: dob, 
+		name: name,
+		email: email,
+		dob: dob,
 		addr: addr
 	};
 
@@ -87,7 +89,7 @@ router.post('/register', checkPermission.isLogon, async function(req, res){
 	var newId = newUsr.id;
 	// console.log(newId);
 	const token = cryptoRandomString({length: 100});
-	
+
 	var exprD = await mailingModel.getNewExpiredDate();
 	await accountModel.addToNotVerifiedEmail({id_acc: newId, token: token, expired_date: exprD});
 
@@ -104,7 +106,7 @@ router.get('/login', checkPermission.isLogon, function(req, res){
 		req.session.retUrl = '/' + from.substr(1, from.length - 2);
 		console.log(req.session.retUrl);
 	}
-	if(typeof(req.session.forgotPwd) !== 'undefined' && 
+	if(typeof(req.session.forgotPwd) !== 'undefined' &&
 		req.session.forgotPwd === true){
 		delete req.session.forgotPwd;
 		return res.render('vwAccount/login', {layout: false, err_message: 'Đổi mật khẩu thành công'});
@@ -228,7 +230,31 @@ router.get('/profile/:id', async function(req, res, next){
 	}
 	next();
 });
-
+router.get('/rating/:id', async function(req, res){
+	const id = req.params.id;
+	const rate_history = await rateModel.findByID(id);
+	const user = await accountModel.findID(id);
+	if(rate_history === null){
+		res.redirect("/404");
+	}
+	else{
+		const rateHistoryAndProduct = await rateModel.getDetailRate(id);
+		for(var i = 0; i<rateHistoryAndProduct.length;i++){
+			if(rateHistoryAndProduct[i].mark == 1 ){
+				rateHistoryAndProduct[i].mark = true;
+			}
+			else {
+				rateHistoryAndProduct[i].mark = false;
+			}
+		}
+		console.log(rateHistoryAndProduct)
+		res.render('vwAccount/rating',{
+			layout: 'non_sidebar.hbs',
+			rate:rateHistoryAndProduct,
+			fullName:user.name
+		});
+	}
+});
 // router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
 //
 // 	res.render('vwAccount/edit_profile',{
@@ -240,12 +266,12 @@ router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
 	const user = await accountModel.findID(req.session.passport.user.id);
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	console.log(user.dob);
-	
+
 	res.render('vwAccount/edit_profile',{
 		layout: 'non_sidebar.hbs',
 		user: user
 	});
-	
+
 
 });
 router.post('/edit_profile', checkPermission.notLogin, async function(req, res){
@@ -314,13 +340,13 @@ router.get('/change-password', checkPermission.notLogin, async function(req, res
 	if(res.locals.canChangePwd == false){
 		return res.redirect(req.headers.referer || '/');
 	}
-	
-		res.render('vwAccount/resetPassword',{
-			layout: 'non_sidebar.hbs',
-			id_acc: req.session.passport.user.id,
-			isChangePwd: true
-		});
-	
+
+	res.render('vwAccount/resetPassword',{
+		layout: 'non_sidebar.hbs',
+		id_acc: req.session.passport.user.id,
+		isChangePwd: true
+	});
+
 
 });
 
@@ -342,26 +368,26 @@ router.post('/change-password', async function(req, res){
 		const ret = bcrypt.compareSync(req.body.OldPwd, user.pwd);
 		if(ret === false){
 			// console.log('false')
-			
-				return res.render('vwAccount/resetPassword',{
-					layout: 'non_sidebar.hbs',
-					id_acc: id_acc,
-					isChangePwd: true,
-					err_message: 'Đổi mật khẩu thất bại'
-				});
-			
-			return
-		}
-		await accountModel.updatePwd(hashedPwd, id_acc);
-		console.log('true');
-		
+
 			return res.render('vwAccount/resetPassword',{
 				layout: 'non_sidebar.hbs',
 				id_acc: id_acc,
 				isChangePwd: true,
-				success: 'Đổi mật khẩu thành công'
-			})
-		
+				err_message: 'Đổi mật khẩu thất bại'
+			});
+
+			return
+		}
+		await accountModel.updatePwd(hashedPwd, id_acc);
+		console.log('true');
+
+		return res.render('vwAccount/resetPassword',{
+			layout: 'non_sidebar.hbs',
+			id_acc: id_acc,
+			isChangePwd: true,
+			success: 'Đổi mật khẩu thành công'
+		})
+
 	}
 	else{
 		// forgot pwd
@@ -375,7 +401,7 @@ router.post('/change-password', async function(req, res){
 		await accountModel.updatePwd(hashedPwd, id_acc);
 		req.session.forgotPwd = true;
 	}
-	
+
 	return res.redirect('/login');
 });
 
@@ -402,7 +428,7 @@ router.post('/forgot-password', async function(req, res){
 	await accountModel.addToForgotPwd({id_acc: user.id, token: token, expired_date: exprD});
 	// send mail change pwd
 	await mailingModel.sendForgotPwdEmail(user.name, user.email,
-				host, req.protocol + '://' + host, user.id, token, 24)
+		host, req.protocol + '://' + host, user.id, token, 24)
 	return res.render('vwAccount/forgot_password', {
 		layout: false,
 		email: req.body.email,

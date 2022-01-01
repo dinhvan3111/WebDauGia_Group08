@@ -153,6 +153,18 @@ export default{
 
 
 	},
+	async ediMaxBidPrice(req,now){
+		var max_bid_price = req.body.max_bid_price;
+		const id_product = req.body.id_product;
+		const id_acc = req.user.id;
+		const product = await productModel.findID(id_product);
+		const step_price = parseInt(product.step_price);
+		max_bid_price = max_bid_price.split(' ')[1].replace(/,/g, '');
+		max_bid_price = parseInt(max_bid_price);
+		await db("bid_price").where('id_product',id_product).update({time:now,max_bid_price:max_bid_price})
+
+
+	},
 	async deletePriceOfBidder(info){
 		return await db('bid_price').where(info).del();
 	},
