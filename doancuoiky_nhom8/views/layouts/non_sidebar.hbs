@@ -119,7 +119,7 @@
                                     </div>
                                 {{/each}}
                                 <div role="separator" class="dropdown-divider"></div>
-                                <a category-id="0" class="category-field-item-temp dropdown-item text-center font-bold" href="#">Tất cả</a>
+                                <a category-id="0" class="category-field-item dropdown-item text-center font-bold" href="#">Tất cả</a>
                             </div>
                         </div>
                     </div>
@@ -158,10 +158,10 @@
                     <button class="category-field-temp btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">Tất cả</button>
                     <div class="dropdown-menu">
                         {{#each lcCategories}}
-                            <a category-id="{{id}}" class="category-field-item-temp dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
+                            <a category-id="{{id}}" class="parents-category category-field-item-temp dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
                             {{#if subCate.length}}
                                 {{#each subCate}}
-                                    <a category-id="{{id}}" class="category-field-item-item dropdown-item" href="#">{{name}}</a>
+                                    <a category-id="{{id}}" class="category-field-item-temp dropdown-item" href="#">{{name}}</a>
                                 {{/each}}
                             {{else}}
 

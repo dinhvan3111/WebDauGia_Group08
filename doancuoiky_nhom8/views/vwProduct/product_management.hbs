@@ -24,14 +24,13 @@
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            font-weight: bold;
         }
 
         th {
             font-size: 18px;
         }
 
-        .dropdown-menu .dropdown-item {
+        .category.dropdown-menu .dropdown-item {
             padding: 15px;
         }
 
@@ -129,7 +128,7 @@
                     <b>{{choseCtg}}</b>
                 </button>
 
-                <div class="dropdown-menu dropdown-menu-right mt-1" aria-labelledby="dropdownMenuButton">
+                <div class="category dropdown-menu dropdown-menu-right mt-1" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="/products/management"><b>Tất cả</b></a>
                     <hr class="m-0">
                     {{#each categories}}

@@ -30,6 +30,41 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JDMcKinstry/JavaScriptDateFormat@master/dateFormat.min.js">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
     <script>
+        if($('#like')[0].checked){
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+        }
+        else{
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+        }
+        if($('#dislike')[0].checked){
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+        }
+        else{
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+        }
+        $('.react-group').on('click',function (){
+            if($('#like')[0].checked){
+                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+            }
+            else{
+                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+            }
+            if($('#dislike')[0].checked){
+                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+            }
+            else{
+                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+            }
+        })
+
+        var sortElement = $('.sort-function-price');
+        console.log(window.location.href);
+        if(window.location.href.includes('?sort=1')){
+            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
+        }
+        if(window.location.href.includes('?sort=2')){
+            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
+        }
         var total = Number.parseInt("{{this.totalPage}}");
         var current = Number.parseInt("{{this.page}}");
         var pre = Number.parseInt(("{{this.prePage}}"));
@@ -71,41 +106,7 @@
                 }
             });
         }
-        if($('#like')[0].checked){
-            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
-        }
-        else{
-            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
-        }
-        if($('#dislike')[0].checked){
-            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
-        }
-        else{
-            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
-        }
-        $('.react-group').on('click',function (){
-            if($('#like')[0].checked){
-                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
-            }
-            else{
-                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
-            }
-            if($('#dislike')[0].checked){
-                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
-            }
-            else{
-                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
-            }
-        })
 
-        var sortElement = $('.sort-function-price');
-        console.log(window.location.href);
-        if(window.location.href.includes('?sort=1')){
-            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
-        }
-        if(window.location.href.includes('?sort=2')){
-            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
-        }
     </script>
     <script>
         $('.comment-btn').on('click', function () {
@@ -201,8 +202,8 @@
                                                 <!--                                                </a>-->
 
                                                 <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
-                                                        data-target="#commentModal" class="btn btn-sm btn-outline-success comment-btn"><i
-                                                        class="fa fa-comments"
+                                                        data-target="#commentModal" class="btn btn-sm btn-outline-info comment-btn"><i
+                                                        class="fa fa-star"
                                                         aria-hidden="true"></i> Đánh giá ngay</button>
 
 
@@ -210,14 +211,14 @@
                                             {{else}}
 
                                                 {{#if @root/isSold}}
-                                                    <button class="btn btn-sm btn-outline-success"disabled>
-                                                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                    <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                        <i class="fa fa-check" aria-hidden="true"></i>
                                                         Đã đánh giá
                                                     </button>
                                                 {{else}}
                                                     {{#if @root/isWon}}
-                                                        <button class="btn btn-sm btn-outline-success"disabled>
-                                                            <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                        <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
                                                             Đã đánh giá
                                                         </button>
                                                     {{else}}
