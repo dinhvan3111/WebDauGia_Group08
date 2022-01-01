@@ -694,7 +694,8 @@ export default {
 	},
 	async countSoldProductByIdAcc(id_acc){
 		const sql = `SELECT COUNT(id) as amount from products p
-					 where p.time_end < now() and p.id_seller =  ${id_acc}  and id_win_bidder != NULL`;
+					 where p.time_end < now() and p.id_seller =  ${id_acc}  
+					 and p.id_win_bidder is not NULL`;
 		const raw = await db.raw(sql);
 		return raw[0][0].amount;
 	},

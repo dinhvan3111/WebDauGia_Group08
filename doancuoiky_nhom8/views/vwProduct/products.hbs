@@ -27,86 +27,13 @@
     </style>
 {{/section}}
 {{#section 'js'}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/JDMcKinstry/JavaScriptDateFormat@master/dateFormat.min.js">
+    
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script type="text/javascript" src="/js/paging.js"></script>
     <script>
-        if($('#like')[0].checked){
-            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
-        }
-        else{
-            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
-        }
-        if($('#dislike')[0].checked){
-            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
-        }
-        else{
-            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
-        }
-        $('.react-group').on('click',function (){
-            if($('#like')[0].checked){
-                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
-            }
-            else{
-                $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
-            }
-            if($('#dislike')[0].checked){
-                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
-            }
-            else{
-                $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
-            }
-        })
-
-        var sortElement = $('.sort-function-price');
-        console.log(window.location.href);
-        if(window.location.href.includes('?sort=1')){
-            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
-        }
-        if(window.location.href.includes('?sort=2')){
-            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
-        }
-        var total = Number.parseInt("{{this.totalPage}}");
-        var current = Number.parseInt("{{this.page}}");
-        var pre = Number.parseInt(("{{this.prePage}}"));
-        var next = Number.parseInt(("{{this.nextPage}}"));
-        $('#pagination').twbsPagination({
-            startPage: current,
-            totalPages: total,
-            visiblePages: 5,
-            onPageClick: function (event, page) {
-                var allPageElements = $('.page-link');
-                for(let i =0 ;i < allPageElements.length;i++) {
-                    if(allPageElements[i].innerText === 'First'){
-                        allPageElements[i].href = "?page=1";
-                    }
-                    if(allPageElements[i].innerText === 'Last'){
-                        allPageElements[i].href = "?page=" + total;
-                    }
-                    if(allPageElements[i].innerText === 'Previous'){
-                        allPageElements[i].href = "?page=" + pre;
-                    }
-                    if(allPageElements[i].innerText === 'Next'){
-                        allPageElements[i].href = "?page=" + next;
-                    }
-                }
-                var pageElements = ($('.page-link').slice(2,$('page-link').length -2));
-                for(let i =0 ;i < pageElements.length;i++) {
-                    pageElements[i].href = "?page=" + pageElements[i].innerText;
-                }
-            }
-        });
-        var pageElements = $('.page-link');
-        for(let i =0 ; i < pageElements.length;i++){
-            pageElements[i].addEventListener('click',function (e){
-                if(this.innerText == current){
-                    e.preventDefault();
-                }
-                else{
-                    location.href = this.href;
-                }
-            });
-        }
-
+        console.log(Number.parseInt("{{this.totalPage}}"))
+        paging(Number.parseInt("{{this.totalPage}}"), Number.parseInt("{{this.page}}"),
+            Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
     </script>
     <script>
         $('.comment-btn').on('click', function () {

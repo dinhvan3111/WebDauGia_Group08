@@ -75,9 +75,11 @@
                         <a class="dropdown-item font-bold" href="/products/posted">Danh sách sản phẩm đã đăng</a>
                         <a class="dropdown-item font-bold" href="/products/sold">Danh sách sản phẩm có người chiến thắng</a>
                     {{/if}}
-                    <a class="dropdown-item font-bold" href="/products/watch-list">Danh sách sản phẩm yêu thích</a>
-                    <a class="dropdown-item font-bold" href="/products/bidding">Danh sách sản phẩm đang đấu giá </a>
-                    <a class="dropdown-item font-bold" href="/products/won">Danh sách sản phẩm đã chiến thắng</a>
+                    {{#if (isBidder lcAuthUser.user.id_permission)}}
+                        <a class="dropdown-item font-bold" href="/products/watch-list">Danh sách sản phẩm yêu thích</a>
+                        <a class="dropdown-item font-bold" href="/products/bidding">Danh sách sản phẩm đang đấu giá </a>
+                        <a class="dropdown-item font-bold" href="/products/won">Danh sách sản phẩm đã chiến thắng</a>
+                    {{/if}}
                 </div>
             </li>
             
@@ -124,7 +126,7 @@
                         </div>
                     </div>
                     <input type="text" class="search_cateID" name="search_cateID" value="">
-                    <input type="text" name="search_param" class="search_param form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    <input type="text" name="search_param" id="search_param" class="search_param form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
                     <div class="input-group-append">
                         <a href="#" class="search-btn btn btn-dark">Search</a>
                     </div>
@@ -172,7 +174,7 @@
                     </div>
                 </div>
                 <input type="text" class="search_cateID_temp" name="search_cateID" value="">
-                <input type="text" name="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                <input type="text" name="search_param" id="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
                 <div class="input-group-append">
                     <a href="#" class="search-btn-temp btn btn-dark" style="height: 38px">Search</a>
                 </div>

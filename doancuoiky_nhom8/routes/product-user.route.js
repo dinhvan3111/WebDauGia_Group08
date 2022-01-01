@@ -167,28 +167,29 @@ router.post('/:id/bidding', checkPermission.notLogin, async function (req, res) 
     return res.redirect(req.headers.referer);
 });
 router.post('/:id/rebidding', checkPermission.notLogin, async function (req, res) {
-    var date = new Date();
-    var min = date.getMinutes();
-    if(String(min).length === 1){
-        min = "0" + min;
-    }
-    var hour = date.getHours();
-    if(String(hour).length === 1){
-        hour = "0" + hour;
-    }
-    var second = date.getSeconds();
-    if(String(second).length === 1){
-        second = "0" + second;
-    }
-    var day = date.getDate();
-    if(String(day).length === 1){
-        day = "0" + day;
-    }
-    var month = date.getMonth() + 1;
-    if(String(month).length === 1){
-        month = "0" + month;
-    }
-    const now = date.getFullYear() + "-" + month + "-" + day + " " + hour+ ":" + min + ":" + second;
+    // var date = new Date();
+    // var min = date.getMinutes();
+    // if(String(min).length === 1){
+    //     min = "0" + min;
+    // }
+    // var hour = date.getHours();
+    // if(String(hour).length === 1){
+    //     hour = "0" + hour;
+    // }
+    // var second = date.getSeconds();
+    // if(String(second).length === 1){
+    //     second = "0" + second;
+    // }
+    // var day = date.getDate();
+    // if(String(day).length === 1){
+    //     day = "0" + day;
+    // }
+    // var month = date.getMonth() + 1;
+    // if(String(month).length === 1){
+    //     month = "0" + month;
+    // }
+    // const now = date.getFullYear() + "-" + month + "-" + day + " " + hour+ ":" + min + ":" + second;
+    const now = moment().format('YYYY-MM-DD HH:mm:ss');
     await biddingModel.ediMaxBidPrice(req,now);
     return res.redirect(req.headers.referer);
 });
@@ -261,6 +262,7 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
     const offset = (page - 1) * limit;
     var total;
     total = await productModel.countWonProductByIdAcc(id);
+
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getWonProductByIdAcc(id, limit, offset);
     var result = null;
@@ -329,6 +331,7 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
     const offset = (page - 1) * limit;
     var total;
     total = await productModel.countSoldProductByIdAcc(id);
+    console.log(total)
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getSoldProductByIdAcc(id, limit, offset);
 
