@@ -317,7 +317,6 @@ router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
-        totalPage: paging.totalPage,
         result,
         title: "đã đăng"
     });

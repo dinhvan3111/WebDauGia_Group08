@@ -14,6 +14,60 @@
         }
     </style>
 {{/section}}
+{{#section 'js'}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script>
+        var sortElement = $('.sort-function-price');
+        console.log(window.location.href);
+        if(window.location.href.includes('?sort=1')){
+            sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
+        }
+        if(window.location.href.includes('?sort=2')){
+            sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
+        }
+        var total = Number.parseInt("{{this.totalPage}}");
+        var current = Number.parseInt("{{this.page}}");
+        var pre = Number.parseInt(("{{this.prePage}}"));
+        var next = Number.parseInt(("{{this.nextPage}}"));
+        $('#pagination').twbsPagination({
+            startPage: current,
+            totalPages: total,
+            visiblePages: 5,
+            onPageClick: function (event, page) {
+                var allPageElements = $('.page-link');
+                for(let i =0 ;i < allPageElements.length;i++) {
+                    if(allPageElements[i].innerText === 'First'){
+                        allPageElements[i].href = "?page=1";
+                    }
+                    if(allPageElements[i].innerText === 'Last'){
+                        allPageElements[i].href = "?page=" + total;
+                    }
+                    if(allPageElements[i].innerText === 'Previous'){
+                        allPageElements[i].href = "?page=" + pre;
+                    }
+                    if(allPageElements[i].innerText === 'Next'){
+                        allPageElements[i].href = "?page=" + next;
+                    }
+                }
+                var pageElements = ($('.page-link').slice(2,$('page-link').length -2));
+                for(let i =0 ;i < pageElements.length;i++) {
+                    pageElements[i].href = "?page=" + pageElements[i].innerText;
+                }
+            }
+        });
+        var pageElements = $('.page-link');
+        for(let i =0 ; i < pageElements.length;i++){
+            pageElements[i].addEventListener('click',function (e){
+                if(this.innerText == current){
+                    e.preventDefault();
+                }
+                else{
+                    location.href = this.href;
+                }
+            });
+        }
+    </script>
+{{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10">
 
     <!-- Products section -->
@@ -90,33 +144,7 @@
                             </div>
                         {{/if}}
                     </div>
-                    <ul class="pagination  mt-3 justify-content-end">
-                        {{#if this.disablePre}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{this.prePage}}" tabindex="-1">Previous</a>
-                            </li>
-                        {{/if}}
-                        {{#each this.pageNumber}}
-                            {{#if isCurrent}}
-                                <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>
-                            {{else}}
-                                <li class="page-item"><a class="page-link" href="?page={{value}}">{{value}}</a></li>
-                            {{/if}}
-                        {{/each}}
-                        {{#if this.disableNext}}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="javascript:;">Next</a>
-                            </li>
-                        {{else}}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{this.nextPage}}">Next</a>
-                            </li>
-                        {{/if}}
-                    </ul>
+                    <ul id="pagination" class="pagination pagination-sm mt-3 justify-content-end"></ul>
                 </div>
             </div>
         </blockquote>
