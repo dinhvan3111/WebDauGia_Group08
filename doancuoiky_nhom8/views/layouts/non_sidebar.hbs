@@ -71,7 +71,7 @@
                 <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
                     <a class="dropdown-item font-bold" href="/products"><i class="fa fa-th-list mr-2" aria-hidden="true"></i> Danh sách sản phẩm</a>
                     {{#if (isAdmin lcAuthUser.user.id_permission)}}
-                        <a class="dropdown-item font-bold" href="/products/management"><i class="fa fa-trash mr-2" aria-hidden="true"></i> Quản lý sản phẩm</a>
+                        <a class="dropdown-item font-bold" href="/products/management"><i class="fa fa-wrench mr-2" aria-hidden="true"></i> Quản lý sản phẩm</a>
                     {{/if}}
                     {{#if (isSeller lcAuthUser.user.id_permission)}}
                         <a class="dropdown-item font-bold" href="/products/add"><i class="fa fa-plus-circle mr-2" aria-hidden="true"></i> Đăng sản phẩm</a>
@@ -108,7 +108,11 @@
             <div class="search-for-lg seach_form">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tất cả</button>
+                        {{#if this.cateName}}
+                            <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{cateName.name}}</button>
+                        {{else}}
+                            <button class="category-field btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tất cả</button>
+                        {{/if}}
                         <div class="dropdown">
                             <div class="dropdown-menu dropdown-menu-right dropdown-multicol" aria-labelledby="dropdownMenuButton">
                                 {{#each lcCategories}}
@@ -128,8 +132,16 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" class="search_cateID" name="search_cateID" value="">
-                    <input type="text" name="search_param" id="search_param" class="search_param form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    {{#if this.cateName}}
+                        <input type="text" class="search_cateID" name="search_cateID" value="{{cateName.id}}">
+                    {{else}}
+                        <input type="text" class="search_cateID" name="search_cateID" value="">
+                    {{/if}}
+                    {{#if this.param}}
+                        <input type="text" name="search_param" class="search_param form-control" aria-label="Search input with dropdown button" value="{{param}}">
+                    {{else}}
+                        <input type="text" name="search_param" class="search_param form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                    {{/if}}
                     <div class="input-group-append">
                         <a href="#" class="search-btn btn btn-dark">Search</a>
                     </div>
@@ -151,7 +163,7 @@
                             Đổi mật khẩu</a>
                         {{/if}}
                         <form action="/logout" id="frmLogout" method="post"></form>
-                        <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();"><i class="fa fa-sign-out-alt mr-2" aria-hidden="true"></i><i class="fa fa-sign-out mr-2" aria-hidden="true"></i> Đăng xuất</a>
+                        <a class="dropdown-item font-bold" href="javascript: $('#frmLogout').submit();"><i class="fa fa-sign-out-alt mr-2" aria-hidden="true"></i>  Đăng xuất</a>
                     </div>
                 </li>
             {{else}}
@@ -332,13 +344,11 @@
     });
 
     $('.search-btn').on('click',function (e){
-        var search_cateID = $('.input-group .search_cateID')[0].value;
+        var search_cateID = $('.input-group .search_cateID').attr('value');
         var search_param = $('.input-group .search_param')[0].value;
         if(search_cateID === ''){
             search_cateID = 0;
         }
-        console.log(search_cateID);
-        console.log(search_param);
         $(this).attr("href","/products/search_result?cateID=" + search_cateID +"&param="+ search_param);
         $(this).off('click').click();
     });
@@ -353,7 +363,7 @@
     });
 
     $('.search-btn-temp').on('click',function (e){
-        var search_cateID = $('.input-group .search_cateID_temp')[0].value;
+        var search_cateID = $('.input-group .search_cateID_temp').attr('value');
         var search_param = $('.input-group .search_param_temp')[0].value;
         if(search_cateID === ''){
             search_cateID = 0;

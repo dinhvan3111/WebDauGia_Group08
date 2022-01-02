@@ -5,43 +5,47 @@
 {{#section 'css'}}
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
-    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.2.5/css/fileinput.min.css" media="all"
+          rel="stylesheet" type="text/css"/>
     <style>
         #frmSort {
             display: none;
         }
-        .card-body > a{
+
+        .card-body > a {
             color: black;
             text-decoration: none;
         }
-        .card-body > a:hover{
+
+        .card-body > a:hover {
             color: black;
             text-decoration: none;
         }
     </style>
 {{/section}}
 {{#section 'js'}}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
     <script type="text/javascript" src="/js/paging.js"></script>
     <script>
         console.log(Number.parseInt("{{this.totalPage}}"))
         paging(Number.parseInt("{{this.totalPage}}"), Number.parseInt("{{this.page}}"),
-            Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
+                Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
 
 
         var sortElement = $('.sort-function-price');
         console.log(window.location.href);
-        if(window.location.href.includes('?sort=1')){
+        if (window.location.href.includes('?sort=1')) {
             sortElement.parent().prev()[0].innerText = 'Thời gian kết thúc giảm dần';
         }
-        if(window.location.href.includes('?sort=2')){
+        if (window.location.href.includes('?sort=2')) {
             sortElement.parent().prev()[0].innerText = 'Giá tăng dần';
         }
-        $('.sort-function .sort-function-time').on('click',function (){
+        $('.sort-function .sort-function-time').on('click', function () {
             $('#txtSort').val('1');
             $('#frmSort').submit();
         });
-        $('.sort-function .sort-function-price').on('click',function (){
+        $('.sort-function .sort-function-price').on('click', function () {
             $('#txtSort').val('2');
             $('#frmSort').submit();
         });
@@ -54,111 +58,126 @@
 <div class="col-xl-12">
 
     <!-- Products section -->
-                <div class="card-body">
-                    {{#if this.param}}
-                        <h1>Kết quả tìm kiếm cho: '{{param}}'</h1>
-                    {{/if}}
+    <div class="card-body">
+        {{#if this.param}}
+            <h1>Kết quả tìm kiếm cho: '{{param}}'</h1>
+        {{/if}}
 
-                    <div class="dropdown text-right">
-                        <button class="btn border border-secondary dropdown-toggle" type="button"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                            Sắp xếp theo
-                        </button>
-                        <form id="frmSort" action="/products/search_result" method="post">
-                            <input id="txtCateID" name="search_cateID" type="text" value="{{this.cateID}}">
-                            <input id="txtParam" name="search_param" type="text" value="{{this.param}}">
-                            <input id="txtSort" name="sort" type="text" value="">
-                        </form>
-                        <div class="sort-function dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
-                             aria-labelledby="dropdownMenuButton">
-                            <a class="sort-function-time dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
-                            <a class="sort-function-price dropdown-item" href="#">Giá tăng dần</a>
+        <div class="dropdown text-right">
+            <button class="btn border border-secondary dropdown-toggle" type="button"
+                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                Sắp xếp theo
+            </button>
+            <form id="frmSort" action="/products/search_result" method="post">
+                <input id="txtCateID" name="search_cateID" type="text" value="{{this.cateID}}">
+                <input id="txtParam" name="search_param" type="text" value="{{this.param}}">
+                <input id="txtSort" name="sort" type="text" value="">
+            </form>
+            <div class="sort-function dropdown-menu dropdown-menu-right shadow-sm mb-5 bg-white rounded"
+                 aria-labelledby="dropdownMenuButton">
+                <a class="sort-function-time dropdown-item" href="#">Thời gian kết thúc giảm dần</a>
+                <a class="sort-function-price dropdown-item" href="#">Giá tăng dần</a>
+            </div>
+        </div>
+        <div class="row">
+            {{#if this.search_result.length}}
+                {{#each this.search_result}}
+                    <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                        <div class="card h-100">
+
+                            <div class="card-body">
+                                <a href="/products/{{id}}">
+                                    <img class="product-img-4-sidebar" src="../img/products/{{id}}/thumb/{{img.thumb}}"
+                                         alt="Sản phẩm">
+                                    <h5 class="card-title">{{name}}</h5>
+                                    <h6 class="card-title">Giá hiện tại: <span class="text-success">{{format_number
+                                            price}} VNĐ</span></h6>
+                                    {{#if buy_now_price}}
+                                        <h6 class="card-title">Giá mua ngay: <span class="text-danger">{{format_number
+                                                buy_now_price}} VNĐ</span></h6>
+                                    {{/if}}
+                                    <h6 class="card-title">Đăng vào lúc: <span
+                                            class="text-info">{{time_start}}</span></h6>
+                                    {{#if price_color}}
+                                        <h6 class="card-title">Đóng vào lúc: <span
+                                                class="text-info">{{time_end}}</span></h6>
+                                    {{else}}
+                                        <h6 class="card-title">Đóng vào lúc: <span
+                                                class="text-danger">{{time_end}}</span></h6>
+                                    {{/if}}
+                                    {{#if priceHolder}}
+                                        <h6 class="card-title">Người giữ giá hiện tại: <span
+                                                class="text-info">{{priceHolder}}</span></h6>
+                                    {{else}}
+                                        <h6 class="card-title">Người giữ giá hiện tại: <span
+                                                class="text-muted">Chưa có</span></h6>
+                                    {{/if}}
+                                    {{#if bidHistory.length}}
+                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                class="text-info">{{bidHistory.length}}</span></h6>
+                                    {{else}}
+                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                class="text-muted">Chưa có lượt ra giá nào</span></h6>
+                                    {{/if}}
+                                </a>
+                            </div>
+
+                            <div class="card-footer text-muted">
+                                {{#if isWonOtherBidder}}
+                                    <button class="btn btn-sm btn-outline-dark" disabled>
+                                        <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                                        Đã kết thúc đấu giá
+                                    </button>
+                                {{else}}
+                                    <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
+                                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                                        Đấu giá ngay
+                                    </a>
+                                {{/if}}
+                                <a class="btn btn-sm btn-outline-danger" href="#" role="button">
+                                    <i class="fa fa-heart" aria-hidden="true"></i>
+                                    Quan tâm
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        {{#if this.search_result.length}}
-                            {{#each this.search_result}}
-                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
-                                    <div class="card h-100">
-
-                                        <div class="card-body">
-                                            <a href="/products/{{id}}">
-                                            <img class="product-img-4-sidebar" src="../img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
-                                            <h5 class="card-title">{{name}}</h5>
-                                            <h6 class="card-title">Giá hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
-                                            {{#if buy_now_price}}
-                                                <h6 class="card-title">Giá mua ngay: <span class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
-                                            {{/if}}
-                                            <h6 class="card-title">Đăng vào lúc: <span
-                                                    class="text-info">{{time_start}}</span></h6>
-                                            {{#if price_color}}
-                                                <h6 class="card-title">Đóng vào lúc: <span
-                                                        class="text-info">{{time_end}}</span></h6>
-                                            {{else}}
-                                                <h6 class="card-title">Đóng vào lúc: <span
-                                                        class="text-danger">{{time_end}}</span></h6>
-                                            {{/if}}
-                                            <h6 class="card-title">Người giữ giá hiện tại: <span
-                                                    class="text-info"></span></h6>
-                                            {{#if bidHistory.length}}
-                                                <h6 class="card-title">Số lượt ra giá: <span
-                                                        class="text-info">{{bidHistory.length}}</span></h6>
-                                            {{else}}
-                                                <h6 class="card-title">Số lượt ra giá: <span
-                                                        class="text-muted">Chưa có lượt ra giá nào</span></h6>
-                                            {{/if}}
-                                            </a>
-                                        </div>
-
-                                        <div class="card-footer text-muted">
-                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
-                                                <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                Đấu giá ngay
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                                <i class="fa fa-heart" aria-hidden="true"></i>
-                                                Quan tâm
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            {{/each}}
-                        {{else}}
-                            <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
-                                Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
-                            </div>
-                        {{/if}}
-                    </div>
-<!--                    <ul class="pagination  mt-3 justify-content-end">-->
-<!--                        {{#if this.disablePre}}-->
-<!--                            <li class="page-item disabled">-->
-<!--                                <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>-->
-<!--                            </li>-->
-<!--                        {{else}}-->
-<!--                            <li class="page-item">-->
-<!--                                <a class="page-link" href="?cateID={{this.cateID}}&param={{this.param}}&page={{this.prePage}}" tabindex="-1">Previous</a>-->
-<!--                            </li>-->
-<!--                        {{/if}}-->
-<!--                        {{#each this.pageNumber}}-->
-<!--                            {{#if isCurrent}}-->
-<!--                                <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>-->
-<!--                            {{else}}-->
-<!--                                <li class="page-item"><a class="page-link" href="?cateID={{../cateID}}&param={{../param}}&page={{value}}">{{value}}</a></li>-->
-<!--                            {{/if}}-->
-<!--                        {{/each}}-->
-<!--                        {{#if this.disableNext}}-->
-<!--                            <li class="page-item disabled">-->
-<!--                                <a class="page-link" href="javascript:;">Next</a>-->
-<!--                            </li>-->
-<!--                        {{else}}-->
-<!--                            <li class="page-item">-->
-<!--                                <a class="page-link" href="?cateID={{this.cateID}}&param={{this.param}}&page={{this.nextPage}}">Next</a>-->
-<!--                            </li>-->
-<!--                        {{/if}}-->
-<!--                    </ul>-->
-                    <ul id="pagination" class="pagination pagination-sm mt-3 justify-content-end"></ul>
+                {{/each}}
+            {{else}}
+                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                    Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
                 </div>
+            {{/if}}
+        </div>
+        <!--                    <ul class="pagination  mt-3 justify-content-end">-->
+            <!--                        {{#if this.disablePre}}-->
+        <!--                            <li class="page-item disabled">-->
+        <!--                                <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>-->
+        <!--                            </li>-->
+            <!--                        {{else}}-->
+        <!--                            <li class="page-item">-->
+        <!--                                <a class="page-link" href="?cateID={{this.cateID}}&param={{this.param}}&page={{this.prePage}}" tabindex="-1">Previous</a>-->
+        <!--                            </li>-->
+            <!--                        {{/if}}-->
+            <!--                        {{#each this.pageNumber}}-->
+            <!--                            {{#if isCurrent}}-->
+            <!--                                <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>-->
+                <!--                            {{else}}-->
+            <!--                                <li class="page-item"><a class="page-link" href="?cateID={{../cateID}}&param={{../param}}&page={{value}}">{{value}}</a></li>-->
+                <!--                            {{/if}}-->
+            <!--                        {{/each}}-->
+            <!--                        {{#if this.disableNext}}-->
+        <!--                            <li class="page-item disabled">-->
+        <!--                                <a class="page-link" href="javascript:;">Next</a>-->
+        <!--                            </li>-->
+            <!--                        {{else}}-->
+        <!--                            <li class="page-item">-->
+        <!--                                <a class="page-link" href="?cateID={{this.cateID}}&param={{this.param}}&page={{this.nextPage}}">Next</a>-->
+        <!--                            </li>-->
+            <!--                        {{/if}}-->
+        <!--                    </ul>-->
+        <ul id="pagination" class="pagination pagination-sm mt-3 justify-content-end"></ul>
+    </div>
     <!-- End Products section -->
 
 </div>

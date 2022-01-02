@@ -71,7 +71,7 @@
                 <div class="dropdown-menu bg-light-yellow" aria-labelledby="productDropdown">
                     <a class="dropdown-item font-bold" href="/products"><i class="fa fa-th-list mr-2" aria-hidden="true"></i> Danh sách sản phẩm</a>
                     {{#if (isAdmin lcAuthUser.user.id_permission)}}
-                        <a class="dropdown-item font-bold" href="/products/management"><i class="fa fa-trash mr-2" aria-hidden="true"></i> Quản lý sản phẩm</a>
+                        <a class="dropdown-item font-bold" href="/products/management"><i class="fa fa-wrench mr-2" aria-hidden="true"></i> Quản lý sản phẩm</a>
                     {{/if}}
                     {{#if (isSeller lcAuthUser.user.id_permission)}}
                         <a class="dropdown-item font-bold" href="/products/add"><i class="fa fa-plus-circle mr-2" aria-hidden="true"></i> Đăng sản phẩm</a>

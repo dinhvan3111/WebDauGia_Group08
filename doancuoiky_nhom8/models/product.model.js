@@ -407,6 +407,19 @@ export default {
 		return result;
 	},
 
+	async findPriceHolder(id_product) {
+		var result = await db.select()
+			.from('bid_history')
+			.where('id_product', id_product)
+			.orderByRaw('RAND()')
+			.limit(1);
+		var priceHolder = null;
+		if (result[0] != null || result[0] != undefined) {
+			priceHolder = accountModel.findID(result[0].id_acc);
+		}
+		return priceHolder;
+	},
+
 	async getProductsDisplayByCard(id_acc,productList){
 		moment.locale('vi');
 		var end_date = [];
@@ -473,6 +486,10 @@ export default {
 			productList[i].img = fileModel.getAllFileName('./public/img/products/'
 				+ productList[i].id, productList[i].id);
 			productList[i].bidHistory = await this.getBidHistory(productList[i].id);
+			const priceHolder = await this.findPriceHolder(productList[i].id);
+			if(priceHolder != undefined){
+				productList[i].priceHolder = priceHolder.name;
+			}
 		}
 		return productList;
 	},
@@ -757,4 +774,10 @@ export default {
 		const raw = await db.raw(sql);
 		return raw[0][0].amount;
 	},
+	async findCateName(id_cate){
+		const result = db.select('name')
+			.from('categories')
+			.where('id', id_cate);
+		return result;
+	}
 }

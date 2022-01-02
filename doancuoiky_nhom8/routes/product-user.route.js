@@ -42,16 +42,24 @@ router.get('/', async function (req, res) {
 router.get('/search_result', async function (req, res) {
     const cateID = req.query.cateID;
     const param = req.query.param;
+    var cateName = await productModel.findCateName(cateID);
+    cateName[0].id = cateID;
+    cateName = cateName[0];
+    console.log(cateName);
     const limit = 8;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
+    var id = null;
+    if(req.session.passport.user !== undefined){
+        id = req.session.passport.user.id ;
+    }
     const total = await productModel.countSearchProduct(cateID, param);
 
     const paging = pagingInfo.getPagingInfo(limit, page, total);
 
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var search_result = await productModel.searchProduct(cateID, param, limit, offset, sort);
-    search_result = await productModel.getProductsDisplayByCard(search_result);
+    search_result = await productModel.getProductsDisplayByCard(id,search_result);
     res.render('vwProduct/product_search_result', {
         layout: 'non_sidebar.hbs',
         page,
@@ -62,6 +70,7 @@ router.get('/search_result', async function (req, res) {
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
         cateID,
+        cateName,
         param,
         search_result
     });

@@ -128,8 +128,13 @@
                                                     <h6 class="card-title">Đóng vào lúc: <span
                                                             class="text-danger">{{time_end}}</span></h6>
                                                 {{/if}}
-                                                <h6 class="card-title">Người giữ giá hiện tại: <span
-                                                        class="text-info"></span></h6>
+                                                {{#if priceHolder}}
+                                                    <h6 class="card-title">Người giữ giá hiện tại: <span
+                                                            class="text-info">{{priceHolder}}</span></h6>
+                                                {{else}}
+                                                    <h6 class="card-title">Người giữ giá hiện tại: <span
+                                                            class="text-muted">Chưa có</span></h6>
+                                                {{/if}}
                                                 {{#if bidHistory.length}}
                                                     <h6 class="card-title">Số lượt ra giá: <span
                                                             class="text-info">{{bidHistory.length}}</span></h6>
@@ -257,9 +262,9 @@
                                                             </button>
                                                         {{else}}
                                                             {{#if isWonOtherBidder}}
-                                                                <button class="btn btn-sm btn-outline-success" disabled>
-                                                                    <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                                    Đấu giá ngay
+                                                                <button class="btn btn-sm btn-outline-dark" disabled>
+                                                                    <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                                                                    Đã kết thúc đấu giá
                                                                 </button>
                                                             {{else}}
 
