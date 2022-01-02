@@ -535,7 +535,9 @@ export default {
 		if(req.body.auto_renew === true){
 			product.auto_renew = 1;
 		}
-		if(req.body.allow_non_rating_bidder === true){
+		// console.log('req.body.allow_non_rating_bidder', req.body.allow_non_rating_bidder)
+		if(req.body.allow_non_rating_bidder == 'true'){
+			console.log('= 1')
 			product.allow_non_rating_bidder = 1;
 		}
 		var buy_now_price = req.body.buy_now_price.split(' ')[1]

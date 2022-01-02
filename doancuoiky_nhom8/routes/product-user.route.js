@@ -106,6 +106,11 @@ router.get('/:id', async function (req, res, next) {
     if(bidder_win_now === id_now){
         isWinner = true;
     }
+    console.log('1', product_info.allow_non_rating_bidder);
+    if(product_info.allow_non_rating_bidder == 1 && info.notEnoughVotes == true){
+        console.log('dung')
+        info.notEnoughVotes = false;
+    }
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',
         id: id_product,
