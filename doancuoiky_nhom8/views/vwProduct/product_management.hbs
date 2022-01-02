@@ -121,10 +121,10 @@
 
                         <tr data-href="/products/{{proID}}">
 
-                            <td><a href="/products/{{proID}}">{{proID}}</a></td>
-                            <td style="vertical-align: center;" class="name-column"><a href="/products/{{proID}}">{{proName}}</a></td>
-                            <td><a href="/products/{{proID}}"><img class="img-avt" src="/img/products/{{proID}}/thumb/{{img}}"></a></td>
-                            <td>{{accName}}</td>
+                            <td><a href="/products/{{proID}}" target="_blank">{{proID}}</a></td>
+                            <td style="vertical-align: center;" class="name-column"><a style="color: blue;" target="_blank" href="/products/{{proID}}">{{proName}} <i style="font-size: 9px" class="fa fa-external-link " aria-hidden="true"></i></a></td>
+                            <td><a href="/products/{{proID}}"><img class="img-avt" src="/img/products/{{proID}}/thumb/{{img}}" target="_blank"></a></td>
+                            <td><a style="color: blue;" href="/profile/{{id_seller}}" target="_blank">{{accName}} <i style="font-size: 9px" class="fa fa-external-link " aria-hidden="true"></i></a></td>
                             <td>{{format_number price}} VNĐ</td>
                             <td>{{start}}</td>
                             <td>{{end}}</td>

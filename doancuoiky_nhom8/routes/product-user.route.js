@@ -381,7 +381,12 @@ router.post('/comment', checkPermission.notLogin, async function (req, res) {
     req.body.time = moment().format('YYYY-MM-DD HH:mm:ss');
     const comment = req.body.comment;
     if (comment.length === 0) {
-        req.body.comment = "Tốt";
+        if(req.body.mark == 1){
+            req.body.comment = "Tốt";
+        }
+        else{
+            req.body.comment = "Không thích";
+        }
     }
     if (req.body.mark === undefined) {
         req.body.mark = 1;

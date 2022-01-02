@@ -144,6 +144,7 @@ export default{
 		user.starList = [];
 		user.ratio = 0;
 		user.percent = 0;
+		user.total_rate = totalRate;
 		for (let i = 0; i < 5; i++) {
         	user.starList.push(-1);
         	// gray star

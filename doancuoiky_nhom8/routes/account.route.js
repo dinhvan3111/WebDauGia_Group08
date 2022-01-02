@@ -169,8 +169,10 @@ router.get('/profile', checkPermission.notLogin, async function(req, res){
 	const isBidder = (user.id_permission === 3) ? false : true;
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	const userRatio = await accountModel.getUpVoteRatio(user.id);
+	user.total_rate = userRatio.total_rate;
 	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
 	user.starPercentageRounded = await accountModel.starPercentageRounded(userRatio.ratio);
+	console.log(user);
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		isBidder,
@@ -195,6 +197,7 @@ router.post('/profile', checkPermission.notLogin, async function(req, res){
 	user.dob = moment(user.dob).format('DD-MM-YYYY');
 	const userRatio = await accountModel.getUpVoteRatio(user.id);
 	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
+
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		user: user,
@@ -215,6 +218,7 @@ router.get('/profile/:id', async function(req, res, next){
 			}
 		}
 		const user_info = {
+			id: id,
 			username: user.username,
 			name: user.name,
 			email: user.email,
@@ -251,7 +255,8 @@ router.get('/rating/:id', async function(req, res){
 		res.render('vwAccount/rating',{
 			layout: 'non_sidebar.hbs',
 			rate:rateHistoryAndProduct,
-			fullName:user.name
+			fullName:user.name,
+			id_acc: id
 		});
 	}
 });

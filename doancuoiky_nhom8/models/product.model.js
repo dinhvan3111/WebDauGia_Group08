@@ -659,34 +659,48 @@ export default {
 					numeral(bidderPrice).format('0,0'));
 	},
 	async getListProductToManage(catID, limit, offset){
+		var productList = null;
 		if(catID === 0){
-			var productList =  await db('products')
+			productList =  await db('products')
 				.join('accounts', 'products.id_seller', 'accounts.id')
-				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end')
+				.select('products.id as proID', 
+					'products.name as proName',
+					'accounts.name as accName',
+					'products.buy_now_price as price',
+					'products.time_start as start',
+					'products.time_end as end',
+					'products.id_seller as id_seller')
 				.limit(limit).offset(offset);
-			if(productList === null){
-				return null;
-			}
-			for(let i = 0; i < productList.length; i++){
-				productList[i].img = fileModel.getAllFileName('./public/img/products/'
-					+ productList[i].proID,
-					productList[i].proID).thumb;
-			}
+			// if(productList === null){
+			// 	return null;
+			// }
+			// for(let i = 0; i < productList.length; i++){
+			// 	productList[i].img = fileModel.getAllFileName('./public/img/products/'
+			// 		+ productList[i].proID,
+			// 		productList[i].proID).thumb;
+			// }
 		}
 		else{
-			var productList =  await db('products')
-				.where('products.id_category',catID)
+			productList =  await db('products')
+				.where('products.id_category', catID)
 				.join('accounts', 'products.id_seller', 'accounts.id')
-				.select('products.id as proID', 'products.name as proName','accounts.name as accName','products.buy_now_price as price','products.time_start as start','products.time_end as end')
+				.select('products.id as proID', 
+					'products.name as proName',
+					'accounts.name as accName',
+					'products.buy_now_price as price',
+					'products.time_start as start',
+					'products.time_end as end',
+					'products.id_seller as id_seller')
 				.limit(limit).offset(offset);;
-			if(productList === null){
-				return null;
-			}
-			for(let i = 0; i < productList.length; i++){
-				productList[i].img = fileModel.getAllFileName('./public/img/products/'
-					+ productList[i].proID,
-					productList[i].proID).thumb;
-			}
+			
+		}
+		if(productList === null){
+			return null;
+		}
+		for(let i = 0; i < productList.length; i++){
+			productList[i].img = fileModel.getAllFileName('./public/img/products/'
+				+ productList[i].proID,
+				productList[i].proID).thumb;
 		}
 		return productList;
 	},
