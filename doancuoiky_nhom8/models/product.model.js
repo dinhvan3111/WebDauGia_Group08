@@ -406,33 +406,75 @@ export default {
 		}
 		return result;
 	},
-	async getProductsDisplayByCard(productList){
+
+	async getProductsDisplayByCard(id_acc,productList){
 		moment.locale('vi');
-	    var end_date = [];
-	    for (let i =0 ; i < productList.length; i++){
-	        end_date.push(0);
-	    }
-	    for(let i =0 ; i < productList.length; i++){
-	        if(productList[i].buy_now_price == 0){
-	            delete productList[i].buy_now_price;
-	        }
-	        end_date[i] = moment(productList[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-	        if(end_date[i].diff(moment(), 'days') < 3){
-	            productList[i].price_color = false;
-	            productList[i].time_end = end_date[i].fromNow();
-	        }
-	        else{
-	            productList[i].price_color = true;
-	            productList[i].time_end = moment(productList[i].time_end,
-	                'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-	        }
-	        productList[i].time_start = moment(productList[i].time_start,
-	            'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-	        productList[i].img = fileModel.getAllFileName('./public/img/products/'
-	        								+ productList[i].id, productList[i].id);
-	        productList[i].bidHistory = await this.getBidHistory(productList[i].id);
-	    }
-	    return productList;
+		var end_date = [];
+		for (let i =0 ; i < productList.length; i++){
+			end_date.push(0);
+		}
+		for(let i =0 ; i < productList.length; i++){
+			productList[i].isWatchList = false;
+			productList[i].isWonOtherBidder = false;
+			productList[i].isWonBidder = false;
+			productList[i].isWon = false;
+			productList[i].isSold = false;
+			productList[i].isSeller = false;
+			productList[i].isSellerComment = false;
+			if(id_acc !== null){
+				const end_date = moment(productList[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+				const checkWatchList = await watchListModel.IsProductOnWatchList(id_acc,productList[i].id);
+				if(checkWatchList !== null){
+					productList[i].isWatchList = true;
+				};
+				if(productList[i].id_win_bidder !== null && productList[i].id_win_bidder!== id_acc && end_date.diff(moment(), 'seconds') < 0){
+					productList[i].isWonOtherBidder = true;
+				}
+				const checkComment = await  this.isComment(id_acc,productList[i].id_seller,productList[i].id)
+				if(productList[i].id_win_bidder !== null && productList[i].id_win_bidder=== id_acc && end_date.diff(moment(), 'seconds') < 0){
+					productList[i].isWon = true;
+					if (checkComment !== null) {
+						productList[i].isWonBidder = true;
+					}
+				}
+
+
+				if(productList[i].id_seller=== id_acc){
+					productList[i].isSeller = true;
+
+					if(productList[i].id_win_bidder!==null && end_date.diff(moment(), 'seconds') < 0){
+						productList[i].isSold = true;
+						const checkSellerComment = await  this.isComment(id_acc,productList[i].id_win_bidder,productList[i].id)
+						if(checkSellerComment !== null){
+							productList[i].isSellerComment = true;
+						}
+
+					}
+
+				}
+
+			}
+
+			if(productList[i].buy_now_price == 0){
+				delete productList[i].buy_now_price;
+			}
+			end_date[i] = moment(productList[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+			if(end_date[i].diff(moment(), 'days') < 3){
+				productList[i].price_color = false;
+				productList[i].time_end = end_date[i].fromNow();
+			}
+			else{
+				productList[i].price_color = true;
+				productList[i].time_end = moment(productList[i].time_end,
+					'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+			}
+			productList[i].time_start = moment(productList[i].time_start,
+				'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+			productList[i].img = fileModel.getAllFileName('./public/img/products/'
+				+ productList[i].id, productList[i].id);
+			productList[i].bidHistory = await this.getBidHistory(productList[i].id);
+		}
+		return productList;
 	},
 	async isComment(id_assessor,id_acc,id_product){
 		const sql = `SELECT * from rate_history

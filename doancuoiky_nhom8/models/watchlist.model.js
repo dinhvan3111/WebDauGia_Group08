@@ -15,8 +15,8 @@ export default {
 		return await db('watch_list').where('id_acc',id).limit(limit).offset(offset);
 	},
 	async IsProductOnWatchList(id_acc,id_product){
-		const product = await db('watch-list')
-			.where("id_acc",id_acc,"id_product",id_product);
+		const product = await db('watch_list')
+			.where({"id_acc":id_acc,"id_product":id_product});
 		if(product.length == 0){
 			return null;
 		}

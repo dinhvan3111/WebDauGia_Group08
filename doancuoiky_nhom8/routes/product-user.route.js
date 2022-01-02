@@ -21,7 +21,11 @@ router.get('/', async function (req, res) {
 
     const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var result = await productModel.findPageAllProduct(limit, offset, sort);
-    result = await productModel.getProductsDisplayByCard(result);
+    var id = null;
+    if(req.session.passport.user !== undefined){
+        id = req.session.passport.user.id;
+    }
+    result = await productModel.getProductsDisplayByCard(id,result);
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,
@@ -30,7 +34,8 @@ router.get('/', async function (req, res) {
         disablePre: paging.disablePre,
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
-        result
+        result,
+        id,
     });
 });
 
@@ -120,6 +125,10 @@ router.get('/:id', async function (req, res, next) {
 });
 router.get('/list/:id', async function (req, res) {
     const cateID = req.params.id;
+    var id = null;
+    if(req.session.passport.user !== undefined){
+        id = req.session.passport.user.id ;
+    }
 
     const limit = 9;
     const page = req.query.page || 1;
@@ -130,11 +139,9 @@ router.get('/list/:id', async function (req, res) {
     const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var result = await productModel.findPagebyCatId(cateID, limit, offset, sort);
 
-    result = await productModel.getProductsDisplayByCard(result);
-
+    result = await productModel.getProductsDisplayByCard(id,result);
+    console.log(result);
     res.render('vwCategory/show-product', {
-        // layout: 'non_sidebar.hbs',
-
         page,
         nextPage: paging.nextPage,
         prePage: paging.prePage,
@@ -143,6 +150,7 @@ router.get('/list/:id', async function (req, res) {
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
         result,
+        id,
     });
 });
 
@@ -167,28 +175,6 @@ router.post('/:id/bidding', checkPermission.notLogin, async function (req, res) 
     return res.redirect(req.headers.referer);
 });
 router.post('/:id/rebidding', checkPermission.notLogin, async function (req, res) {
-    // var date = new Date();
-    // var min = date.getMinutes();
-    // if(String(min).length === 1){
-    //     min = "0" + min;
-    // }
-    // var hour = date.getHours();
-    // if(String(hour).length === 1){
-    //     hour = "0" + hour;
-    // }
-    // var second = date.getSeconds();
-    // if(String(second).length === 1){
-    //     second = "0" + second;
-    // }
-    // var day = date.getDate();
-    // if(String(day).length === 1){
-    //     day = "0" + day;
-    // }
-    // var month = date.getMonth() + 1;
-    // if(String(month).length === 1){
-    //     month = "0" + month;
-    // }
-    // const now = date.getFullYear() + "-" + month + "-" + day + " " + hour+ ":" + min + ":" + second;
     const now = moment().format('YYYY-MM-DD HH:mm:ss');
     await biddingModel.ediMaxBidPrice(req,now);
     return res.redirect(req.headers.referer);
@@ -229,7 +215,7 @@ router.get('/watch-list', checkPermission.notLogin, async function (req, res) {
             var product = await productModel.findID(watch_list[i].id_product);
             products.push(product);
         }
-        result = await productModel.getProductsDisplayByCard(products);
+        result = await productModel.getProductsDisplayByCard(id,products);
         // result = products;
     }
     // const OnWatchList = [];
@@ -250,6 +236,7 @@ router.get('/watch-list', checkPermission.notLogin, async function (req, res) {
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
         result,
+        isWatchList:true,
         title: "yêu thích",
         inWatchList: true
     });
@@ -262,13 +249,12 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
     const offset = (page - 1) * limit;
     var total;
     total = await productModel.countWonProductByIdAcc(id);
-
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getWonProductByIdAcc(id, limit, offset);
     var result = null;
     if (products !== null) {
 
-        result = await productModel.getProductsDisplayByCard(products);
+        result = await productModel.getProductsDisplayByCard(id,products);
         // result = products;
     }
     for (var i = 0; i < result.length; i++) {
@@ -279,7 +265,6 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
             result[i].isComment = true;//hiện nút đánh giá
         }
     }
-    //console.log(result);
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,
@@ -289,8 +274,7 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
         result,
-        title: "đã chiến thắng",
-        isWon: true
+        title: "đã chiến thắng"
     });
 });
 router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
@@ -306,10 +290,9 @@ router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
     var result = null;
     if (products !== null) {
 
-        result = await productModel.getProductsDisplayByCard(products);
+        result = await productModel.getProductsDisplayByCard(id,products);
         // result = products;
     }
-
 
     res.render('vwProduct/products', {
         page,
@@ -331,14 +314,13 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
     const offset = (page - 1) * limit;
     var total;
     total = await productModel.countSoldProductByIdAcc(id);
-    console.log(total)
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getSoldProductByIdAcc(id, limit, offset);
 
     var result = null;
     if (products !== null) {
 
-        result = await productModel.getProductsDisplayByCard(products);
+        result = await productModel.getProductsDisplayByCard(id,products);
         // result = products;
     }
     for (var i = 0; i < result.length; i++) {
@@ -374,11 +356,10 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
     // console.log('total::::::;', total)
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getProductBiddingById(id, limit, offset);
-    console.log(products)
     var result = null;
     if (products !== null) {
 
-        result = await productModel.getProductsDisplayByCard(products);
+        result = await productModel.getProductsDisplayByCard(id,products);
         // result = products;
     }
 
@@ -397,7 +378,7 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
 });
 router.post('/comment', checkPermission.notLogin, async function (req, res) {
 
-    req.body.time = moment(req.body.time).format('YYYY-MM-DD HH:mm:ss');
+    req.body.time = moment().format('YYYY-MM-DD HH:mm:ss');
     const comment = req.body.comment;
     if (comment.length === 0) {
         req.body.comment = "Tốt";
@@ -446,5 +427,11 @@ router.post('/:id/cancel-transaction', checkPermission.isNotSeller, async functi
     }
     const ret = await rateModel.add(rate);
     res.redirect(req.headers.referer);
+});
+router.post('/like', checkPermission.notLogin, async function (req, res) {
+    const id_product = req.body.value_id_pro;
+    const id = req.session.passport.user.id;
+    await watchListModel.add(id,id_product);
+    return res.redirect(req.headers.referer);
 });
 export default router;

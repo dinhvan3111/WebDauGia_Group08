@@ -13,15 +13,74 @@
             color: black;
             text-decoration: none;
         }
+        .reactbtn{
+            font-size: 30px;
+            color: #ffcc37;
+        }
+        .react-group input{
+            display: none;
+        }
+        .modal-content .cancel-modal-body{
+            padding:8px;
+            font-size: 16px;
+            font-style: italic;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
 <script type="text/javascript" src="/js/paging.js"></script>
 <script>
+    if($('#like')[0].checked){
+        $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+    }
+    else{
+        $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+    }
+    if($('#dislike')[0].checked){
+        $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+    }
+    else{
+        $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+    }
+    $('.react-group').on('click',function (){
+        if($('#like')[0].checked){
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-up"></i>`;
+        }
+        else{
+            $('#like').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-up"></i>`;
+        }
+        if($('#dislike')[0].checked){
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-down"></i>`;
+        }
+        else{
+            $('#dislike').prev()[0].innerHTML = `<i class="reactbtn fa fa-thumbs-o-down"></i>`;
+        }
+    })
     console.log(Number.parseInt("{{this.totalPage}}"))
     paging(Number.parseInt("{{this.totalPage}}"), Number.parseInt("{{this.page}}"),
         Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
+</script>
+<script>
+    $('.comment-btn').on('click', function () {
+        const id = $(this).attr('data-id');
+        const id_seller = $(this).attr('data-id-seller');
+        const id_bidder = $(this).attr('data-id-win-bidder');
+        $('#txtProID').val(id);
+        $('#txtIdSeller').val(id_seller);
+        $('#txtIdBidder').val(id_bidder);
+    });
+    $('#commentBtn').on('click', function () {
+        $('#frmComment').submit();
+    });
+    $('#cancel-transaction').on('click', function () {
+        $('#frmCancel').submit();
+    });
+    $('.btn-like').on('click', function () {
+        const id = $(this).attr('proID');
+        $('#txtLike').val(id);
+        $('#frmLike').submit();
+    });
 </script>
 {{/section}}
 <div class="col-sm-12 col-md-10 col-xl-10">
@@ -31,7 +90,7 @@
         <blockquote class="blockquote mb-0">
             <div class="card">
                 <div class="card-header bg-warning font-bold">
-                    Danh sách sản phẩm
+                    Danh sách sản phẩm {{title}}
                 </div>
                 <div class="card-body">
                     <div class="dropdown text-right">
@@ -80,26 +139,262 @@
                                                 {{/if}}
                                             </a>
                                         </div>
+                                        <!--                        Modal-->
+                                        <form id="frmComment" action="/products/comment" method="post">
+                                            <input type="hidden" id="txtProID" name="id_product" value="">
+                                            {{#if isSold}}
+                                                <input type="hidden" id="txtIdSeller" name="id_assessor" value="">
+                                                <input type="hidden" id="txtIdBidder" name="id_acc" value="">
+                                            {{else}}
+                                                <input type="hidden" id="txtIdSeller" name="id_acc" value="">
+                                                <input type="hidden" id="txtIdBidder" name="id_assessor" value="">
+                                            {{/if}}
+                                            {{#if @root/isWon}}
+                                                <input type="hidden" id="txtIdSeller" name="id_acc" value="">
+                                                <input type="hidden" id="txtIdBidder" name="id_assessor" value="">
+                                            {{/if}}
 
-                                        <div class="card-footer text-muted">
-                                            <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">
-                                                <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                Đấu giá ngay
-                                            </a>
-                                            <a class="btn btn-sm btn-outline-danger" href="#" role="button">
-                                                <i class="fa fa-heart" aria-hidden="true"></i>
-                                                Quan tâm
-                                            </a>
-                                        </div>
+                                            <div class="modal fade" id="commentModal" tabindex="-1"
+                                                 aria-labelledby="commentModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="commentModalLabel">Đánh giá của bạn về sản phẩm </h5>
+                                                            <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+
+
+                                                        <div class="modal-body">
+                                                            <input  type="text" name="comment"
+                                                                    id="comment"
+                                                                    placeholder="Nhập đánh giá của bạn..."
+                                                                    data-type="currency" value required/>
+                                                            <div class="react-group m-2 d-flex">
+                                                                <div class="mr-3">
+                                                                    <label for="like"><i class="reactbtn fa fa-thumbs-o-up"></i></label>
+                                                                    <input id="like" class="mt-10" name="mark" type="radio" value="1" checked required="required" />&nbspThích
+                                                                </div>
+                                                                <div>
+                                                                    <label for="dislike"><i class="reactbtn fa fa-thumbs-o-down"></i></label>
+                                                                    <input id="dislike" name="mark" type="radio" value="0" required="required" />&nbsp Không thích
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Đóng
+                                                            </button>
+                                                            <a href="javascript:;">
+                                                                <button type="button" id="commentBtn"
+                                                                        class="btn btn-success"><i
+                                                                        class="fa fa-comments"></i> Đánh giá
+                                                                </button>
+                                                            </a>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                        </form>
+                                        {{#if isSeller}}
+                                            <div class="card-footer text-muted">
+                                                {{#if isSold}}
+                                                    {{#if isSellerComment}}
+                                                        <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                            Đã đánh giá
+                                                        </button>
+                                                    {{else}}
+                                                        <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
+                                                                data-target="#commentModal" class="btn btn-sm btn-outline-info comment-btn"><i
+                                                                class="fa fa-star"
+                                                                aria-hidden="true"></i> Đánh giá ngay</button>
+                                                        <a  data-toggle="modal" data-target="#cancelModal" class="btn btn-sm btn-outline-danger" href="javascript:;" role="button">
+                                                            <i class="fa fa-ban" aria-hidden="true"></i>
+                                                            Hủy giao dịch
+                                                        </a>
+                                                        <form id="frmCancel" action="/products/{{id}}/cancel-transaction" method="post">
+                                                        </form>
+                                                    {{/if}}
+                                                {{else}}
+                                                    <a class="btn btn-sm btn-success" href="/products/{{id}}">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                        Xem chi tiết
+                                                    </a>
+                                                {{/if}}
+
+                                            </div>
+                                        {{else}}
+                                            <div class="card-footer text-muted">
+                                                {{#if isComment}}
+                                                    <!--                                                <a class="btn btn-sm btn-outline-success" href="/products/{{id}}" role="button">-->
+                                                    <!--                                                    <i class="fa fa-comments" aria-hidden="true"></i>-->
+                                                    <!--                                                    Đánh giá ngay-->
+                                                    <!--                                                </a>-->
+
+                                                    <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
+                                                            data-target="#commentModal" class="btn btn-sm btn-outline-info comment-btn"><i
+                                                            class="fa fa-star"
+                                                            aria-hidden="true"></i> Đánh giá ngay</button>
+                                                {{else}}
+
+                                                    {{#if @root/isSold}}
+                                                        <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                            Đã đánh giá
+                                                        </button>
+                                                    {{else}}
+                                                        {{#if @root/isWon}}
+                                                            <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                                                Đã đánh giá
+                                                            </button>
+                                                        {{else}}
+                                                            {{#if isWonOtherBidder}}
+                                                                <button class="btn btn-sm btn-outline-success" disabled>
+                                                                    <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                                    Đấu giá ngay
+                                                                </button>
+                                                            {{else}}
+
+                                                                {{#if isWon}}
+                                                                    {{#if isWonBidder}}
+                                                                        <button class="btn btn-sm btn-outline-secondary"disabled>
+                                                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                                                            Đã đánh giá
+                                                                        </button>
+                                                                    {{else}}
+
+                                                                        <button data-id-win-bidder="{{id_win_bidder}}" data-id-seller="{{id_seller}}" data-id="{{id}}"  type="submit" data-toggle="modal"
+                                                                                data-target="#commentModal" class="btn btn-sm btn-outline-info comment-btn"><i
+                                                                                class="fa fa-star"
+                                                                                aria-hidden="true"></i> Đánh giá ngay</button>
+
+                                                                    {{/if}}
+                                                                {{else}}
+                                                                    <a class="btn btn-sm btn-outline-success" href="/products/{{id}}">
+                                                                        <i class="fa fa-gavel" aria-hidden="true"></i>
+                                                                        Đấu giá ngay
+                                                                    </a>
+                                                                {{/if}}
+
+                                                            {{/if}}
+
+                                                        {{/if}}
+
+                                                    {{/if}}
+
+                                                {{/if}}
+
+                                                {{#if @root/isSold}}
+                                                    {{#if isComment}}
+                                                        <a  data-toggle="modal" data-target="#cancelModal" class="btn btn-sm btn-outline-danger" href="javascript:;" role="button">
+                                                            <i class="fa fa-ban" aria-hidden="true"></i>
+                                                            Hủy giao dịch
+                                                        </a>
+                                                        <form id="frmCancel" action="/products/{{id}}/cancel-transaction" method="post">
+                                                        </form>
+                                                    {{/if}}
+                                                {{else}}
+                                                    {{#if isWatchList}}
+                                                        <button class="btn btn-sm btn-outline-danger" disabled>
+                                                            <i class="fa fa-heart" aria-hidden="true"></i>
+                                                            Đã yêu thích
+                                                        </button>
+                                                    {{else}}
+                                                        <button proID ="{{id}}" class="btn btn-sm btn-outline-danger btn-like" >
+                                                            <i class="fa fa-heart" aria-hidden="true"></i>
+                                                            Yêu thích
+
+                                                        </button>
+                                                        <form id="frmLike" action="/products/like" method="post">
+                                                            <input id="txtLike" type="hidden" name="value_id_pro" value ="">
+                                                        </form>
+                                                        <!--                                                        <a class="btn btn-sm btn-outline-danger" href="javascript:;" role="button">-->
+                                                        <!--                                                            <i class="fa fa-heart" aria-hidden="true"></i>-->
+                                                        <!--                                                            Yêu thích-->
+                                                        <!--                                                        </a>-->
+                                                    {{/if}}
+                                                {{/if}}
+
+
+                                            </div>
+                                        {{/if}}
+
                                     </div>
                                 </div>
                             {{/each}}
                         {{else}}
-                            <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
-                                Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
-                            </div>
+                            {{#if param}}
+                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                    Không tìm thấy sản phẩm cho từ khoá <span class="font-bold">'{{param}}'</span>
+                                </div>
+                            {{else}}
+                                <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-3">
+                                    Không tìm thấy sản phẩm
+                                </div>
+                            {{/if}}
+
                         {{/if}}
+                        <!--                        Modal Cancel transaction-->
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="cancelModalLabel"><b>Xác nhận</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="cancel-modal-body modal-body">
+                                        Bạn có chắc chắn muốn hủy giao dịch này?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                        <button id="cancel-transaction" type="button" class="btn btn-danger">Hủy giao dịch</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
+                    <!--                    <ul class="pagination  mt-3 justify-content-end">-->
+                        <!--                        {{#if this.disablePre}}-->
+                    <!--                            <li class="page-item disabled">-->
+                    <!--                                <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>-->
+                    <!--                            </li>-->
+                        <!--                        {{else}}-->
+                    <!--                            <li class="page-item">-->
+                    <!--                                <a class="page-link" href="?page={{this.prePage}}" tabindex="-1">Previous</a>-->
+                    <!--                            </li>-->
+                        <!--                        {{/if}}-->
+                        <!--                        {{#each this.pageNumber}}-->
+                        <!--                            {{#if isCurrent}}-->
+                        <!--                                <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>-->
+                            <!--                            {{else}}-->
+                        <!--                                <li class="page-item"><a class="page-link" href="?page={{value}}">{{value}}</a></li>-->
+                            <!--                            {{/if}}-->
+                        <!--                        {{/each}}-->
+                        <!--                        {{#if this.disableNext}}-->
+                    <!--                            <li class="page-item disabled">-->
+                    <!--                                <a class="page-link" href="javascript:;">Next</a>-->
+                    <!--                            </li>-->
+                        <!--                        {{else}}-->
+                    <!--                            <li class="page-item">-->
+                    <!--                                <a class="page-link" href="?page={{this.nextPage}}">Next</a>-->
+                    <!--                            </li>-->
+                        <!--                        {{/if}}-->
+                    <!--                    </ul>-->
                     <ul id="pagination" class="pagination pagination-sm mt-3 justify-content-end"></ul>
                 </div>
             </div>
