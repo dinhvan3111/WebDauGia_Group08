@@ -181,7 +181,8 @@ nav .search-for-lg {
 
 .new-product{
     position: relative;
-    width: 37%;
+    background: #44d744;
+    width: 40%;
     font-size: 15px;
     font-weight: bold;
     border-radius: 5px;

@@ -247,11 +247,10 @@ export default {
         if (res.length == 0) {
             return null;
         }
-        // for(let i = 0; i <= res.length;i++){
-        //     if(res[i] != undefined){
-        //         res[i].real_time_start = moment(res[i].time_start);
-        //     }
-        // }
+        for(let i = 0; i < res.length;i++){
+            res[i].real_time_start = moment(res[i].time_start);
+            // console.log(res[i].time_start);
+        }
         return res;
     },
     async topProductsMostBid(numOfProducts) {
@@ -264,15 +263,15 @@ export default {
                                          time_start,
                                          time_end
                                   from products p
-                                  where p.not_sold = 1;`);
+                                  where p.not_sold = 1
+                                  limit ${numOfProducts};`);
         if (res[0].length == 0) {
             return null;
         }
-        // for(let i = 0; i <= res.length;i++){
-        //     if(res[i] != undefined){
-        //         res[i].real_time_start = moment(res[i].time_start);
-        //     }
-        // }
+        for(let i = 0; i < res[0].length;i++){
+            res[0][i].real_time_start = moment(res[0][i].time_start);
+            // console.log(res[0][i].time_start);
+        }
         return res[0];
     },
     async topProductsHighestPrice(numOfProducts) {
@@ -282,11 +281,10 @@ export default {
         if (res.length == 0) {
             return null;
         }
-        // for(let i = 0; i <= res.length;i++){
-        //     if(res[i] != undefined){
-        //         res[i].real_time_start = moment(res[i].time_start);
-        //     }
-        // }
+        for(let i = 0; i < res.length;i++){
+            res[i].real_time_start = moment(res[i].time_start);
+            // console.log(res[i].time_start);
+        }
         return res;
     },
     getImgProductList(productList) {
