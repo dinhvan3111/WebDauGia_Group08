@@ -11,6 +11,13 @@ export default {
 		}
 		return line[0];
 	},
+	async findById(id_acc,id_product){
+		const line = await db('watch_list').where({id_acc:id_acc,id_product:id_product});
+		if(line.length == 0){
+			return null;
+		}
+		return line[0];
+	},
 	async getWatchListById(id, limit, offset){
 		return await db('watch_list').where('id_acc',id).limit(limit).offset(offset);
 	},

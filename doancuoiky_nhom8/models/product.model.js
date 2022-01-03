@@ -37,10 +37,18 @@ export default {
 		return bidHistory;
 	},
 	async getProductsInSameCate(id_category, id_product, quantity){
-		return await db('products').where({id_category: id_category})
-									.whereNot({id: id_product})
-									.orderBy('time_end', 'desc')
-									.limit(quantity).offset(0);
+		var productList = await db('products').where({id_category: id_category})
+			.whereNot({id: id_product})
+			.orderBy('time_end', 'desc')
+			.limit(quantity).offset(0);
+		for(let i = 0; i < productList.length; i++){
+			productList[i].time_start = moment(productList[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
+			productList[i].time_end = moment(productList[i].time_end).format('DD/MM/YYYY HH:mm:ss');
+			productList[i].img = fileModel.getAllFileName('./public/img/products/'
+				+ productList[i].id,
+				productList[i].proID).thumb;
+		}
+		return  productList;
 	},
 	async findIgnoredBidders(info){
 		const res = await db('ignore_bidder').where(info);

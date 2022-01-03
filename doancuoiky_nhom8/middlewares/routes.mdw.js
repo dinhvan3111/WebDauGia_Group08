@@ -1,4 +1,5 @@
 import productModel from '../models/product.model.js';
+import watchListModel from '../models/watchlist.model.js';
 import categoryRoute from '../routes/category.route.js';
 import accountRoute from '../routes/account.route.js';
 import productUserRoute from '../routes/product-user.route.js';
@@ -29,7 +30,41 @@ export default function(app){
 
 	app.get('/', async function (req, res) {
 		const productList = await productModel.getTopProduct();
-		// console.log(productList);
+		var id = null;
+		if(req.session.passport!== undefined){
+			if(req.session.passport.user !== undefined){
+				id = req.session.passport.user.id ;
+			}
+		};
+		for(var i = 0; i<productList.nearTimeEnd.length; i++){
+			productList.nearTimeEnd[i].isWatchList = false;
+			const checkInWatchList = await watchListModel.findById(id,productList.nearTimeEnd[i].id);
+			if(checkInWatchList !== null){
+				productList.nearTimeEnd[i].isWatchList = true;
+			}
+		}
+		for(var i = 0; i<productList.nearTimeEnd.length; i++){
+			productList.nearTimeEnd[i].isWatchList = false;
+			const checkInWatchList = await watchListModel.findById(id,productList.nearTimeEnd[i].id);
+			if(checkInWatchList !== null){
+				productList.nearTimeEnd[i].isWatchList = true;
+			}
+		}
+		for(var i = 0; i<productList.mostBid.length; i++){
+			productList.mostBid[i].isWatchList = false;
+			const checkInWatchList = await watchListModel.findById(id,productList.mostBid[i].id);
+			if(checkInWatchList !== null){
+				productList.mostBid[i].isWatchList = true;
+			}
+		}
+		for(var i = 0; i<productList.highestPrice.length; i++){
+			productList.highestPrice[i].isWatchList = false;
+			const checkInWatchList = await watchListModel.findById(id,productList.highestPrice[i].id);
+			if(checkInWatchList !== null){
+				productList.highestPrice[i].isWatchList = true;
+			}
+		}
+		console.log(productList);
 	    res.render('home', {
 	    	products: productList
 	    });

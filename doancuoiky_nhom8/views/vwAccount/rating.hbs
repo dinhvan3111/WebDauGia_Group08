@@ -17,7 +17,6 @@
         .table td, .table th {
             vertical-align: middle;
             text-align: center;
-            font-weight: bold;
         }
 
         th {
@@ -36,6 +35,9 @@
         .icon-emotion{
             font-size: 30px;
             color: #ffcc37;
+        }
+        .name-product{
+            width: 400px;
         }
     </style>
 {{/section}}
@@ -64,7 +66,7 @@
 
                         <tr >
 
-                            <td><a style="color: blue;" href="/products/{{id}}" target="_blank">{{name}} <i style="font-size: 9px" class="fa fa-external-link " aria-hidden="true"></i></a></td>
+                            <td class="name-product"><a style="color: blue;" href="/products/{{id}}" target="_blank">{{name}} <i style="font-size: 9px" class="fa fa-external-link " aria-hidden="true"></i></a></td>
                             <td><a href="/products/{{id}}" target="_blank"><img class="img-avt" src="/img/products/{{id}}/thumb/{{img}}"></a></td>
                             <td ><a style="color: blue;" href="/profile/{{id_acc}}" target="_blank">{{nameAssessor}}  <i style="font-size: 9px" class="fa fa-external-link " aria-hidden="true"></i></a></td>
 

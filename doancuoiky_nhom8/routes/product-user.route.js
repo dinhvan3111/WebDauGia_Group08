@@ -22,9 +22,11 @@ router.get('/', async function (req, res) {
     const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var result = await productModel.findPageAllProduct(limit, offset, sort);
     var id = null;
-    if(req.session.passport.user !== undefined){
-        id = req.session.passport.user.id;
-    }
+    if(req.session.passport!== undefined){
+        if(req.session.passport.user !== undefined){
+            id = req.session.passport.user.id ;
+        }
+    };
     result = await productModel.getProductsDisplayByCard(id,result);
     res.render('vwProduct/products', {
         page,
@@ -50,9 +52,12 @@ router.get('/search_result', async function (req, res) {
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
     var id = null;
-    if(req.session.passport.user !== undefined){
-        id = req.session.passport.user.id ;
-    }
+    if(req.session.passport!== undefined){
+        if(req.session.passport.user !== undefined){
+            id = req.session.passport.user.id ;
+        }
+    };
+
     const total = await productModel.countSearchProduct(cateID, param);
 
     const paging = pagingInfo.getPagingInfo(limit, page, total);
@@ -115,11 +120,26 @@ router.get('/:id', async function (req, res, next) {
     if(bidder_win_now === id_now){
         isWinner = true;
     }
-    console.log('1', product_info.allow_non_rating_bidder);
+
     if(product_info.allow_non_rating_bidder == 1 && info.notEnoughVotes == true){
         console.log('dung')
         info.notEnoughVotes = false;
     }
+    const relativeProducts = await productModel.getProductsInSameCate(product_info.id_category,id_product,5);
+    var id_acc = null;
+    if(req.session.passport!== undefined){
+        if(req.session.passport.user !== undefined){
+            id_acc = req.session.passport.user.id ;
+        }
+    };
+    for(var i = 0; i<relativeProducts.length; i++){
+        relativeProducts[i].isWatchList = false;
+        const checkInWatchList = await watchListModel.findById(id_acc,relativeProducts[i].id);
+        if(checkInWatchList !== null){
+            relativeProducts[i].isWatchList = true;
+        }
+    }
+    console.log(relativeProducts);
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',
         id: id_product,
@@ -134,15 +154,18 @@ router.get('/:id', async function (req, res, next) {
         canBid: info.canBid,
         startDate: info.startDate,
         notEnoughVotes: info.notEnoughVotes,
-        isWinner
+        isWinner,
+        relativeProducts
     });
 });
 router.get('/list/:id', async function (req, res) {
     const cateID = req.params.id;
     var id = null;
-    if(req.session.passport.user !== undefined){
-        id = req.session.passport.user.id ;
-    }
+    if(req.session.passport!== undefined){
+        if(req.session.passport.user !== undefined){
+            id = req.session.passport.user.id ;
+        }
+    };
 
     const limit = 9;
     const page = req.query.page || 1;
@@ -154,7 +177,6 @@ router.get('/list/:id', async function (req, res) {
     var result = await productModel.findPagebyCatId(cateID, limit, offset, sort);
 
     result = await productModel.getProductsDisplayByCard(id,result);
-    console.log(result);
     res.render('vwCategory/show-product', {
         page,
         nextPage: paging.nextPage,

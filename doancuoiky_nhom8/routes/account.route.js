@@ -238,10 +238,10 @@ router.get('/rating/:id', async function(req, res){
 	const id = req.params.id;
 	const rate_history = await rateModel.findByID(id);
 	const user = await accountModel.findID(id);
-	if(rate_history === null){
-		res.redirect("/404");
-	}
-	else{
+	// if(rate_history === null){
+	// 	res.redirect("/404");
+	// }
+	// else{
 		const rateHistoryAndProduct = await rateModel.getDetailRate(id);
 		for(var i = 0; i<rateHistoryAndProduct.length;i++){
 			if(rateHistoryAndProduct[i].mark == 1 ){
@@ -258,7 +258,7 @@ router.get('/rating/:id', async function(req, res){
 			fullName:user.name,
 			id_acc: id
 		});
-	}
+	// }
 });
 // router.get('/edit_profile', checkPermission.notLogin, async function(req, res){
 //
