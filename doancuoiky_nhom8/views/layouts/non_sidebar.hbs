@@ -176,7 +176,11 @@
             {{/if}}
             <div class="input-group search-for-md seach_form">
                 <div class="input-group-prepend">
-                    <button class="category-field-temp btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">Tất cả</button>
+                    {{#if this.cateName}}
+                        <button class="category-field-temp btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">{{cateName.name}}</button>
+                    {{else}}
+                        <button class="category-field-temp btn btn-light dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 38px">Tất cả</button>
+                    {{/if}}
                     <div class="dropdown-menu">
                         {{#each lcCategories}}
                             <a category-id="{{id}}" class="parents-category category-field-item-temp dropdown-item font-bold disabled" href="#" style="color: black">{{name}}</a>
@@ -192,8 +196,16 @@
                         <a category-id="0" class="category-field-item-temp dropdown-item" href="#">Tất cả</a>
                     </div>
                 </div>
-                <input type="text" class="search_cateID_temp" name="search_cateID" value="">
-                <input type="text" name="search_param" id="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                {{#if this.cateName}}
+                    <input type="text" class="search_cateID_temp" name="search_cateID" value="{{cateName.id}}">
+                {{else}}
+                    <input type="text" class="search_cateID_temp" name="search_cateID" value="">
+                {{/if}}
+                {{#if param}}
+                    <input type="text" name="search_param" id="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" value="{{param}}">
+                {{else}}
+                    <input type="text" name="search_param" id="search_param" class="search_param_temp form-control" aria-label="Search input with dropdown button" placeholder="Tìm kiếm">
+                {{/if}}
                 <div class="input-group-append">
                     <a href="#" class="search-btn-temp btn btn-dark" style="height: 38px">Search</a>
                 </div>

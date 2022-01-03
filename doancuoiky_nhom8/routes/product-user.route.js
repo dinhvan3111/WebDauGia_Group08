@@ -28,6 +28,9 @@ router.get('/', async function (req, res) {
         }
     };
     result = await productModel.getProductsDisplayByCard(id,result);
+    for(let i =0;i< result.length;i++) {
+        result[i].isNew = productModel.isNew(result[i].real_time_start);
+    }
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,
@@ -45,9 +48,14 @@ router.get('/search_result', async function (req, res) {
     const cateID = req.query.cateID;
     const param = req.query.param;
     var cateName = await productModel.findCateName(cateID);
-    cateName[0].id = cateID;
-    cateName = cateName[0];
-    console.log(cateName);
+    if(cateName[0] === undefined){
+        cateName.id = 0;
+        cateName.name = 'Tất cả';
+    }
+    else{
+        cateName[0].id = cateID;
+        cateName = cateName[0];
+    }
     const limit = 8;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
@@ -65,6 +73,9 @@ router.get('/search_result', async function (req, res) {
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var search_result = await productModel.searchProduct(cateID, param, limit, offset, sort);
     search_result = await productModel.getProductsDisplayByCard(id,search_result);
+    for(let i =0;i< search_result.length;i++) {
+        search_result[i].isNew = productModel.isNew(search_result[i].real_time_start);
+    }
     res.render('vwProduct/product_search_result', {
         layout: 'non_sidebar.hbs',
         page,
@@ -177,6 +188,9 @@ router.get('/list/:id', async function (req, res) {
     var result = await productModel.findPagebyCatId(cateID, limit, offset, sort);
 
     result = await productModel.getProductsDisplayByCard(id,result);
+    for(let i =0;i< result.length;i++) {
+        result[i].isNew = productModel.isNew(result[i].real_time_start);
+    }
     res.render('vwCategory/show-product', {
         page,
         nextPage: paging.nextPage,
@@ -252,6 +266,9 @@ router.get('/watch-list', checkPermission.notLogin, async function (req, res) {
             products.push(product);
         }
         result = await productModel.getProductsDisplayByCard(id,products);
+        for(let i =0;i< result.length;i++) {
+            result[i].isNew = productModel.isNew(result[i].real_time_start);
+        }
         // result = products;
     }
     // const OnWatchList = [];
@@ -291,6 +308,9 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
     if (products !== null) {
 
         result = await productModel.getProductsDisplayByCard(id,products);
+        for(let i =0;i< result.length;i++) {
+            result[i].isNew = productModel.isNew(result[i].real_time_start);
+        }
         // result = products;
     }
     for (var i = 0; i < result.length; i++) {
@@ -327,6 +347,9 @@ router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
     if (products !== null) {
 
         result = await productModel.getProductsDisplayByCard(id,products);
+        for(let i =0;i< result.length;i++) {
+            result[i].isNew = productModel.isNew(result[i].real_time_start);
+        }
         // result = products;
     }
 
@@ -357,6 +380,9 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
     if (products !== null) {
 
         result = await productModel.getProductsDisplayByCard(id,products);
+        for(let i =0;i< result.length;i++) {
+            result[i].isNew = productModel.isNew(result[i].real_time_start);
+        }
         // result = products;
     }
     for (var i = 0; i < result.length; i++) {
@@ -396,6 +422,9 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
     if (products !== null) {
 
         result = await productModel.getProductsDisplayByCard(id,products);
+        for(let i =0;i< result.length;i++) {
+            result[i].isNew = productModel.isNew(result[i].real_time_start);
+        }
         // result = products;
     }
 

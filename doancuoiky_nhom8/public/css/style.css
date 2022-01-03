@@ -179,6 +179,16 @@ nav .search-for-lg {
     margin-bottom: 10px;
 }
 
+.new-product{
+    position: relative;
+    width: 37%;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+    right: 0;
+    top: -7px;
+}
+
 /* Footer */
 footer .copyright {
     background-color: #000;

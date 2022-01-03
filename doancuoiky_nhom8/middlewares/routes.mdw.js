@@ -42,13 +42,7 @@ export default function(app){
 			if(checkInWatchList !== null){
 				productList.nearTimeEnd[i].isWatchList = true;
 			}
-		}
-		for(var i = 0; i<productList.nearTimeEnd.length; i++){
-			productList.nearTimeEnd[i].isWatchList = false;
-			const checkInWatchList = await watchListModel.findById(id,productList.nearTimeEnd[i].id);
-			if(checkInWatchList !== null){
-				productList.nearTimeEnd[i].isWatchList = true;
-			}
+			// productList.nearTimeEnd[i].isNew = productModel.isNew(productList.nearTimeEnd[i].real_time_start);
 		}
 		for(var i = 0; i<productList.mostBid.length; i++){
 			productList.mostBid[i].isWatchList = false;
@@ -56,6 +50,7 @@ export default function(app){
 			if(checkInWatchList !== null){
 				productList.mostBid[i].isWatchList = true;
 			}
+			// productList.mostBid[i].isNew = productModel.isNew(productList.mostBid[i].real_time_start);
 		}
 		for(var i = 0; i<productList.highestPrice.length; i++){
 			productList.highestPrice[i].isWatchList = false;
@@ -63,8 +58,9 @@ export default function(app){
 			if(checkInWatchList !== null){
 				productList.highestPrice[i].isWatchList = true;
 			}
+			// productList.highestPrice[i].isNew = productModel.isNew(productList.highestPrice[i].real_time_start);
 		}
-		console.log(productList);
+		// console.log(productList);
 	    res.render('home', {
 	    	products: productList
 	    });
