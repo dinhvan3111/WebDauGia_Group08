@@ -143,10 +143,11 @@ router.post('/del', checkPermission.isNotAdmin,
 
 		const seller = await accountModel.findID(product.id_seller);
 
+		await biddingModel.deleteBidderBidsOfProduct(id);
 		await productModel.deleteWatchListByProID(id);
 		await productModel.deleteBidHistoryByProID(id);
+		await productModel.deleteRateHistoryByProID(id);
 		await productModel.deleteProduct(id);
-		await biddingModel.deleteBidderBidsOfProduct(id);
 		await upload.deletePath('./public/img/products/' + product.id);
 		await mailing.deletedProduct_sendSeller(seller.email, 
 												seller.name,

@@ -10,7 +10,7 @@ import adminManagementRoute from '../routes/admin_management.route.js';
 import checkVerifiedEmail from './verifiedEmail.mdw.js';
 import adminManagement from "../models/admin_management.model.js";
 import checkLockedAccMdw from './lockedAcc.mdw.js';
-
+import moment from 'moment';
 export default function(app){
 
 	app.post('/logout', function(req, res){
@@ -36,8 +36,18 @@ export default function(app){
 				id = req.session.passport.user.id ;
 			}
 		};
+		if(productList.nearTimeEnd === null){
+			productList.nearTimeEnd = [];
+		}
+		if(productList.mostBid === null){
+			productList.mostBid = [];
+		}
+		if(productList.highestPrice === null){
+			productList.highestPrice = [];
+		}
 		for(var i = 0; i<productList.nearTimeEnd.length; i++){
 			productList.nearTimeEnd[i].isWatchList = false;
+			productList.nearTimeEnd[i].time_start = moment(productList.nearTimeEnd[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
 			const checkInWatchList = await watchListModel.findById(id,productList.nearTimeEnd[i].id);
 			if(checkInWatchList !== null){
 				productList.nearTimeEnd[i].isWatchList = true;
@@ -46,6 +56,7 @@ export default function(app){
 		}
 		for(var i = 0; i<productList.mostBid.length; i++){
 			productList.mostBid[i].isWatchList = false;
+			productList.mostBid[i].time_start = moment(productList.mostBid[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
 			const checkInWatchList = await watchListModel.findById(id,productList.mostBid[i].id);
 			if(checkInWatchList !== null){
 				productList.mostBid[i].isWatchList = true;
@@ -54,13 +65,14 @@ export default function(app){
 		}
 		for(var i = 0; i<productList.highestPrice.length; i++){
 			productList.highestPrice[i].isWatchList = false;
+			productList.highestPrice[i].time_start = moment(productList.highestPrice[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
 			const checkInWatchList = await watchListModel.findById(id,productList.highestPrice[i].id);
 			if(checkInWatchList !== null){
 				productList.highestPrice[i].isWatchList = true;
 			}
 			productList.highestPrice[i].isNew = productModel.isNew(productList.highestPrice[i].real_time_start);
 		}
-		// console.log(productList);
+		console.log(productList.mostBid);
 	    res.render('home', {
 	    	products: productList
 	    });

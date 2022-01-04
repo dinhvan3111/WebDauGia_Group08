@@ -124,8 +124,10 @@ router.get('/:id', async function (req, res, next) {
         bidder_win_now = info.bidHistory[0].bidder_id;
     }
     var id_now = undefined;
-    if(req.session.passport.user !== undefined){
-        id_now = req.session.passport.user.id;
+    if(req.session.passport !== undefined) {
+        if (req.session.passport.user !== undefined) {
+            id_now = req.session.passport.user.id;
+        }
     }
     var isWinner = false;
     if(bidder_win_now === id_now){
@@ -136,20 +138,21 @@ router.get('/:id', async function (req, res, next) {
         console.log('dung')
         info.notEnoughVotes = false;
     }
-    const relativeProducts = await productModel.getProductsInSameCate(product_info.id_category,id_product,5);
+    var relativeProducts = await productModel.getProductsInSameCate(product_info.id_category,id_product,5);
     var id_acc = null;
     if(req.session.passport!== undefined){
         if(req.session.passport.user !== undefined){
             id_acc = req.session.passport.user.id ;
         }
     };
-    for(var i = 0; i<relativeProducts.length; i++){
-        relativeProducts[i].isWatchList = false;
-        const checkInWatchList = await watchListModel.findById(id_acc,relativeProducts[i].id);
-        if(checkInWatchList !== null){
-            relativeProducts[i].isWatchList = true;
-        }
-    }
+    // for(var i = 0; i<relativeProducts.length; i++){
+    //     relativeProducts[i].isWatchList = false;
+    //     const checkInWatchList = await watchListModel.findById(id_acc,relativeProducts[i].id);
+    //     if(checkInWatchList !== null){
+    //         relativeProducts[i].isWatchList = true;
+    //     }
+    // }
+    relativeProducts = await productModel.getProductsDisplayByCard(id_acc,relativeProducts);
     console.log(relativeProducts);
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',

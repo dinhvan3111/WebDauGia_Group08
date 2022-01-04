@@ -9,12 +9,13 @@ const router = express.Router();
 router.get('/', async function (req, res){
 	const list = await categoryModel.getAllParent();
 	var isAdmin = false;
-
-	if(req.session.passport.user!==undefined) {
+	if(req.session.passport!==undefined){
+		if(req.session.passport.user!==undefined) {
 		if (req.session.passport.user.id_permission === 1) {
 			isAdmin = true;
 
 		}
+	}
 	}
 	res.render('vwCategory/index', {
 		layout: 'non_sidebar.hbs',

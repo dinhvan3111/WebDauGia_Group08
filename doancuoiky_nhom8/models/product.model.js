@@ -42,8 +42,8 @@ export default {
             .orderBy('time_end', 'desc')
             .limit(quantity).offset(0);
         for (let i = 0; i < productList.length; i++) {
-            productList[i].time_start = moment(productList[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
-            productList[i].time_end = moment(productList[i].time_end).format('DD/MM/YYYY HH:mm:ss');
+            //productList[i].time_start = moment(productList[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
+            //productList[i].time_end = moment(productList[i].time_end).format('DD/MM/YYYY HH:mm:ss');
             productList[i].img = fileModel.getAllFileName('./public/img/products/'
                 + productList[i].id,
                 productList[i].proID).thumb;
@@ -250,6 +250,14 @@ export default {
         for(let i = 0; i < res.length;i++){
             res[i].real_time_start = moment(res[i].time_start);
             // console.log(res[i].time_start);
+            res[i].bidHistory = await this.getBidHistory(res[i].id);
+            var priceHolder = await this.findPriceHolder(res[i].id);
+            if (priceHolder !== null) {
+                res[i].priceHolder = priceHolder.name;
+            }
+            else{
+                res[i].priceHolder = "Chưa có";
+            }
         }
         return res;
     },
@@ -260,6 +268,7 @@ export default {
                                          id,
                                          name,
                                          price,
+                                        buy_now_price,
                                          time_start,
                                          time_end
                                   from products p
@@ -271,6 +280,11 @@ export default {
         for(let i = 0; i < res[0].length;i++){
             res[0][i].real_time_start = moment(res[0][i].time_start);
             // console.log(res[0][i].time_start);
+            res[0][i].bidHistory = await this.getBidHistory(res[0][i].id);
+            var priceHolder = await this.findPriceHolder(res[0][i].id);
+            if (priceHolder !== null) {
+                res[0][i].priceHolder = priceHolder.name;
+            }
         }
         return res[0];
     },
@@ -284,6 +298,14 @@ export default {
         for(let i = 0; i < res.length;i++){
             res[i].real_time_start = moment(res[i].time_start);
             // console.log(res[i].time_start);
+            res[i].bidHistory = await this.getBidHistory(res[i].id);
+            var priceHolder = await this.findPriceHolder(res[i].id);
+            if (priceHolder !== null) {
+                res[i].priceHolder = priceHolder.name;
+            }
+            else{
+                res[i].priceHolder = "Chưa có";
+            }
         }
         return res;
     },
@@ -536,6 +558,9 @@ export default {
     },
     async deleteBidHistoryByProID(id_product) {
         return await db('bid_history').where({id_product: id_product}).del();
+    },
+    async deleteRateHistoryByProID(id_product) {
+        return await db('rate_history').where({id_product: id_product}).del();
     },
     async deleteWatchListByProID(id_product) {
         return await db('watch_list').where({id_product: id_product}).del();
