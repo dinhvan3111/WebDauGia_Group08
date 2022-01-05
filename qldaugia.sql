@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th1 04, 2022 lúc 08:00 AM
--- Phiên bản máy phục vụ: 10.4.21-MariaDB
--- Phiên bản PHP: 8.0.12
+-- Host: 127.0.0.1
+-- Generation Time: Jan 05, 2022 at 09:50 AM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,14 +17,26 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+
+
+
+
+CREATE DATABASE `qldaugia` CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `qldaugia`;
+
+
+
+
+
+
 --
--- Cơ sở dữ liệu: `qldaugia`
+-- Database: `qldaugia`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `accounts`
+-- Table structure for table `accounts`
 --
 
 CREATE TABLE `accounts` (
@@ -40,7 +52,7 @@ CREATE TABLE `accounts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `accounts`
+-- Dumping data for table `accounts`
 --
 
 INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email`, `dob`, `addr`, `is_locked`) VALUES
@@ -61,7 +73,7 @@ INSERT INTO `accounts` (`id`, `username`, `pwd`, `id_permission`, `name`, `email
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `bid_history`
+-- Table structure for table `bid_history`
 --
 
 CREATE TABLE `bid_history` (
@@ -73,7 +85,7 @@ CREATE TABLE `bid_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `bid_history`
+-- Dumping data for table `bid_history`
 --
 
 INSERT INTO `bid_history` (`id`, `time`, `id_acc`, `id_product`, `in_bid_price`) VALUES
@@ -148,12 +160,52 @@ INSERT INTO `bid_history` (`id`, `time`, `id_acc`, `id_product`, `in_bid_price`)
 (0000000161, '2022-01-04 13:25:49', 0000000051, 0000000004, '42000000'),
 (0000000162, '2022-01-04 13:26:10', 0000000043, 0000000004, '44000000'),
 (0000000163, '2022-01-04 13:26:22', 0000000051, 0000000004, '44000000'),
-(0000000164, '2022-01-04 13:26:22', 0000000043, 0000000004, '46000000');
+(0000000164, '2022-01-04 13:26:22', 0000000043, 0000000004, '46000000'),
+(0000000165, '2022-01-05 13:20:16', 0000000046, 0000000013, '200000'),
+(0000000166, '2022-01-05 13:25:51', 0000000044, 0000000013, '400000'),
+(0000000167, '2022-01-05 13:25:51', 0000000046, 0000000013, '500000'),
+(0000000168, '2022-01-05 13:26:21', 0000000044, 0000000013, '1000000'),
+(0000000169, '2022-01-05 13:26:21', 0000000046, 0000000013, '1100000'),
+(0000000170, '2022-01-05 15:00:08', 0000000046, 0000000014, '100000'),
+(0000000171, '2022-01-05 15:01:33', 0000000044, 0000000014, '200000'),
+(0000000172, '2022-01-05 15:01:33', 0000000046, 0000000014, '210000'),
+(0000000173, '2022-01-05 15:02:04', 0000000044, 0000000014, '300000'),
+(0000000174, '2022-01-05 15:02:04', 0000000046, 0000000014, '310000'),
+(0000000175, '2022-01-05 15:09:34', 0000000044, 0000000015, '100000'),
+(0000000176, '2022-01-05 15:10:09', 0000000046, 0000000015, '200000'),
+(0000000177, '2022-01-05 15:10:09', 0000000044, 0000000015, '210000'),
+(0000000178, '2022-01-05 15:10:19', 0000000046, 0000000015, '500000'),
+(0000000179, '2022-01-05 15:10:19', 0000000044, 0000000015, '510000'),
+(0000000180, '2022-01-05 15:15:44', 0000000046, 0000000016, '100000'),
+(0000000181, '2022-01-05 15:16:27', 0000000044, 0000000016, '200000'),
+(0000000182, '2022-01-05 15:16:27', 0000000046, 0000000016, '210000'),
+(0000000183, '2022-01-05 15:16:44', 0000000044, 0000000016, '400000'),
+(0000000184, '2022-01-05 15:16:44', 0000000046, 0000000016, '410000'),
+(0000000185, '2022-01-05 15:24:34', 0000000044, 0000000017, '100000'),
+(0000000186, '2022-01-05 15:25:10', 0000000044, 0000000018, '100000'),
+(0000000187, '2022-01-05 15:28:13', 0000000046, 0000000017, '200000'),
+(0000000188, '2022-01-05 15:28:13', 0000000044, 0000000017, '210000'),
+(0000000189, '2022-01-05 15:29:20', 0000000046, 0000000017, '400000'),
+(0000000190, '2022-01-05 15:29:20', 0000000044, 0000000017, '410000'),
+(0000000191, '2022-01-05 15:32:23', 0000000046, 0000000018, '200000'),
+(0000000192, '2022-01-05 15:32:24', 0000000044, 0000000018, '210000'),
+(0000000193, '2022-01-05 15:35:30', 0000000046, 0000000018, '400000'),
+(0000000194, '2022-01-05 15:35:30', 0000000044, 0000000018, '410000'),
+(0000000195, '2022-01-05 15:46:56', 0000000046, 0000000019, '100000'),
+(0000000196, '2022-01-05 15:47:18', 0000000046, 0000000020, '100000'),
+(0000000197, '2022-01-05 15:48:11', 0000000044, 0000000020, '400000'),
+(0000000198, '2022-01-05 15:48:11', 0000000046, 0000000020, '500000'),
+(0000000199, '2022-01-05 15:48:23', 0000000044, 0000000019, '500000'),
+(0000000200, '2022-01-05 15:48:23', 0000000046, 0000000019, '510000'),
+(0000000201, '2022-01-05 15:48:32', 0000000044, 0000000020, '800000'),
+(0000000202, '2022-01-05 15:48:32', 0000000046, 0000000020, '900000'),
+(0000000203, '2022-01-05 15:48:42', 0000000044, 0000000019, '1000000'),
+(0000000204, '2022-01-05 15:48:42', 0000000046, 0000000019, '1010000');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `bid_price`
+-- Table structure for table `bid_price`
 --
 
 CREATE TABLE `bid_price` (
@@ -164,7 +216,7 @@ CREATE TABLE `bid_price` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `bid_price`
+-- Dumping data for table `bid_price`
 --
 
 INSERT INTO `bid_price` (`id_acc`, `id_product`, `time`, `max_bid_price`) VALUES
@@ -176,6 +228,14 @@ INSERT INTO `bid_price` (`id_acc`, `id_product`, `time`, `max_bid_price`) VALUES
 (0000000043, 0000000010, '2022-01-04 06:22:32', '52000000'),
 (0000000043, 0000000012, '2022-01-04 06:24:01', '36000000'),
 (0000000044, 0000000009, '2022-01-04 05:53:49', '23000000'),
+(0000000044, 0000000015, '2022-01-05 08:09:34', '4900000'),
+(0000000044, 0000000017, '2022-01-05 08:24:34', '1000000'),
+(0000000044, 0000000018, '2022-01-05 08:25:09', '2000000'),
+(0000000046, 0000000013, '2022-01-05 06:20:16', '1800000'),
+(0000000046, 0000000014, '2022-01-05 08:00:08', '4900000'),
+(0000000046, 0000000016, '2022-01-05 08:15:44', '2000000'),
+(0000000046, 0000000019, '2022-01-05 08:46:56', '5000000'),
+(0000000046, 0000000020, '2022-01-05 08:47:18', '4000000'),
 (0000000051, 0000000001, '2022-01-04 06:00:53', '31000000'),
 (0000000051, 0000000003, '2022-01-04 06:14:38', '23000000'),
 (0000000051, 0000000004, '2022-01-04 06:25:16', '42000000'),
@@ -192,7 +252,7 @@ INSERT INTO `bid_price` (`id_acc`, `id_product`, `time`, `max_bid_price`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `categories`
+-- Table structure for table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -202,7 +262,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `categories`
+-- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
@@ -211,12 +271,17 @@ INSERT INTO `categories` (`id`, `name`, `parent_id`) VALUES
 (0000000003, 'Máy tính xách tay', 0000000001),
 (0000000004, 'Nội thất', NULL),
 (0000000005, 'Đồng hồ thông minh', 0000000001),
-(0000000006, 'Bàn ghế', 0000000004);
+(0000000006, 'Bàn ghế', 0000000004),
+(0000000007, 'Sách, Tiểu thuyết', NULL),
+(0000000012, 'Sách khoa học', 0000000007),
+(0000000013, 'Sách trinh thám', 0000000007),
+(0000000014, 'Sách hành động', 0000000007),
+(0000000015, 'Tai nghe', 0000000001);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `change_pwd`
+-- Table structure for table `change_pwd`
 --
 
 CREATE TABLE `change_pwd` (
@@ -226,7 +291,7 @@ CREATE TABLE `change_pwd` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `change_pwd`
+-- Dumping data for table `change_pwd`
 --
 
 INSERT INTO `change_pwd` (`id_acc`, `token`, `expired_date`) VALUES
@@ -235,7 +300,7 @@ INSERT INTO `change_pwd` (`id_acc`, `token`, `expired_date`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `ignore_bidder`
+-- Table structure for table `ignore_bidder`
 --
 
 CREATE TABLE `ignore_bidder` (
@@ -246,7 +311,7 @@ CREATE TABLE `ignore_bidder` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `not_verified_email`
+-- Table structure for table `not_verified_email`
 --
 
 CREATE TABLE `not_verified_email` (
@@ -258,7 +323,7 @@ CREATE TABLE `not_verified_email` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -279,7 +344,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `step_price`, `buy_now_price`, `time_start`, `time_end`, `description`, `auto_renew`, `id_category`, `id_win_bidder`, `id_seller`, `not_sold`, `allow_non_rating_bidder`) VALUES
@@ -294,12 +359,20 @@ INSERT INTO `products` (`id`, `name`, `price`, `step_price`, `buy_now_price`, `t
 (0000000009, 'Laptop Dell Inspiron 7400 i5 1135G7/16GB/512GB/2GB MX350/Win10 (N4I5134W)', '26000000', '1000000', '40000000', '2022-01-04 12:00:00', '2022-01-12 11:40:00', '<p>Mang đến kiểu d&aacute;ng sang trọng v&agrave; đẳng cấp, laptop <strong>Dell Inspiron 7400 i5 1135G7 (N4I5134W)</strong> với sức mạnh hiệu năng mạnh mẽ từ chip Intel Gen 11, l&agrave; cộng sự l&yacute; tưởng ở cả c&ocirc;ng việc v&agrave; giải tr&iacute;.<br />Tận hưởng khung h&igrave;nh ch&acirc;n thật c&ugrave;ng &acirc;m thanh sống động<br />M&agrave;n h&igrave;nh 14.5 inch c&ugrave;ng độ ph&acirc;n giải QHD+ (2560 x 1600) cho h&igrave;nh ảnh hiển thị ch&acirc;n thật, r&otilde; n&eacute;t ở cả trong nh&agrave; hay ngo&agrave;i trời nhờ độ s&aacute;ng m&agrave;n h&igrave;nh 300 nits.</p>\r\n<p>Hiển thị một c&aacute;ch ch&iacute;nh x&aacute;c v&agrave; sắc n&eacute;t c&aacute;c chi tiết của h&igrave;nh ảnh nhờ m&agrave;n h&igrave;nh 100% sRGB, đồng thời gi&uacute;p hạn chế tối đa sự kh&aacute;c biệt giữa h&igrave;nh ảnh hiển thị với thực tế.<br />Khung h&igrave;nh được trải rộng l&ecirc;n đến 178 độ nhờ tấm nền IPS mang đến cho bạn h&igrave;nh ảnh sống động d&ugrave; kh&ocirc;ng ngồi trực diện m&agrave; kh&ocirc;ng lo mỏi mắt hay l&oacute;a mắt do ảnh hưởng xấu từ &aacute;nh s&aacute;ng xanh độc hại nhờ c&ocirc;ng nghệ chống ch&oacute;i Anti Glare.</p>', 0, 0000000003, 0000000043, 0000000053, 1, 1),
 (0000000010, 'Điện thoại Samsung Galaxy Z Fold3 5G 512GB', '52000000', '2000000', '90000000', '2022-01-04 12:00:00', '2022-01-27 11:41:00', '<p><strong>Galaxy Z Fold3 5G</strong> đ&aacute;nh dấu bước tiến mới của Samsung trong ph&acirc;n kh&uacute;c điện thoại gập cao cấp khi được cải tiến về độ bền c&ugrave;ng những n&acirc;ng cấp đ&aacute;ng gi&aacute; về cấu h&igrave;nh hiệu năng, hứa hẹn sẽ mang đến trải nghiệm sử dụng đột ph&aacute; cho người d&ugrave;ng.</p>\r\n<p><br /><strong>Đột ph&aacute; thiết kế m&agrave;n h&igrave;nh gập</strong><br />Đầu ti&ecirc;n, khung viền Galaxy Z Fold3 được ho&agrave;n thiện bằng chất liệu Armor Aluminum cao cấp nhất từ trước đến giờ nhằm tăng cường được độ bền, m&agrave; vẫn đảm bảo được trọng lượng c&acirc;n đối đem tới cảm gi&aacute;c v&ocirc; c&ugrave;ng chắc chắn v&agrave; cao cấp.&nbsp;</p>\r\n<p><br /><strong>Cụm camera đỉnh cao c&ocirc;ng nghệ</strong><br />Kế đ&oacute;, cụm camera tr&ecirc;n Galaxy Z Fold3 bao gồm 3 ống k&iacute;nh: Camera g&oacute;c rộng, camera g&oacute;c si&ecirc;u rộng, camera tele t&iacute;ch hợp chống rung OIS v&agrave; đều sở hữu độ ph&acirc;n giải 12 MP đặt trong cụm m&ocirc;-đun h&igrave;nh chữ nhật được bo tr&ograve;n 2 đầu tr&ocirc;ng rất thon gọn v&agrave; đầy tinh tế.</p>', 0, 0000000002, 0000000043, 0000000053, 1, 0),
 (0000000011, 'Điện thoại Xiaomi 11T 5G 128GB', '12000000', '500000', '20000000', '2022-01-04 12:00:00', '2022-01-13 11:43:00', '<p><strong>Xiaomi 11T</strong> đầy nổi bật với thiết kế v&ocirc; c&ugrave;ng trẻ trung, m&agrave;n h&igrave;nh AMOLED, bộ 3 camera sắc n&eacute;t v&agrave; vi&ecirc;n pin lớn đ&acirc;y sẽ l&agrave; mẫu smartphone của Xiaomi thỏa m&atilde;n mọi nhu cầu giải tr&iacute;, l&agrave;m việc v&agrave; l&agrave; niềm đam m&ecirc; s&aacute;ng tạo của bạn.&nbsp;</p>\r\n<p><br /><strong>Camera 108 MP si&ecirc;u sắc n&eacute;t, l&agrave;m chủ mọi khung h&igrave;nh</strong><br />Xiaomi trang bị cho 11T 3 camera sau gồm camera ch&iacute;nh độ ph&acirc;n giải 108 MP, camera g&oacute;c rộng 8 MP 120 độ v&agrave; camera telemacro 5 MP c&ugrave;ng hệ thống phần cứng tối t&acirc;n được trang bị b&ecirc;n trong cực kỳ ấn tượng. Chỉ cần giơ m&aacute;y l&ecirc;n chụp l&agrave; bạn đ&atilde; c&oacute; những bức ảnh sắc n&eacute;t đ&aacute;ng kinh ngạc, khả năng thu ph&oacute;ng cũng cực tốt, cho bạn chụp được r&otilde; từng chi tiết d&ugrave; đối tượng ở kh&aacute; xa.</p>\r\n<p><br /><strong>Chiến game cực &ldquo;mượt&rdquo; với MediaTek Dimensity 1200</strong><br />MediaTek Dimensity 1200 8 nh&acirc;n được sản xuất dựa tr&ecirc;n tiến tr&igrave;nh 6 nm đạt mức xung nhịp tối đa l&agrave; 3 GHz, một sức mạnh cực khủng cho chiếc điện thoại đủ để bạn chiến mọi tựa game tr&ecirc;n di động v&agrave; tiết kiệm năng lượng hơn so với thế hệ tiền nhiệm trước đ&oacute;.&nbsp;</p>', 0, 0000000002, 0000000052, 0000000053, 1, 1),
-(0000000012, 'iPhone 13 Pro Max 256GB Chính hãng', '37000000', '1000000', '60000000', '2022-01-04 11:50:00', '2022-01-12 11:44:00', '<p><strong>Mua iPhone 13 Pro Max 256GB</strong> là lựa chọn t&ocirc;́t nh&acirc;́t ở thời đi&ecirc;̉m này bởi đ&acirc;y được xem là bản n&acirc;ng c&acirc;́p tuy&ecirc;̣t vời của phi&ecirc;n bản iPhone 12 Pro Max. Sự xu&acirc;́t hi&ecirc;̣n của chip A15 Bionic, màn hình ProMotion 120Hz, dung lượng pin lớn hơn....chắc chắn sẽ mang đ&ecirc;́n trải nghi&ecirc;̣m hoàn hảo nh&acirc;́t.<br />Thi&ecirc;́t k&ecirc;́ sang trọng đ&ecirc;́n từng chi ti&ecirc;́t<br />Thi&ecirc;́t k&ecirc;́ <strong>iPhone 13 Pro Max 256GB</strong> tr&ocirc;ng v&acirc;̃n gi&ocirc;́ng với <strong>iPhone 12 Pro Max</strong>. Đi&ecirc;̣n thoại v&acirc;̃n được hoàn thi&ecirc;̣n từ mặt lưng kính phủ mờ k&ecirc;́t hợp với khung vi&ecirc;̀n thép kh&ocirc;ng gỉ được làm phẳng mang đ&ecirc;́n sự nam tính và mạnh mẽ. Đ&ecirc;̉ thi&ecirc;́t bị trở n&ecirc;n hoàn hảo hơn, Apple cũng đã thực hi&ecirc;̣n m&ocirc;̣t vài tinh nhỏ.<br />Ph&acirc;̀n notch tai thỏ tr&ecirc;n <strong>iPhone 13 Pro Max</strong> giá rẻ giờ đ&acirc;y đã được thu hẹp nhỏ hơn th&ecirc;́ h&ecirc;̣ trước 20%. M&ocirc;-đun camera sau cũng có kích thước lớn và nh&ocirc; ra nhi&ecirc;̀u hơn. Những chi ti&ecirc;́t này k&ecirc;́t hợp với vi&ecirc;̣c trang bị dung lượng pin lớn đã khi&ecirc;́n trọng lượng đi&ecirc;̣n thoại nặng và dày hơn khá nhi&ecirc;̀u. Mua <strong>iPhone 13 Pro Max 256GB</strong> người dùng sẽ có các tùy chòn màu sắc g&ocirc;̀m: Xám, bạc, vàng và xanh nhạt.</p>\r\n<p><strong>Màn hình ProMotion 120Hz</strong><br />Apple ti&ecirc;́p tục trang bị cho màn hình<strong> iPhone 13 Pro Max 256GB</strong> kích thước 6.7 inch có đ&ocirc;̣ ph&acirc;n giải 1284 x 2778 Pixel. Đi&ecirc;̉m đáng chú ý nh&acirc;́t chính là đi&ecirc;̣n thoại đã được trang bị t&acirc;̀n s&ocirc;́ quét 120Hz. Đ&acirc;y là tính năng mà r&acirc;́t nhi&ecirc;̀u người h&acirc;m m&ocirc;̣ đã chờ đợi, và họ đã r&acirc;́t th&acirc;́t vọng khi nó lỡ hẹn tr&ecirc;n iPhone 12 Pro Max.</p>', 0, 0000000002, 0000000052, 0000000053, 1, 0);
+(0000000012, 'iPhone 13 Pro Max 256GB Chính hãng', '37000000', '1000000', '60000000', '2022-01-04 11:50:00', '2022-01-12 11:44:00', '<p><strong>Mua iPhone 13 Pro Max 256GB</strong> là lựa chọn t&ocirc;́t nh&acirc;́t ở thời đi&ecirc;̉m này bởi đ&acirc;y được xem là bản n&acirc;ng c&acirc;́p tuy&ecirc;̣t vời của phi&ecirc;n bản iPhone 12 Pro Max. Sự xu&acirc;́t hi&ecirc;̣n của chip A15 Bionic, màn hình ProMotion 120Hz, dung lượng pin lớn hơn....chắc chắn sẽ mang đ&ecirc;́n trải nghi&ecirc;̣m hoàn hảo nh&acirc;́t.<br />Thi&ecirc;́t k&ecirc;́ sang trọng đ&ecirc;́n từng chi ti&ecirc;́t<br />Thi&ecirc;́t k&ecirc;́ <strong>iPhone 13 Pro Max 256GB</strong> tr&ocirc;ng v&acirc;̃n gi&ocirc;́ng với <strong>iPhone 12 Pro Max</strong>. Đi&ecirc;̣n thoại v&acirc;̃n được hoàn thi&ecirc;̣n từ mặt lưng kính phủ mờ k&ecirc;́t hợp với khung vi&ecirc;̀n thép kh&ocirc;ng gỉ được làm phẳng mang đ&ecirc;́n sự nam tính và mạnh mẽ. Đ&ecirc;̉ thi&ecirc;́t bị trở n&ecirc;n hoàn hảo hơn, Apple cũng đã thực hi&ecirc;̣n m&ocirc;̣t vài tinh nhỏ.<br />Ph&acirc;̀n notch tai thỏ tr&ecirc;n <strong>iPhone 13 Pro Max</strong> giá rẻ giờ đ&acirc;y đã được thu hẹp nhỏ hơn th&ecirc;́ h&ecirc;̣ trước 20%. M&ocirc;-đun camera sau cũng có kích thước lớn và nh&ocirc; ra nhi&ecirc;̀u hơn. Những chi ti&ecirc;́t này k&ecirc;́t hợp với vi&ecirc;̣c trang bị dung lượng pin lớn đã khi&ecirc;́n trọng lượng đi&ecirc;̣n thoại nặng và dày hơn khá nhi&ecirc;̀u. Mua <strong>iPhone 13 Pro Max 256GB</strong> người dùng sẽ có các tùy chòn màu sắc g&ocirc;̀m: Xám, bạc, vàng và xanh nhạt.</p>\r\n<p><strong>Màn hình ProMotion 120Hz</strong><br />Apple ti&ecirc;́p tục trang bị cho màn hình<strong> iPhone 13 Pro Max 256GB</strong> kích thước 6.7 inch có đ&ocirc;̣ ph&acirc;n giải 1284 x 2778 Pixel. Đi&ecirc;̉m đáng chú ý nh&acirc;́t chính là đi&ecirc;̣n thoại đã được trang bị t&acirc;̀n s&ocirc;́ quét 120Hz. Đ&acirc;y là tính năng mà r&acirc;́t nhi&ecirc;̀u người h&acirc;m m&ocirc;̣ đã chờ đợi, và họ đã r&acirc;́t th&acirc;́t vọng khi nó lỡ hẹn tr&ecirc;n iPhone 12 Pro Max.</p>', 0, 0000000002, 0000000052, 0000000053, 1, 0),
+(0000000013, 'Sách The Gene: An Intimate History cũ', '1100000', '100000', '2000000', '2022-01-05 11:52:00', '2022-01-16 11:52:00', '<p><em>The book&rsquo;s author, Siddhartha Mukherjee, decided to write it largely because of a huge advance that had received far less attention than it deserved: Biochemist Jennifer Doudna and microbiologist Emmanuelle Charpentier&rsquo;s discovery of &ldquo;genetic scissors&rdquo; that allow scientists to cut any DNA sequence with incredible precision. Doudna and Charpentier&rsquo;s discovery earned them the 2020 Nobel Prize in Chemistry.</em></p>', 0, 0000000012, 0000000046, 0000000043, 1, 1),
+(0000000014, 'Sách A Thousand Brains: A New Theory of Intelligence cũ', '310000', '10000', '5000000', '2022-01-05 14:59:00', '2022-01-14 16:00:00', '<p><span style=\"color: #000000;\">If Hawkins is right that the only viable path to artificial general intelligence is by replicating the workings of the neocortex, that means it&rsquo;s unlikely that intelligent machines will supplant or subjugate the human race&mdash;the kind of thing you see in classic sci-fi movies like&nbsp;<em>The Matrix</em>&nbsp;and&nbsp;<em>The Terminator</em>. That&rsquo;s because the neocortex operates differently from parts of the brain that evolved much earlier and that drive our primal emotions and instincts.</span></p>\r\n<p><span style=\"color: #e03e2d;\"><strong>&ldquo;Intelligent machines need to have a model of the world and the flexibility of behavior that comes from that model, but they don&rsquo;t need to have human-like instincts for survival and procreation.&rdquo;</strong></span></p>', 0, 0000000012, 0000000046, 0000000043, 1, 1),
+(0000000015, 'Sách Klara and the Sun, by Kazuo Ishiguro cũ', '510000', '10000', '5000000', '2022-01-05 15:08:00', '2022-01-13 16:00:00', '<p><strong><em><a href=\"https://www.gatesnotes.com/Books/Klara-and-the-Sun\" target=\"_blank\" rel=\"noopener\">Klara and the Sun</a></em></strong><em>,&nbsp;<a href=\"https://www.gatesnotes.com/Books/Klara-and-the-Sun\" target=\"_blank\" rel=\"noopener\">by Kazuo Ishiguro</a>.&nbsp;</em>I love a good robot story, and Ishiguro&rsquo;s novel about an &ldquo;artificial friend&rdquo; to a sick young girl is no exception. Although it takes place in a dystopian future, the robots aren&rsquo;t a force for evil. Instead, they serve as companions to keep people company. This book made me think about what life with super intelligent robots might look like&mdash;and whether we&rsquo;ll treat these kinds of machines as pieces of technology or as something more.</p>', 0, 0000000012, 0000000044, 0000000043, 1, 1),
+(0000000016, 'Sách Hamnet, by Maggie O’Farrell cũ', '410000', '10000', '5000000', '2022-01-05 15:14:00', '2022-01-13 18:00:00', '<p><strong><em><a href=\"https://www.gatesnotes.com/Books/Hamnet\" target=\"_blank\" rel=\"noopener\">Hamnet</a></em></strong><em>,&nbsp;<a href=\"https://www.gatesnotes.com/Books/Hamnet\" target=\"_blank\" rel=\"noopener\">by Maggie O&rsquo;Farrell</a>.&nbsp;</em>If you&rsquo;re a Shakespeare fan, you&rsquo;ll love this moving novel about how his personal life might&rsquo;ve influenced the writing of one of his most famous plays. O&rsquo;Farrell has built her story on two facts we know to be true about &ldquo;The Bard&rdquo;: his son Hamnet died at the age of 11, and a couple years later, Shakespeare wrote a tragedy called&nbsp;<em>Hamlet</em>. I especially enjoyed reading about his wife, Anne, who is imagined here as an almost supernatural figure.</p>', 0, 0000000012, 0000000046, 0000000043, 1, 1),
+(0000000017, 'Sách Project Hail Mary, by Andy Weir cũ', '410000', '10000', '5000000', '2022-01-05 15:21:00', '2022-01-15 16:00:00', '<p><strong><em><a href=\"https://www.gatesnotes.com/Books/Project-Hail-Mary\" target=\"_blank\" rel=\"noopener\">Project Hail Mary</a></em></strong><em>,&nbsp;<a href=\"https://www.gatesnotes.com/Books/Project-Hail-Mary\" target=\"_blank\" rel=\"noopener\">by Andy Weir</a>.&nbsp;</em>Like most people, I was first introduced to Weir&rsquo;s writing through&nbsp;<em>The Martian</em>. His latest novel is a wild tale about a high school science teacher who wakes up in a different star system with no memory of how he got there. The rest of the story is all about how he uses science and engineering to save the day. It&rsquo;s a fun read, and I finished the whole thing in one weekend.</p>', 0, 0000000012, 0000000044, 0000000043, 1, 1),
+(0000000018, 'Sách The Overstory by Richard Powers cũ', '410000', '10000', '5000000', '2022-01-05 15:25:00', '2022-01-14 18:00:00', '<p>In&nbsp;<em>The Overstory</em>&nbsp;by Richard Powers, Mimi Ma arrives at her office one morning to find that the woods she can see from her desk have been cut down. Powers describes the moment the &ldquo;outrage floods into her, the sneakiness of man, a sense of injustice larger than her whole life, the old loss that will never, ever be answered.&rdquo; This reaction starts her on a path to become a radical activist willing to throw her entire life away to protect trees.</p>', 0, 0000000012, 0000000044, 0000000043, 1, 1),
+(0000000019, 'Tai nghe True Wireless Audio-Techncia ATH-CK3TW cũ', '1010000', '10000', '20000000', '2022-01-05 15:45:00', '2022-01-13 17:00:00', '<h2>Tai nghe True Wireless Audio-Techncia ATH-CK3TW &nbsp;ch&iacute;nh h&atilde;ng</h2>\r\n<p><strong><a href=\"https://tainghe.com.vn/tai-nghe-true-wireless-audio-techncia-ath-ck3tw.html\" target=\"_blank\" rel=\"noopener\">Audio-Technica ATH-CK3TW</a></strong>&nbsp;l&agrave; một trong những chiếc tai nghe hiếm hoi được trang bị True Wireless Stereo Plus của Qualcomm. Với gi&aacute; b&aacute;n chỉ 2,5 triệu đồng,&nbsp;<strong>ATH-CK3TW</strong>&nbsp;hứa hẹn sẽ l&agrave;m mưa l&agrave;m gi&oacute; trong thị trường tai nghe kh&ocirc;ng d&acirc;y vốn đang rất chật chội hiện nay.</p>', 0, 0000000015, 0000000046, 0000000043, 1, 1),
+(0000000020, 'Tai nghe True Wireless Sabbat E12 cũ', '900000', '100000', '6000000', '2022-01-05 15:47:00', '2022-01-15 18:00:00', '<h2><strong>Tai nghe True Wireless Sabbat E12</strong></h2>\r\n<p><strong>Sabbat</strong> l&agrave; một h&atilde;ng &acirc;m thanh mới lạ với phần lớn những người chơi &acirc;m thanh, h&atilde;ng nổi tiếng với những mẫu tai nghe true wireless thời thượng. Một trong số đ&oacute; l&agrave; mẫu <strong>tai nghe true wireless Sabbat E12</strong> được rất nhiều người d&ugrave;ng săn đ&oacute;n.</p>\r\n<h2><strong>Sabbat E12 đ&oacute;ng hộp</strong></h2>\r\n<p>Tuy l&agrave; một sản phẩm gi&aacute; rẻ, tuy nhi&ecirc;n <strong>Sabbat E12</strong> vẫn được h&atilde;ng chăm ch&uacute;t với phần đ&oacute;ng hộp đẹp mắt v&agrave; cứng c&aacute;p. B&ecirc;n ngo&agrave;i vỏ hộp, ch&uacute;ng ta sẽ chỉ c&oacute; một v&agrave;i đường dẫn c&aacute;ch t&acirc;n hiện đại c&ugrave;ng với t&ecirc;n sản phẩm v&agrave; một v&agrave;i th&ocirc;ng tin kh&aacute; cơ bản.</p>', 0, 0000000015, 0000000046, 0000000043, 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `rate_history`
+-- Table structure for table `rate_history`
 --
 
 CREATE TABLE `rate_history` (
@@ -313,7 +386,7 @@ CREATE TABLE `rate_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `rate_history`
+-- Dumping data for table `rate_history`
 --
 
 INSERT INTO `rate_history` (`id`, `id_assessor`, `id_acc`, `mark`, `time`, `comment`, `id_product`) VALUES
@@ -327,7 +400,7 @@ INSERT INTO `rate_history` (`id`, `id_assessor`, `id_acc`, `mark`, `time`, `comm
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `request_upgrade`
+-- Table structure for table `request_upgrade`
 --
 
 CREATE TABLE `request_upgrade` (
@@ -335,7 +408,7 @@ CREATE TABLE `request_upgrade` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `request_upgrade`
+-- Dumping data for table `request_upgrade`
 --
 
 INSERT INTO `request_upgrade` (`id_acc`) VALUES
@@ -344,7 +417,7 @@ INSERT INTO `request_upgrade` (`id_acc`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `seller_expired_day`
+-- Table structure for table `seller_expired_day`
 --
 
 CREATE TABLE `seller_expired_day` (
@@ -353,7 +426,7 @@ CREATE TABLE `seller_expired_day` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `seller_expired_day`
+-- Dumping data for table `seller_expired_day`
 --
 
 INSERT INTO `seller_expired_day` (`id`, `time`) VALUES
@@ -363,7 +436,7 @@ INSERT INTO `seller_expired_day` (`id`, `time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `sessions`
+-- Table structure for table `sessions`
 --
 
 CREATE TABLE `sessions` (
@@ -373,22 +446,18 @@ CREATE TABLE `sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `sessions`
+-- Dumping data for table `sessions`
 --
 
 INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('FDnDaDr1XLG_lAKclJUZI-HI7DARfIZ7', 1641363972, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":43,\"username\":\"ab\",\"id_permission\":1,\"name\":\"Hai Tuan Vu\",\"email\":\"vutuanhaigk@gmail.com\",\"dob\":\"30-11-2021\",\"addr\":\"ab\",\"is_locked\":0}}}'),
-('HEgnOHfl3hX4iiHXZwCw5F0MXYcZQo5K', 1641362030, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":44,\"username\":\"abc\",\"id_permission\":2,\"name\":\"Hai Tuan Vu\",\"email\":\"drl19hcmus@gmail.com\",\"dob\":\"30-11-1899\",\"addr\":\"abc\",\"is_locked\":0}}}'),
-('MCkh7TMpH2QoNb_mXAVNtSUj07kn9ARM', 1641363954, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":53,\"email\":\"tuantran.280801@gmail.com\",\"name\":\"Tuan Tran\",\"id_in_third_party\":\"112099082612252636766\",\"provider\":\"google\",\"id_permission\":2},\"id_permission\":2}}'),
-('NATf_1jZY2HJoCz7LSVyg3v5inEBTOVz', 1641365960, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":51,\"username\":\"tushimon\",\"id_permission\":1,\"name\":\"Nguyễn Trần Ngọc Tú\",\"email\":\"ngoctu.280801@gmail.com\",\"dob\":\"28-08-2001\",\"addr\":\"Cần Đước, Long An\",\"is_locked\":0}}}'),
-('XUsqu7_PQwO0gMn7zYwgVrSQsuGMUuQJ', 1641357509, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":52,\"email\":\"ntntu19@clc.fitus.edu.vn\",\"name\":\"Tú Nguyễn Trần Ngọc\",\"id_in_third_party\":\"110765543678667073301\",\"provider\":\"google\",\"id_permission\":2},\"id_permission\":2}}'),
-('Z1aYlTB57sQNTqB5Vvrm8NrPA3bA3Oh4', 1641363929, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":52,\"email\":\"ntntu19@clc.fitus.edu.vn\",\"name\":\"Tú Nguyễn Trần Ngọc\",\"id_in_third_party\":\"110765543678667073301\",\"provider\":\"google\",\"id_permission\":2},\"id_permission\":2}}'),
-('fu0CymQZe1Fg-yjIoRZm9Tb4bI0Dvdo2', 1641317538, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":51,\"username\":\"tushimon\",\"id_permission\":1,\"name\":\"Nguyễn Trần Ngọc Tú\",\"email\":\"ngoctu.280801@gmail.com\",\"dob\":\"28-08-2001\",\"addr\":\"Cần Đước, Long An\",\"is_locked\":0}}}');
+('1nwkLVLH9iS6XDsicynCr8nsdVjoBElQ', 1641447316, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":44,\"username\":\"abc\",\"id_permission\":2,\"name\":\"Hai Tuan Vu\",\"email\":\"drl19hcmus@gmail.com\",\"dob\":\"30-11-1899\",\"addr\":\"abc\",\"is_locked\":0}}}'),
+('pxh_4CiGIxLvGMGBagKiwF3joOulMjNK', 1641458926, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":44,\"username\":\"abc\",\"id_permission\":2,\"name\":\"Hai Tuan Vu\",\"email\":\"drl19hcmus@gmail.com\",\"dob\":\"30-11-1899\",\"addr\":\"abc\",\"is_locked\":0}}}'),
+('w_f2OXLzvoFOnzmpWcphRKwvt4S7LsOr', 1641458938, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":{\"id\":43,\"username\":\"ab\",\"id_permission\":1,\"name\":\"Hai Tuan Vu\",\"email\":\"vutuanhaigk@gmail.com\",\"dob\":\"30-11-2021\",\"addr\":\"ab\",\"is_locked\":0}}}');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `third_party_account`
+-- Table structure for table `third_party_account`
 --
 
 CREATE TABLE `third_party_account` (
@@ -398,7 +467,7 @@ CREATE TABLE `third_party_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `third_party_account`
+-- Dumping data for table `third_party_account`
 --
 
 INSERT INTO `third_party_account` (`id`, `id_in_third_party`, `provider`) VALUES
@@ -413,7 +482,7 @@ INSERT INTO `third_party_account` (`id`, `id_in_third_party`, `provider`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `watch_list`
+-- Table structure for table `watch_list`
 --
 
 CREATE TABLE `watch_list` (
@@ -422,7 +491,7 @@ CREATE TABLE `watch_list` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Đang đổ dữ liệu cho bảng `watch_list`
+-- Dumping data for table `watch_list`
 --
 
 INSERT INTO `watch_list` (`id_acc`, `id_product`) VALUES
@@ -436,18 +505,18 @@ INSERT INTO `watch_list` (`id_acc`, `id_product`) VALUES
 (0000000052, 0000000012);
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `accounts`
+-- Indexes for table `accounts`
 --
 ALTER TABLE `accounts`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`,`email`);
 
 --
--- Chỉ mục cho bảng `bid_history`
+-- Indexes for table `bid_history`
 --
 ALTER TABLE `bid_history`
   ADD PRIMARY KEY (`id`),
@@ -455,14 +524,14 @@ ALTER TABLE `bid_history`
   ADD KEY `FK_BidHis_Product` (`id_product`);
 
 --
--- Chỉ mục cho bảng `bid_price`
+-- Indexes for table `bid_price`
 --
 ALTER TABLE `bid_price`
   ADD PRIMARY KEY (`id_acc`,`id_product`),
   ADD KEY `FK_BidPrice_Product` (`id_product`);
 
 --
--- Chỉ mục cho bảng `categories`
+-- Indexes for table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
@@ -470,26 +539,26 @@ ALTER TABLE `categories`
   ADD KEY `FK_cate_parentCate` (`parent_id`);
 
 --
--- Chỉ mục cho bảng `change_pwd`
+-- Indexes for table `change_pwd`
 --
 ALTER TABLE `change_pwd`
   ADD PRIMARY KEY (`id_acc`);
 
 --
--- Chỉ mục cho bảng `ignore_bidder`
+-- Indexes for table `ignore_bidder`
 --
 ALTER TABLE `ignore_bidder`
   ADD PRIMARY KEY (`id_product`,`id_acc`),
   ADD KEY `FK_IgnoreBidder_Account` (`id_acc`);
 
 --
--- Chỉ mục cho bảng `not_verified_email`
+-- Indexes for table `not_verified_email`
 --
 ALTER TABLE `not_verified_email`
   ADD PRIMARY KEY (`id_acc`);
 
 --
--- Chỉ mục cho bảng `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
@@ -499,7 +568,7 @@ ALTER TABLE `products`
 ALTER TABLE `products` ADD FULLTEXT KEY `name` (`name`,`description`);
 
 --
--- Chỉ mục cho bảng `rate_history`
+-- Indexes for table `rate_history`
 --
 ALTER TABLE `rate_history`
   ADD PRIMARY KEY (`id`),
@@ -508,121 +577,121 @@ ALTER TABLE `rate_history`
   ADD KEY `FK_RateHis_Products` (`id_product`);
 
 --
--- Chỉ mục cho bảng `request_upgrade`
+-- Indexes for table `request_upgrade`
 --
 ALTER TABLE `request_upgrade`
   ADD PRIMARY KEY (`id_acc`);
 
 --
--- Chỉ mục cho bảng `seller_expired_day`
+-- Indexes for table `seller_expired_day`
 --
 ALTER TABLE `seller_expired_day`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `sessions`
+-- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`session_id`);
 
 --
--- Chỉ mục cho bảng `third_party_account`
+-- Indexes for table `third_party_account`
 --
 ALTER TABLE `third_party_account`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `watch_list`
+-- Indexes for table `watch_list`
 --
 ALTER TABLE `watch_list`
   ADD PRIMARY KEY (`id_acc`,`id_product`),
   ADD KEY `FK_WatchList_Product` (`id_product`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `accounts`
+-- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
   MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
--- AUTO_INCREMENT cho bảng `bid_history`
+-- AUTO_INCREMENT for table `bid_history`
 --
 ALTER TABLE `bid_history`
-  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
--- AUTO_INCREMENT cho bảng `bid_price`
+-- AUTO_INCREMENT for table `bid_price`
 --
 ALTER TABLE `bid_price`
   MODIFY `id_acc` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
--- AUTO_INCREMENT cho bảng `categories`
+-- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT cho bảng `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
--- AUTO_INCREMENT cho bảng `rate_history`
+-- AUTO_INCREMENT for table `rate_history`
 --
 ALTER TABLE `rate_history`
   MODIFY `id` int(10) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `bid_history`
+-- Constraints for table `bid_history`
 --
 ALTER TABLE `bid_history`
   ADD CONSTRAINT `FK_BidHis_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
   ADD CONSTRAINT `FK_BidHis_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `bid_price`
+-- Constraints for table `bid_price`
 --
 ALTER TABLE `bid_price`
   ADD CONSTRAINT `FK_BidPrice_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
   ADD CONSTRAINT `FK_BidPrice_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `categories`
+-- Constraints for table `categories`
 --
 ALTER TABLE `categories`
   ADD CONSTRAINT `FK_cate_parentCate` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`);
 
 --
--- Các ràng buộc cho bảng `change_pwd`
+-- Constraints for table `change_pwd`
 --
 ALTER TABLE `change_pwd`
   ADD CONSTRAINT `FK_ChangePwd_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
 
 --
--- Các ràng buộc cho bảng `ignore_bidder`
+-- Constraints for table `ignore_bidder`
 --
 ALTER TABLE `ignore_bidder`
   ADD CONSTRAINT `FK_IgnoreBidder_Account` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
   ADD CONSTRAINT `FK_IgnoreBidder_Product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `not_verified_email`
+-- Constraints for table `not_verified_email`
 --
 ALTER TABLE `not_verified_email`
   ADD CONSTRAINT `FK_NotVerifiedEmail_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
 
 --
--- Các ràng buộc cho bảng `products`
+-- Constraints for table `products`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `FK_products_accBidder` FOREIGN KEY (`id_win_bidder`) REFERENCES `accounts` (`id`),
@@ -630,7 +699,7 @@ ALTER TABLE `products`
   ADD CONSTRAINT `FK_products_cate` FOREIGN KEY (`id_category`) REFERENCES `categories` (`id`);
 
 --
--- Các ràng buộc cho bảng `rate_history`
+-- Constraints for table `rate_history`
 --
 ALTER TABLE `rate_history`
   ADD CONSTRAINT `FK_RateHis_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),
@@ -638,25 +707,25 @@ ALTER TABLE `rate_history`
   ADD CONSTRAINT `FK_RateHis_Products` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `request_upgrade`
+-- Constraints for table `request_upgrade`
 --
 ALTER TABLE `request_upgrade`
   ADD CONSTRAINT `FK_RequestUp_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`);
 
 --
--- Các ràng buộc cho bảng `seller_expired_day`
+-- Constraints for table `seller_expired_day`
 --
 ALTER TABLE `seller_expired_day`
   ADD CONSTRAINT `FK_SellerExpDay_Acc` FOREIGN KEY (`id`) REFERENCES `accounts` (`id`);
 
 --
--- Các ràng buộc cho bảng `third_party_account`
+-- Constraints for table `third_party_account`
 --
 ALTER TABLE `third_party_account`
   ADD CONSTRAINT `FK_ThirdPartyAcc_Acc` FOREIGN KEY (`id`) REFERENCES `accounts` (`id`);
 
 --
--- Các ràng buộc cho bảng `watch_list`
+-- Constraints for table `watch_list`
 --
 ALTER TABLE `watch_list`
   ADD CONSTRAINT `FK_WatchList_Acc` FOREIGN KEY (`id_acc`) REFERENCES `accounts` (`id`),

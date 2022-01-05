@@ -23,41 +23,7 @@ router.get('/', async function (req, res){
 		isAdmin
 	})
 });
-// router.get('/list-product/:id', async function (req, res){
-// 	const cateID = req.params.id;
-// 	console.log(cateID);
-// 	const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
-// 	const result = await categoryModel.getProductByIdCtg(cateID,sort);
-// 	moment.locale('vi');
-// 	var end_date = [];
-// 	for (let i =0 ; i < result.length; i++){
-// 		end_date.push(0);
-// 	}
-// 	for(let i =0 ; i < result.length; i++){
-// 		if(result[i].buy_now_price == 0){
-// 			delete result[i].buy_now_price;
-// 		}
-// 		end_date[i] = moment(result[i].time_end, 'YYYY/MM/DD HH:mm:ss');
-// 		if(end_date[i].diff(moment(), 'days') < 3){
-// 			result[i].price_color = false;
-// 			result[i].time_end = end_date[i].fromNow();
-// 		}
-// 		else{
-// 			result[i].price_color = true;
-// 			result[i].time_end = moment(result[i].time_end,
-// 				'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-// 		}
-// 		result[i].time_start = moment(result[i].time_start,
-// 			'YYYY/MM/DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss');
-// 		result[i].img = fileModel.getAllFileName('./public/img/products/' + result[i].id, result[i].id);
-// 		result[i].bidHistory = await productModel.getBidHistory(result[i].id);
-// 	}
-// 	res.render('vwCategory/show-product', {
-// 		// layout: 'non_sidebar.hbs',
-// 		cateID,
-// 		result
-// 	});
-// });
+
 router.get('/add_category', checkPermission.isNotAdmin,async function (req,res){
 	res.render('vwCategory/add_category',{
 		layout:'non_sidebar.hbs'
@@ -158,6 +124,7 @@ router.get('/childctg/:id/add_category', checkPermission.isNotAdmin,async functi
 })
 router.post('/childctg/:id/add_category', async function (req,res) {
 	const category = await categoryModel.findByName(req.body.name);
+	const parent_id = req.params.id;
 	if (category !== null) {
 		res.render('vwCategory/add_childCategory', {
 			layout: 'non_sidebar.hbs',
@@ -166,8 +133,9 @@ router.post('/childctg/:id/add_category', async function (req,res) {
 	} else {
 		const ret = await categoryModel.add(req.body);
 		// console.log(ret);
-		res.render('vwCategory/add_category', {
+		res.render('vwCategory/add_childCategory', {
 			layout: 'non_sidebar.hbs',
+			parent_id,
 			success_message: "Thêm danh mục thành công!"
 		});
 	}
@@ -204,20 +172,22 @@ router.get('/childctg/edit_category', checkPermission.isNotAdmin,async function 
 router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function(req, res){
 	console.log(req.body);
 	const id = req.body.id;
-	const parent_name = req.body.parent_name[0];
+	var parent_name = req.body.parent_name[0];
+	if(parent_name === ''){
+		parent_name = req.body.default_parent;
+	}
 	const name = req.body.name;
 	const old_category = await categoryModel.findById(id);
 	const parent_category = await categoryModel.findByName(parent_name);
 	const current_parent = await categoryModel.findById(old_category.parent_id);
 	const category = await categoryModel.findByName(name);
-	console.log(category);
-	console.log(parent_category);
-	console.log(current_parent);
+	const AllParent = await categoryModel.getAllParent();
 	if(parent_category===null){
 		return res.render('vwCategory/edit_childCategory', {
 			layout: 'non_sidebar.hbs',
 			category,
 			parent:current_parent,
+			AllParent,
 			err_message: "Thất bại! Tên danh mục cha Không tồn tại!"
 		});
 	}
@@ -234,8 +204,10 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 	else {
 		if (category !== null && parent_category.name === current_parent.name) {
 			return res.render('vwCategory/edit_childCategory', {
+				layout:'non_sidebar.hbs',
 				category,
 				parent: current_parent,
+				AllParent,
 				err_message: "Thất bại! Tên danh mục đã được sử dụng!"
 			});
 		} else if (category === null && parent_category.name === current_parent.name) {
@@ -248,15 +220,5 @@ router.post('/childctg/edit_category', checkPermission.isNotAdmin,async function
 			return res.redirect('/admin/categories/childctg?id=' + current_parent.id);
 		}
 	}
-	// else {
-	// 	console.log("vo 4");
-	// 	const new_category = {
-	// 		"id": id,
-	// 		"name": name,
-	// 		"parent_id":current_parent.id
-	// 	}
-	// 	const ret = await categoryModel.patch(new_category);
-	// 	return res.redirect('/admin/categories/childctg?id=' + current_parent.id);
-	// }
 });
 export default router;

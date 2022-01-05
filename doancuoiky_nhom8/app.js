@@ -19,12 +19,7 @@ const app = express();
 const port = envVar.PORT;
 
 app.use(morgan('dev'));
-// app.use(express.urlencoded({
-//     extended: true
-// }));
-// app.use(express.json({
-//   type: "*/*"
-// }))
+
 app.use(express.static(__dirname + '/public'));
 
 

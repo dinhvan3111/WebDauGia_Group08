@@ -135,7 +135,7 @@ router.get('/:id', async function (req, res, next) {
     }
 
     if(product_info.allow_non_rating_bidder == 1 && info.notEnoughVotes == true){
-        console.log('dung')
+        
         info.notEnoughVotes = false;
     }
     var relativeProducts = await productModel.getProductsInSameCate(product_info.id_category,id_product,5);
@@ -145,15 +145,8 @@ router.get('/:id', async function (req, res, next) {
             id_acc = req.session.passport.user.id ;
         }
     };
-    // for(var i = 0; i<relativeProducts.length; i++){
-    //     relativeProducts[i].isWatchList = false;
-    //     const checkInWatchList = await watchListModel.findById(id_acc,relativeProducts[i].id);
-    //     if(checkInWatchList !== null){
-    //         relativeProducts[i].isWatchList = true;
-    //     }
-    // }
     relativeProducts = await productModel.getProductsDisplayByCard(id_acc,relativeProducts);
-    console.log(relativeProducts);
+    
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',
         id: id_product,

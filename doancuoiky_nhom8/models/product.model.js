@@ -263,16 +263,13 @@ export default {
     },
     async topProductsMostBid(numOfProducts) {
         const res = await db.raw(`select (select count(*)
-                                          from bid_history bh
-                                          where bh.id_product = p.id) as auctionCount,
-                                         id,
-                                         name,
-                                         price,
-                                        buy_now_price,
-                                         time_start,
-                                         time_end
+                                            from bid_history bh
+                                            where bh.id_product = p.id) as auctionCount,
+                                            id, name, price, buy_now_price,
+                                            time_start, time_end
                                   from products p
                                   where p.not_sold = 1
+                                  order by auctionCount desc
                                   limit ${numOfProducts};`);
         if (res[0].length == 0) {
             return null;

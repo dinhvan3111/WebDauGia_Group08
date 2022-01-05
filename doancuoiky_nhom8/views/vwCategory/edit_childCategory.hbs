@@ -70,10 +70,11 @@
 {{/section}}
 {{#section 'js'}}
     <script>
-        $('.category-item').on('click',function (e){
-            e.preventDefault();
+        $('.category-item').on('click',function (){
+
             var param = $(this).attr('category-name');
-            $('#txtParentName').attr("value",param);
+
+            $('#txtParentName').val(param);
         });
     </script>
 {{/section}}
@@ -87,6 +88,9 @@
         </h4>
         <form id="frmEditCtg" method="post">
             <div class="card-body">
+                {{#if err_message}}
+                    <p class="err_message"><i class="fas fa-sad-tear"></i></i> {{err_message}}</p>
+                {{/if}}
                 <div class="form-group">
                     <label class="title">ID</label>
                     <input type="text" class="text-field form-control" id="txtId" name="id" value="{{this.category.id}}"
@@ -103,6 +107,7 @@
                         <!--                    <input type="text" class="text-field form-control" id="txtParentName" name="parent_name" value="{{this.parent.name}}">-->
                     </div>
                     <div class="dropdown">
+                        <input type="hidden" name="default_parent" value="{{this.parent.name}}">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonCtg"
                                 data-toggle="dropdown" aria-expanded="false">
                             {{this.parent.name}}
@@ -118,9 +123,7 @@
                         </div>
                     </div>
                 </div>
-                {{#if err_message}}
-                    <p class="err_message"><i class="fas fa-sad-tear"></i></i> {{err_message}}</p>
-                {{/if}}
+
                 <div class="">
                     <div class="btn-block mb-2">
                         <a class="btn-add-ctg btn btn-outline-success" href="/admin/categories" role="button">
