@@ -855,8 +855,9 @@ export default {
     isNew(time_start) {
         var isNew = false;
         const now = moment.now();
-        var sincePostTime = Math.abs(time_start.diff(now, 'minutes'));
-        if (sincePostTime <= 60) {
+        var sincePostTime = time_start.diff(now, 'minutes');
+        console.log(sincePostTime);
+        if (sincePostTime < 0 && sincePostTime >= -60) {
             isNew = true;
         } else {
             isNew = false;

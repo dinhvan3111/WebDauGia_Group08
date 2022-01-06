@@ -25,6 +25,23 @@
             flex-direction: column;
 
         }
+
+        .new-product{
+            width: 55%;
+            font-size: 12px;
+        }
+        @media (min-width: 992px) and ( max-width: 1425px) {
+            .new-product{
+                width: 70%;
+                font-size: 11px;
+            }
+        }
+        @media ( max-width: 575px) {
+            .new-product{
+                width: 40%;
+                font-size: 15px;
+            }
+        }
         .name-product,.date-product{
             display: -webkit-box;
             max-height: 3.2rem;
@@ -94,6 +111,10 @@
 
                                 <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                     <div class="card show-product">
+                                        {{#if isNew}}
+                                            <div class="new-product text-white"><i class="fa fa-fire" aria-hidden="true"></i>
+                                                Vừa mở đấu giá</div>
+                                        {{/if}}
                                         <a href="/products/{{id}}">
                                         <div  class="card-product-item card-body">
                                             <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
@@ -157,6 +178,10 @@
                                 {{#each products.mostBid}}
                                     <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                         <div class="card show-product">
+                                            {{#if isNew}}
+                                                <div class="new-product text-white"><i class="fa fa-fire" aria-hidden="true"></i>
+                                                    Vừa mở đấu giá</div>
+                                            {{/if}}
                                             <a href="/products/{{id}}">
                                                 <div  class="card-product-item card-body">
                                                     <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
@@ -218,6 +243,10 @@
                                 {{#each products.highestPrice}}
                                     <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                         <div class="card show-product">
+                                            {{#if isNew}}
+                                                <div class="new-product text-white"><i class="fa fa-fire" aria-hidden="true"></i>
+                                                    Vừa mở đấu giá</div>
+                                            {{/if}}
                                             <a href="/products/{{id}}">
                                                 <div  class="card-product-item card-body">
                                                     <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
