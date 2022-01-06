@@ -338,6 +338,39 @@ export default {
         nearTimeEnd = this.getRelativeTimeOfProductList(nearTimeEnd);
         mostBid = this.getRelativeTimeOfProductList(mostBid);
         highestPrice = this.getRelativeTimeOfProductList(highestPrice);
+        for(var i = 0; i<nearTimeEnd.length; i++){
+            var time_end = moment(nearTimeEnd[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (time_end.diff(moment(), 'days') < 3) {
+                nearTimeEnd[i].price_color = false;
+                nearTimeEnd[i].relativeTimeEnd = time_end.fromNow();
+            } else {
+                nearTimeEnd[i].price_color = true;
+                nearTimeEnd[i].relativeTimeEnd = moment(time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+        }
+        for(var i = 0; i<mostBid.length; i++){
+            var time_end = moment(mostBid[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (time_end.diff(moment(), 'days') < 3) {
+                mostBid[i].price_color = false;
+                mostBid[i].relativeTimeEnd = time_end.fromNow();
+            } else {
+                mostBid[i].price_color = true;
+                mostBid[i].relativeTimeEnd = moment(time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+        }
+        for(var i = 0; i<highestPrice.length; i++){
+            var time_end = moment(highestPrice[i].time_end, 'YYYY/MM/DD HH:mm:ss');
+            if (time_end.diff(moment(), 'days') < 3) {
+                highestPrice[i].price_color = false;
+                highestPrice[i].relativeTimeEnd = time_end.fromNow();
+            } else {
+                highestPrice[i].price_color = true;
+                highestPrice[i].relativeTimeEnd = moment(time_end,
+                    'YYYY/MM/DD hh:mm:ss').format('DD/MM/YYYY HH:mm:ss');
+            }
+        }
         return {
             nearTimeEnd: nearTimeEnd,
             mostBid: mostBid,

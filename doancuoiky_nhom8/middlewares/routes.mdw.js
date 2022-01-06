@@ -48,6 +48,8 @@ export default function(app){
 		for(var i = 0; i<productList.nearTimeEnd.length; i++){
 			productList.nearTimeEnd[i].isWatchList = false;
 			productList.nearTimeEnd[i].time_start = moment(productList.nearTimeEnd[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
+			productList.nearTimeEnd[i].time_end = moment(productList.nearTimeEnd[i].time_end).format('DD/MM/YYYY  HH:mm:ss');
+
 			const checkInWatchList = await watchListModel.findById(id,productList.nearTimeEnd[i].id);
 			if(checkInWatchList !== null){
 				productList.nearTimeEnd[i].isWatchList = true;
@@ -57,6 +59,8 @@ export default function(app){
 		for(var i = 0; i<productList.mostBid.length; i++){
 			productList.mostBid[i].isWatchList = false;
 			productList.mostBid[i].time_start = moment(productList.mostBid[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
+			productList.mostBid[i].time_end = moment(productList.mostBid[i].time_end).format('DD/MM/YYYY  HH:mm:ss');
+
 			const checkInWatchList = await watchListModel.findById(id,productList.mostBid[i].id);
 			if(checkInWatchList !== null){
 				productList.mostBid[i].isWatchList = true;
@@ -66,13 +70,13 @@ export default function(app){
 		for(var i = 0; i<productList.highestPrice.length; i++){
 			productList.highestPrice[i].isWatchList = false;
 			productList.highestPrice[i].time_start = moment(productList.highestPrice[i].time_start).format('DD/MM/YYYY  HH:mm:ss');
+			productList.highestPrice[i].time_end = moment(productList.highestPrice[i].time_end).format('DD/MM/YYYY  HH:mm:ss');
 			const checkInWatchList = await watchListModel.findById(id,productList.highestPrice[i].id);
 			if(checkInWatchList !== null){
 				productList.highestPrice[i].isWatchList = true;
 			}
 			productList.highestPrice[i].isNew = productModel.isNew(productList.highestPrice[i].real_time_start);
 		}
-		
 	    return res.render('home', {
 	    	products: productList
 	    });

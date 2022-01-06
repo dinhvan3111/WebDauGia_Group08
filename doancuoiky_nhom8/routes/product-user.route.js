@@ -31,6 +31,7 @@ router.get('/', async function (req, res) {
     for(let i =0;i< result.length;i++) {
         result[i].isNew = productModel.isNew(result[i].real_time_start);
     }
+
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,

@@ -123,8 +123,14 @@
                                             <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
                                             <h6 class="card-title date-product">Đăng vào lúc: <span
                                                     class="text-info">{{time_start}}</span></h6>
-                                            <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-
+<!--                                            <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>-->
+                                            {{#if price_color}}
+                                                <h6 class="card-title name-product" >Đóng vào lúc: <span
+                                                        class="text-info">{{relativeTimeEnd}}</span></h6>
+                                            {{else}}
+                                                <h6 class="card-title name-product">Đóng vào lúc: <span
+                                                        class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                            {{/if}}
                                             {{#if bidHistory.length}}
                                                 <h6 class="card-title name-product">Số lượt ra giá: <span
                                                         class="text-info">{{bidHistory.length}}</span></h6>
@@ -190,8 +196,14 @@
                                                     <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
                                                     <h6 class="card-title date-product">Đăng vào lúc: <span
                                                             class="text-info">{{time_start}}</span></h6>
-                                                    <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-
+<!--                                                    <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>-->
+                                                    {{#if price_color}}
+                                                        <h6 class="card-title name-product" >Đóng vào lúc: <span
+                                                                class="text-info">{{relativeTimeEnd}}</span></h6>
+                                                    {{else}}
+                                                        <h6 class="card-title name-product">Đóng vào lúc: <span
+                                                                class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                                    {{/if}}
                                                     {{#if bidHistory.length}}
                                                         <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-info">{{bidHistory.length}}</span></h6>
@@ -255,8 +267,13 @@
                                                     <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
                                                     <h6 class="card-title date-product">Đăng vào lúc: <span
                                                             class="text-info">{{time_start}}</span></h6>
-                                                    <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-
+                                                    {{#if price_color}}
+                                                        <h6 class="card-title name-product" >Đóng vào lúc: <span
+                                                                class="text-info">{{relativeTimeEnd}}</span></h6>
+                                                    {{else}}
+                                                        <h6 class="card-title name-product">Đóng vào lúc: <span
+                                                                class="text-danger">{{relativeTimeEnd}}</span></h6>
+                                                    {{/if}}
                                                     {{#if bidHistory.length}}
                                                         <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-info">{{bidHistory.length}}</span></h6>
