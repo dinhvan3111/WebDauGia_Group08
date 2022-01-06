@@ -210,7 +210,7 @@
                 </h4>
                 <div class="list-group list-group-flush">
                     {{#each lcCategories}}
-                        <a class="parents-category collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}"
+                        <a class="parents-category collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}" idCate="{{id}}"
                            role="button" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                             {{name}}
@@ -220,7 +220,7 @@
 
                                 {{#each subCate}}
 
-                                    <a href="/products/list/{{id}}" class="sub-category list-group-item list-group-item-action">{{name}}</a>
+                                    <a href="/products/list/{{id}}" class="sub-category list-group-item list-group-item-action" idCate="{{id}}">{{name}}</a>
 
                                 {{/each}}
 
@@ -373,17 +373,6 @@
             $(this).children()[0].classList.add('fa-caret-right');
         }
     })
-    // var navItems = $('.nav-item');
-    // for(let i =0; i < navItems.length; i++ ){
-    //     if(navItems[i].innerText.includes(localStorage['active-nav'])){
-    //         navItems[i].classList.add('active-nav');
-    //     }
-    // }
-    // for(let i =0; i < navItems.length; i++ ){
-    //     navItems[i].addEventListener('click',function (e){
-    //         localStorage['active-nav'] = navItems[i].innerText;
-    //     });
-    // }
     var pagePath = window.location.pathname;
     $('.sub-category').on('click',function (e){
         // e.preventDefault();
