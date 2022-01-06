@@ -15,10 +15,31 @@
             font-size: 12px;
         }
         .show-product{
-            height: 100%;
+            /*height: 355px;*/
+            height: fit-content;
+        }
+        .card-footer{
         }
         .card-product-item{
-            height: 355px;
+            /*flex: 1 1 auto;*/
+            flex-direction: column;
+
+        }
+        .name-product,.date-product{
+            display: -webkit-box;
+            max-height: 3.2rem;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+            line-height: 1.6rem;
+        }
+        .name-product{
+
+            -webkit-line-clamp: 1;
+        }
+        .date-product{
+            -webkit-line-clamp: 2;
         }
     </style>
 {{/section}}
@@ -76,24 +97,18 @@
                                         <a href="/products/{{id}}">
                                         <div  class="card-product-item card-body">
                                             <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
-                                            <h5 class="card-title">{{name}}</h5>
-                                            <h6 class="card-title">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
-                                            <h6 class="card-title">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
-                                            <h6 class="card-title">Đăng vào lúc: <span
+                                            <h5 class="card-title name-product">{{name}}</h5>
+                                            <h6 class="card-title name-product">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
+                                            <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
+                                            <h6 class="card-title date-product">Đăng vào lúc: <span
                                                     class="text-info">{{time_start}}</span></h6>
-                                            <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-<!--                                            {{#if priceHolder}}-->
-<!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-<!--                                                        class="text-info">{{priceHolder}}</span></h6>-->
-<!--                                            {{else}}-->
-<!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-<!--                                                        class="text-muted">Chưa có</span></h6>-->
-<!--                                            {{/if}}-->
+                                            <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+
                                             {{#if bidHistory.length}}
-                                                <h6 class="card-title">Số lượt ra giá: <span
+                                                <h6 class="card-title name-product">Số lượt ra giá: <span
                                                         class="text-info">{{bidHistory.length}}</span></h6>
                                             {{else}}
-                                                <h6 class="card-title">Số lượt ra giá: <span
+                                                <h6 class="card-title name-product">Số lượt ra giá: <span
                                                         class="text-muted">Chưa có lượt ra giá nào</span></h6>
                                             {{/if}}
                                         </div>
@@ -102,8 +117,10 @@
 
                                                 {{#if isWatchList}}
                                                     <button class="btn btn-sm btn-outline-danger" disabled>
-                                                        <i class="fa fa-heart" aria-hidden="true"></i>
-                                                        Đã yêu thích
+                                                        <div class=" name-product">
+                                                            <i class="fa fa-heart " aria-hidden="true"></i>
+                                                            Đã yêu thích
+                                                        </div>
                                                     </button>
 
                                                 {{else}}
@@ -126,9 +143,7 @@
 
 
                         </div>
-<!--                        {{#if products.nearTimeEnd}}-->
-<!--                        <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>-->
-<!--                        {{/if}}-->
+
                     </div>
                 </div>
 
@@ -145,24 +160,18 @@
                                             <a href="/products/{{id}}">
                                                 <div  class="card-product-item card-body">
                                                     <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
-                                                    <h5 class="card-title">{{name}}</h5>
-                                                    <h6 class="card-title">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
-                                                    <h6 class="card-title">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
-                                                    <h6 class="card-title">Đăng vào lúc: <span
+                                                    <h5 class="card-title name-product">{{name}}</h5>
+                                                    <h6 class="card-title name-product">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
+                                                    <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
+                                                    <h6 class="card-title date-product">Đăng vào lúc: <span
                                                             class="text-info">{{time_start}}</span></h6>
-                                                    <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-                                                        <!--                                            {{#if priceHolder}}-->
-                                                    <!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-                                                    <!--                                                        class="text-info">{{priceHolder}}</span></h6>-->
-                                                        <!--                                            {{else}}-->
-                                                    <!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-                                                    <!--                                                        class="text-muted">Chưa có</span></h6>-->
-                                                        <!--                                            {{/if}}-->
+                                                    <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+
                                                     {{#if bidHistory.length}}
-                                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                        <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-info">{{bidHistory.length}}</span></h6>
                                                     {{else}}
-                                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                        <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-muted">Chưa có lượt ra giá nào</span></h6>
                                                     {{/if}}
                                                 </div>
@@ -171,8 +180,10 @@
 
                                                     {{#if isWatchList}}
                                                         <button class="btn btn-sm btn-outline-danger" disabled>
-                                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                                            Đã yêu thích
+                                                            <div class=" name-product">
+                                                                <i class="fa fa-heart " aria-hidden="true"></i>
+                                                                Đã yêu thích
+                                                            </div>
                                                         </button>
 
                                                     {{else}}
@@ -193,9 +204,7 @@
                             {{/if}}
 
                         </div>
-<!--                        {{#if products.mostBid}}-->
-<!--                            <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>-->
-<!--                        {{/if}}-->
+
                     </div>
                 </div>
 
@@ -212,24 +221,18 @@
                                             <a href="/products/{{id}}">
                                                 <div  class="card-product-item card-body">
                                                     <img class="product-img-5-sidebar" src="img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">
-                                                    <h5 class="card-title">{{name}}</h5>
-                                                    <h6 class="card-title">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
-                                                    <h6 class="card-title">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
-                                                    <h6 class="card-title">Đăng vào lúc: <span
+                                                    <h5 class="card-title name-product">{{name}}</h5>
+                                                    <h6 class="card-title name-product">Hiện tại: <span class="text-success">{{format_number price}} VNĐ</span></h6>
+                                                    <h6 class="card-title name-product">Mua ngay: <span  class="text-danger">{{format_number buy_now_price}} VNĐ</span></h6>
+                                                    <h6 class="card-title date-product">Đăng vào lúc: <span
                                                             class="text-info">{{time_start}}</span></h6>
-                                                    <h6 class="card-title">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
-                                                        <!--                                            {{#if priceHolder}}-->
-                                                    <!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-                                                    <!--                                                        class="text-info">{{priceHolder}}</span></h6>-->
-                                                        <!--                                            {{else}}-->
-                                                    <!--                                                <h6 class="card-title">Người giữ giá hiện tại: <span-->
-                                                    <!--                                                        class="text-muted">Chưa có</span></h6>-->
-                                                        <!--                                            {{/if}}-->
+                                                    <h6 class="card-title name-product">Đóng trong: <span class="text-danger">{{relativeTimeEnd}}</span></h6>
+
                                                     {{#if bidHistory.length}}
-                                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                        <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-info">{{bidHistory.length}}</span></h6>
                                                     {{else}}
-                                                        <h6 class="card-title">Số lượt ra giá: <span
+                                                        <h6 class="card-title name-product">Số lượt ra giá: <span
                                                                 class="text-muted">Chưa có lượt ra giá nào</span></h6>
                                                     {{/if}}
                                                 </div>
@@ -238,8 +241,10 @@
 
                                                     {{#if isWatchList}}
                                                         <button class="btn btn-sm btn-outline-danger" disabled>
-                                                            <i class="fa fa-heart" aria-hidden="true"></i>
-                                                            Đã yêu thích
+                                                            <div class=" name-product">
+                                                                <i class="fa fa-heart " aria-hidden="true"></i>
+                                                                Đã yêu thích
+                                                            </div>
                                                         </button>
 
                                                     {{else}}
@@ -261,9 +266,7 @@
 
 
                         </div>
-<!--                        {{#if products.highestPrice}}-->
-<!--                            <a class="btn btn-dark float-right mt-3 col-lg-2 col-sm-12" href="#" role="button">Xem thêm</a>-->
-<!--                        {{/if}}-->
+
                     </div>
                 </div>
             </blockquote>
@@ -272,6 +275,6 @@
     <form id="frmLike" action="/products/like" method="post">
         <input id="txtLike" type="hidden" name="value_id_pro" value ="">
     </form>
-    <!-- Top product section -->
+
 
 </div>

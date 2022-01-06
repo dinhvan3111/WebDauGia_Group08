@@ -138,7 +138,7 @@
 
 
 
-                                                    <button class="btn bg-warning btn-long" data-toggle="modal" data-target="#buyNowModal">
+                                                    <button class="btn bg-warning btn-long mr-2 mb-2" data-toggle="modal" data-target="#buyNowModal">
                                                         <i class="fa fa-money"></i> Mua ngay
                                                     </button>
                                                     <!-- Modal -->
@@ -171,11 +171,11 @@
                                             {{/if}}
                                         {{/if}}
                                         {{#if isHoldingPrice}}
-                                            <button class="btn bg-warning ml-2 disabled">
+                                            <button class="btn bg-warning mb-2 mr-2 disabled">
                                                 <i class="fa fa-money"></i> Giá tối đa của bạn: {{format_number
                                                     max_bid_price}} (VNĐ)
                                             </button>
-                                            <button type="button" class="btn bg-success btn-long text-white ml-2"
+                                            <button type="button" class="btn bg-success btn-long text-white mb-2 mr-2"
                                                     data-toggle="modal" data-target="#rebidModal">
                                                 <i class="fa fa-gavel"></i> Đặt lại giá
                                             </button>
@@ -187,7 +187,7 @@
                                                 {{#if canBid}}
                                                     <!-- Button trigger modal -->
                                                     <button type="button"
-                                                            class="btn bg-success btn-long text-white ml-2"
+                                                            class="btn bg-success btn-long text-white mb-2 mr-2"
                                                             data-toggle="modal" data-target="#bidModal">
                                                         <i class="fa fa-gavel"></i> Đấu giá
                                                     </button>
@@ -213,13 +213,13 @@
                                 {{/if}}
                             {{/if}}
                             {{#if inWatchList}}
-                                <button class="btn btn-outline-danger ml-2 mt-2" disabled>
+                                <button class="btn btn-outline-danger mb-2 mr-2" disabled>
                                     <i class="fa fa-heart"></i> Đã yêu thích
                                 </button>
                             {{else}}
                                 <form action="add-to-watch-list" method="post">
                                     <input type="text" name="id" value="{{product.id}}" hidden/>
-                                    <button class="btn btn-outline-danger ml-2 mt-2">
+                                    <button class="btn btn-outline-danger mb-2 mr-2">
                                         <i class="fa fa-heart"></i> Yêu thích
                                     </button>
                                 </form>
