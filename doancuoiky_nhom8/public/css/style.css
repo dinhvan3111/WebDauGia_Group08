@@ -50,6 +50,12 @@ nav .search-for-lg {
     display: none;
 }
 
+@media (min-width: 992px) and (max-width: 1114px){
+    nav, nav a.dropdown-item{
+        font-size: 77%;
+    }
+}
+
 @media (min-width: 992px) {
     nav .search-for-md {
         display: none;
@@ -127,6 +133,14 @@ nav .search-for-lg {
     #sidebar {
         position: relative;
         width: 100%;
+    }
+}
+@media (min-width: 768px) and (max-width: 1038px){
+    h4{
+        font-size: 15px !important;
+    }
+    #sidebar {
+        font-size: 80%;
     }
 }
 

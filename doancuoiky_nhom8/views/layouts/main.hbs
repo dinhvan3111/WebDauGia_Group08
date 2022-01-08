@@ -16,7 +16,7 @@
             display: none;
         }
         .dropdown-menu.dropdown-multicol  {
-            right: -210px;
+            right: -250px;
         }
         div.dropdown-multicol{
             width: 50em;
@@ -213,7 +213,7 @@
                         <a class="parents-category collapse-items list-group-item list-group-item-action" data-toggle="collapse" href="#collapseExample{{id}}" idCate="{{id}}"
                            role="button" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fa fa-caret-right" aria-hidden="true"></i>
-                            {{name}}
+                            <span class="font-bold">{{name}}</span>
                         </a>
                         <div class="collapse-content collapse" id="collapseExample{{id}}">
                             {{#if subCate.length}}
@@ -342,25 +342,24 @@
         integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
         crossorigin="anonymous"></script>
 <script>
-    const collapse_items = document.querySelectorAll('.side-bar .collapse-items');
-    const collapse_content = document.querySelectorAll('.collapse-content');
-    collapse_items.forEach((item,index)=>{
-        var content = collapse_content[index];
-        item.onclick = function (){
-            var temp = document.querySelector('.collapse-items.list-group-item.list-group-item-action:not(.collapsed)');
-            var temp_content = document.querySelector('.collapse-content.collapse.show');
-            if(temp != item){
 
-                temp.classList.add('collapsed');
-                temp.ariaExpanded = false;
-                temp_content.classList.remove('show');
-
-                item.classList.remove('collapsed');
-                item.ariaExpanded = true;
-                // content.classList.add('show');
+    const collapse_items = $('.side-bar .collapse-items');
+    const collapse_content = $('.collapse-content');
+    for(let i=0;i < collapse_items.length;i++){
+        collapse_items[i].addEventListener('click',function (){
+            const collapse_items_after = $('.side-bar .collapse-items');
+            const collapse_content_after = $('.collapse-content');
+            for(let j=0;j < collapse_items_after.length;j++){
+                if(collapse_items_after[j].ariaExpanded == 'true' && collapse_items_after[j] != $(this)[0]){
+                    collapse_items_after[j].classList.add('collapsed');
+                    collapse_items_after[j].ariaExpanded = false;
+                    collapse_content_after[j].classList.remove('show');
+                    collapse_items_after[j].firstElementChild.classList.remove('fa-caret-down');
+                    collapse_items_after[j].firstElementChild.classList.add('fa-caret-right');
+                };
             }
-        }
-    })
+        })
+    }
 </script>
 <script>
     $('.parents-category').on('click',function (){
