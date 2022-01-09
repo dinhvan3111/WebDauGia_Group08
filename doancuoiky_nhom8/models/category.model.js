@@ -9,6 +9,9 @@ export default {
     getAllChild() {
         return db('categories').where('parent_id', !null);
     },
+    getAllCtg() {
+        return db('categories');
+    },
     getAllParent() {
         return db.select(['ctg.id as id', 'ctg.name as name'])
             .from('categories as ctg')

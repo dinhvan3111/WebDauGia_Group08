@@ -106,8 +106,15 @@ router.get('/management', checkPermission.isNotAdmin, async function(req, res){
 		choseCtg = await cateModel.findById(catID);
 		choseCtg = choseCtg.name;
 	}
-	const categories = await cateModel.getAllChild();
-	console.log(choseCtg);
+	var categories = await cateModel.getAllCtg();
+	var chillCtg = [];
+	for(var i = 0; i<categories.length; i++ ){
+		if(categories[i].parent_id !== null){
+			chillCtg.push(categories[i])
+		}
+	}
+	categories = chillCtg;
+	console.log(categories);
 	for(var i = 0;i <list_product.length; i++){
 		list_product[i].start = moment(list_product[i].start).format('HH:mm DD-MM-YYYY')
 		list_product[i].end = moment(list_product[i].end).format('HH:mm DD-MM-YYYY');

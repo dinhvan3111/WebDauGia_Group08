@@ -158,10 +158,15 @@ router.post('/login', async function (req, res) {
 	// console.log(user);
 	req.user = user;
 	req.session.passport = {user: user};
-	const url = req.session.retUrl || '/';
+
+	var url = req.session.retUrl || '/';
+	if(url.includes("/like")){
+		url = "/"
+	}
 	if(typeof(req.session.retUrl) !== 'undefined'){
 		delete req.session.retUrl;
 	}
+	console.log(url);
 	res.redirect(url);
 });
 router.get('/profile', checkPermission.notLogin, async function(req, res){

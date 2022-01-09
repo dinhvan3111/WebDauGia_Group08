@@ -330,7 +330,7 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
         title: "đã chiến thắng"
     });
 });
-router.get('/posted', checkPermission.isNotSeller, async function (req, res) {
+router.get('/posted', checkPermission.notLogin, async function (req, res) {
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
     const limit = 9;
@@ -439,7 +439,7 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
     });
 });
 router.post('/comment', checkPermission.notLogin, async function (req, res) {
-
+    console.log(req.body)
     req.body.time = moment().format('YYYY-MM-DD HH:mm:ss');
     const comment = req.body.comment;
     if (comment.length === 0) {
@@ -458,6 +458,7 @@ router.post('/comment', checkPermission.notLogin, async function (req, res) {
     res.redirect(req.headers.referer);
 });
 router.post('/:id/cancel-transaction', checkPermission.isNotSeller, async function (req, res) {
+    console.log(req.body)
     const id = req.params.id;
 
     const product = await productModel.findID(id);

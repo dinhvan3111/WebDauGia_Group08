@@ -68,7 +68,8 @@ router.post('/del', async function (req, res) {
 	}
 	else {
 		const ret = await categoryModel.deleteById(req.body.id);
-		res.redirect('/admin/categories');
+		const url = req.headers.referer || '/admin/categories';
+		res.redirect(url);
 	}
 });
 router.get('/edit', checkPermission.isNotAdmin,async function(req, res){
