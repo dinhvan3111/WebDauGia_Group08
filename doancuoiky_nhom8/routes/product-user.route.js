@@ -391,7 +391,6 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
         }
     }
 
-
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,
@@ -402,7 +401,6 @@ router.get('/sold', checkPermission.isNotSeller, async function (req, res) {
         totalPage: paging.totalPage,
         result,
         title: "đã được đấu giá thành công",
-        isSold: true
     });
 });
 router.get('/bidding', checkPermission.notLogin, async function (req, res) {

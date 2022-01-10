@@ -66,6 +66,7 @@
             const id = $(this).attr('data-id');
             const id_seller = $(this).attr('data-id-seller');
             const id_bidder = $(this).attr('data-id-win-bidder');
+            // alert(id_seller + " " + id_bidder)
             $('#txtProID').val(id);
             $('#txtIdSeller').val(id_seller);
             $('#txtIdBidder').val(id_bidder);
@@ -150,7 +151,7 @@
                                         <!--                        Modal-->
                                         <form id="frmComment" action="/products/comment" method="post">
                                             <input type="hidden" id="txtProID" name="id_product" value="">
-                                            {{#if isSold}}
+                                            {{#if @root/isSold}}
                                                 <input type="hidden" id="txtIdSeller" name="id_assessor" value="">
                                                 <input type="hidden" id="txtIdBidder" name="id_acc" value="">
                                             {{else}}
