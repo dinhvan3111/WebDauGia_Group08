@@ -65,10 +65,14 @@
             object-fit: cover;
             margin-bottom: 10px;
         }
-
         #confirmBiddingBtn, #confirmreBiddingBtn {
             display: none;
         }
+
+        h5 a:hover{
+            text-decoration-color: #17a2b8;
+        }
+
     </style>
 {{/section}}
 
@@ -102,7 +106,27 @@
                     {{#if product.priceSold}}
                         <h5 class="font-weight-bold mt-4">Đã bán với giá: <span class="ml-2 text-danger">{{format_number
                                 product.priceSold}} VNĐ</span></h5>
-                        <h5 class="font-weight-bold mt-4">Người chiến thắng: <span class="ml-2 text-info">{{priceHolderName}}</span></h5>
+                        {{#if canEdit}}
+                            {{#if priceHolder}}
+                                {{#if this.isRating}}
+                                    <h5 class="font-weight-bold mt-4">Người chiến thắng:<a href="/profile/{{priceHolder.id}}"><span class="ml-2 text-info">{{priceHolder.name}}</span></a><a href="/rating/{{priceHolder.id}}"><span class="ml-2 text-info">({{priceHolder.upVoteRatio}}% đánh giá tốt)</span></a></h5>
+                                {{else}}
+                                    <h5 class="font-weight-bold mt-4">Người chiến thắng:<a href="/profile/{{priceHolder.id}}"><span class="ml-2 text-info">{{priceHolder.name}}</span></a><span class="ml-2 text-info">(Chưa có đánh giá)</span></h5>
+                                {{/if}}
+                            {{else}}
+                                <h5 class="font-weight-bold mt-4">Người chiến thắng: <span class="ml-2 text-muted">Không có</span></h5>
+                            {{/if}}
+                        {{else}}
+                            {{#if priceHolder}}
+                                {{#if this.isRating}}
+                                    <h5 class="font-weight-bold mt-4">Người chiến thắng:<span class="ml-2 text-info">{{priceHolder.mask_name}}</span><span class="ml-2 text-info">({{priceHolder.upVoteRatio}}% đánh giá tốt)</span></h5>
+                                {{else}}
+                                    <h5 class="font-weight-bold mt-4">Người chiến thắng:<span class="ml-2 text-info">{{priceHolder.mask_name}}</span><span class="ml-2 text-info">(Chưa có đánh giá)</span></h5>
+                                {{/if}}
+                            {{else}}
+                                <h5 class="font-weight-bold mt-4">Người chiến thắng: <span class="ml-2 text-muted">Không có</span></h5>
+                            {{/if}}
+                        {{/if}}
                     {{else}}
                         <h5 class="font-weight-bold mt-4">Giá hiện tại: <span class="ml-2 text-success">{{format_number
                                 product.price}} VNĐ</span>
@@ -110,12 +134,30 @@
                             <input hidden type="number" id="stepPrice" value="{{product.step_price}}">
 
                         </h5>
-                        {{#if priceHolderName}}
-                            <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span
-                                    class="ml-2 text-info">{{priceHolderName}}</span></h5>
+                        {{#if canEdit}}
+                            {{#if priceHolder}}
+                                {{#if priceHolder.isRating}}
+                                    <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <a href="/profile/{{priceHolder.id}}"><span class="ml-2 text-info">{{priceHolder.name}}</span></a><a href="/rating/{{priceHolder.id}}"><span class="ml-2 text-info">({{priceHolder.upVoteRatio}}% đánh giá tốt)</span></a></h5>
+                                {{else}}
+                                    <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <a href="/profile/{{priceHolder.id}}"><span class="ml-2 text-info">{{priceHolder.name}}</span></a><span class="ml-2 text-info">(Chưa có đánh giá)</span></h5>
+                                {{/if}}
+                            {{else}}
+                                <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span class="ml-2 text-muted">Chưa có người nào giữ giá</span>
+                                </h5>
+                            {{/if}}
                         {{else}}
-                            <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span class="ml-2 text-muted">Chưa có người nào giữ giá</span>
-                            </h5>
+                            {{#if priceHolder}}
+                                {{#if priceHolder.isRating}}
+                                    <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span
+                                            class="ml-2 text-info">{{priceHolder.mask_name}}</span><span class="ml-2 text-info">({{priceHolder.upVoteRatio}}% đánh giá tốt)</span></h5>
+                                {{else}}
+                                    <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span
+                                            class="ml-2 text-info">{{priceHolder.mask_name}}</span><span class="ml-2 text-info">(Chưa có đánh giá)</span></h5>
+                                {{/if}}
+                            {{else}}
+                                <h5 class="font-weight-bold mt-4">Người giữ giá hiện tại: <span class="ml-2 text-muted">Chưa có người nào giữ giá</span>
+                                </h5>
+                            {{/if}}
                         {{/if}}
                         {{#if product.buy_now_price}}
                             <h5 class="font-weight-bold mt-4">Giá mua ngay: <span
@@ -145,7 +187,7 @@
 
                                         {{#if notEnoughVotes}}
 
-                                            <button class="btn bg-warning btn-long mr-2 mb-2 disabled">
+                                            <button class="btn bg-warning btn-long mr-2 disabled">
                                                 <i class="fa fa-ban"></i> Điểm đánh giá tích cực của bạn phải trên 80%
                                             </button>
                                         {{else}}
@@ -294,7 +336,8 @@
                                     <div class="stars-inner" style="width: {{seller.starPercentageRounded}}"></div>
                                 </div>
                             </div>
-                            <a href="/profile/{{seller.id}}"><span class="username">{{seller.name}}</span>
+                            <a href="/profile/{{seller.id}}"><span class="username">{{seller.name}}</span></a>
+                            <a href="/rating/{{seller.id}}">
                                 {{#if (isNotRating seller.starPercentage)}}
                                     <div><small class="followers">Chưa có lượt đánh giá nào</small></div>
                                 {{else}}
@@ -305,7 +348,7 @@
                         </div>
                     </div>
                     <br>
-                    <div class="mt-2"><span class="font-weight-bold">Mô tả</span>
+                    <div class=" mt-2"><span class="font-weight-bold">Mô tả</span>
                         <p>{{{product.description}}}</p>
                     </div>
                     <div class="bid-history card mt-5">
@@ -374,10 +417,18 @@
                                                 <div class="stars-inner"
                                                      style="width:{{this.starPercentageRounded}};"></div>
                                             </div>
-                                            {{#if (isNotRating this.ratio)}}
-                                                <span class="ratio ml-1 ">Chưa có đánh giá</span>
+                                            {{#if ../canEdit}}
+                                                {{#if (isNotRating this.ratio)}}
+                                                    <span class="ratio ml-1 ">Chưa có đánh giá</span>
+                                                {{else}}
+                                                    <span class="ratio ml-1 "><a href="/rating/{{bidder_id}}">{{roundFloat this.starPercentage}}% đánh giá tốt</a></span>
+                                                {{/if}}
                                             {{else}}
-                                                <span class="ratio ml-1 ">{{roundFloat this.starPercentage}}% đánh giá tốt</span>
+                                                {{#if (isNotRating this.ratio)}}
+                                                    <span class="ratio ml-1 ">Chưa có đánh giá</span>
+                                                {{else}}
+                                                    <span class="ratio ml-1 ">{{roundFloat this.starPercentage}}% đánh giá tốt</span>
+                                                {{/if}}
                                             {{/if}}
                                         </td>
 
@@ -633,13 +684,11 @@
                 <form id="frmBidding" action="{{product.id}}/bidding"
                       method="post">
                     <div class="modal-body">
-                        
                         <input type="text" name="max_bid_price"
-                           id="max_bid_price"
-                           placeholder="(VNĐ) {{format_number
-                                   suggestPrice}}"
-                           data-type="currency" value required>
-                        
+                               id="max_bid_price"
+                               placeholder="(VNĐ) {{format_number
+                                       product.price}}"
+                               data-type="currency" value required>
                         <input hidden type="text" name="id_product"
                                id="id_product" value="{{product.id}}"
                                required>
@@ -681,7 +730,7 @@
                         <input type="text" name="max_bid_price"
                                id="remax_bid_price"
                                placeholder="(VNĐ) {{format_number
-                                       suggestPrice}}"
+                                       product.price}}"
                                data-type="currency" value required>
                         <input hidden type="text" name="id_product"
                                id="id_product" value="{{product.id}}"
@@ -912,5 +961,4 @@
             $('#txtLike').val(id);
             $('#frmLike').submit();
         });
-    </script>
 {{/section}}

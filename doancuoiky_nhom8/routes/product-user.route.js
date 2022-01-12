@@ -120,10 +120,12 @@ router.get('/:id', async function (req, res, next) {
     info.seller.starPercentage = starPercentage;
     info.seller.starPercentageRounded = starPercentageRounded;
     var priceHolder = await productModel.findPriceHolder(id_product);
-    if(priceHolder != null)
-        var priceHolderName = priceHolder.mask_name;
-    else
-        var priceHolderName = null;
+    priceHolder.upVoteRatio = await accountModel.getUpVoteRatio(priceHolder.id);
+    if(priceHolder.upVoteRatio.ratio){
+        priceHolder.isRating = true;
+    }
+    priceHolder.upVoteRatio = accountModel.starPercentage(priceHolder.upVoteRatio.ratio);
+    console.log(priceHolder.isRating);
     var bidder_win_now = null;
     var suggestPrice = +product_info.price;
     if (info.bidHistory !== null){
@@ -171,7 +173,7 @@ router.get('/:id', async function (req, res, next) {
         startDate: info.startDate,
         notEnoughVotes: info.notEnoughVotes,
         isWinner,
-        priceHolderName,
+        priceHolder,
         relativeProducts
     });
 });
