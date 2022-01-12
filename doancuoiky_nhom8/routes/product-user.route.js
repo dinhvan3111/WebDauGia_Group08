@@ -119,10 +119,16 @@ router.get('/:id', async function (req, res, next) {
     const starPercentageRounded = accountModel.starPercentageRounded(ratioSeller.ratio);
     info.seller.starPercentage = starPercentage;
     info.seller.starPercentageRounded = starPercentageRounded;
-
+    var priceHolder = await productModel.findPriceHolder(id_product);
+    if(priceHolder != null)
+        var priceHolderName = priceHolder.mask_name;
+    else
+        var priceHolderName = null;
     var bidder_win_now = null;
+    var suggestPrice = +product_info.price;
     if (info.bidHistory !== null){
         bidder_win_now = info.bidHistory[0].bidder_id;
+        suggestPrice += +product_info.step_price;
     }
     var id_now = undefined;
     if(req.session.passport !== undefined) {
@@ -148,10 +154,12 @@ router.get('/:id', async function (req, res, next) {
     };
     relativeProducts = await productModel.getProductsDisplayByCard(id_acc,relativeProducts);
     
+
     return res.render('vwProduct/product_detail', {
         layout: 'non_sidebar.hbs',
         id: id_product,
         product: product_info,
+        suggestPrice: suggestPrice,
         seller: info.seller,
         bidHistory: info.bidHistory,
         inWatchList: info.inWatchList,
@@ -163,6 +171,7 @@ router.get('/:id', async function (req, res, next) {
         startDate: info.startDate,
         notEnoughVotes: info.notEnoughVotes,
         isWinner,
+        priceHolderName,
         relativeProducts
     });
 });

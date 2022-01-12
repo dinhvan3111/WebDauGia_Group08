@@ -22,7 +22,7 @@ function paging(total, current, pre, next){
     $('#pagination').twbsPagination({
         startPage: current,
         totalPages: total,
-        visiblePages: 5,
+        visiblePages: 3,
         onPageClick: function (event, page) {
             var allPageElements = $('.page-link');
             for(let i =0 ;i < allPageElements.length;i++) {

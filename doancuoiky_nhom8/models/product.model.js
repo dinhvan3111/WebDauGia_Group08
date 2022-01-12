@@ -481,11 +481,13 @@ export default {
         var result = await db.select()
             .from('bid_history')
             .where('id_product', id_product)
-            .orderByRaw('RAND()')
+            .orderByRaw('in_bid_price desc')
             .limit(1);
         var priceHolder = null;
         if (result[0] != null || result[0] != undefined) {
-            priceHolder = accountModel.findID(result[0].id_acc);
+            priceHolder = await accountModel.findID(result[0].id_acc);
+            let splited = priceHolder.name.split(' ');
+            priceHolder.mask_name = '****' + splited[splited.length - 1];
         }
         return priceHolder;
     },
@@ -559,7 +561,7 @@ export default {
             productList[i].bidHistory = await this.getBidHistory(productList[i].id);
             const priceHolder = await this.findPriceHolder(productList[i].id);
             if (priceHolder != undefined) {
-                productList[i].priceHolder = priceHolder.name;
+                productList[i].priceHolder = priceHolder.mask_name;
             }
         }
         return productList;
