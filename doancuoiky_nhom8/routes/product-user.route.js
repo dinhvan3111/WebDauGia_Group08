@@ -339,16 +339,26 @@ router.get('/won', checkPermission.notLogin, async function (req, res) {
         title: "đã chiến thắng"
     });
 });
-router.get('/posted', checkPermission.notLogin, async function (req, res) {
+
+router.get('/posted/:type', checkPermission.notLogin, async function (req, res) {
     const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     const id = req.session.passport.user.id;
+    var type =  req.params.type;
+    console.log(type)
     const limit = 9;
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
     var total;
-    total = await productModel.countPostedProductByIdAcc(id);
+    var products;
+    if(type != 1){
+        total = await productModel.countPostedProductByIdAcc(id);
+        products = await productModel.getPostedProductByIdAcc(id, limit, offset);
+    }
+    else{
+        total = await productModel.countCanBiddingProductByIdAcc(id);
+        products = await productModel.getCanBiddingProductByIdAcc(id, limit, offset);
+    }
     const paging = pagingInfo.getPagingInfo(limit, page, total);
-    const products = await productModel.getPostedProductByIdAcc(id, limit, offset);
     var result = null;
     if (products !== null) {
 
@@ -358,7 +368,12 @@ router.get('/posted', checkPermission.notLogin, async function (req, res) {
         }
         // result = products;
     }
-
+    if(type == 1){
+        type = "Có thể đấu giá"
+    }
+    else{
+        type = "Tất cả"
+    }
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,
@@ -368,7 +383,9 @@ router.get('/posted', checkPermission.notLogin, async function (req, res) {
         pageNumber: paging.pageNumber,
         totalPage: paging.totalPage,
         result,
-        title: "đã đăng"
+        title: "đã đăng",
+        posted: true,
+        type
     });
 });
 router.get('/sold', checkPermission.isNotSeller, async function (req, res) {

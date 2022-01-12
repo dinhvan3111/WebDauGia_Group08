@@ -841,6 +841,23 @@ export default {
             .count({amount: 'id'});
         return result[0].amount;
     },
+    async getCanBiddingProductByIdAcc(id_acc, limit, offset) {
+        const sql = `SELECT DISTINCT p.*
+                     from products as p
+                     where p.time_end > now()
+                       and p.id_seller = ${id_acc} limit ${limit}
+                     offset ${offset}`;
+        const raw = await db.raw(sql);
+        return raw[0];
+    },
+    async countCanBiddingProductByIdAcc(id_acc) {
+        const sql = `SELECT count(*)
+                     from products as p
+                     where p.id_seller = ${id_acc}
+                       and p.time_end > now()`;
+        const raw = await db.raw(sql);
+        return raw[0][0]['count(*)'];
+    },
     async getProductBiddingById(id, limit, offset) {
         const sql = `SELECT DISTINCT p.*
                      from products as p,

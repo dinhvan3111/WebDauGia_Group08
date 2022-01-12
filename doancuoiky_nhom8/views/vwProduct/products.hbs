@@ -3,6 +3,8 @@
     <link rel="icon" href="/img/icon.png">
 {{/section}}
 {{#section 'css'}}
+
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         .card-body > a{
             color: black;
@@ -24,10 +26,17 @@
             font-size: 16px;
             font-style: italic;
         }
+        .category.dropdown-menu .dropdown-item {
+            padding: 15px;
+        }
+
+        .dropdown-menu, .dropdown-item:hover {
+            border-radius: 5px;
+        }
     </style>
 {{/section}}
 {{#section 'js'}}
-    
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
     <script type="text/javascript" src="/js/paging.js"></script>
     <script>
@@ -59,7 +68,7 @@
         })
         console.log(Number.parseInt("{{this.totalPage}}"))
         paging(Number.parseInt("{{this.totalPage}}"), Number.parseInt("{{this.page}}"),
-            Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
+                Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
     </script>
     <script>
         $('.comment-btn').on('click', function () {
@@ -92,6 +101,22 @@
             <div class="card">
                 <div class="card-header bg-warning font-bold">
                     Danh sách sản phẩm {{title}}
+                    {{#if posted}}
+                        <div class="dropdown float-right">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-expanded="false">
+                                <b>{{type}}</b>
+                            </button>
+
+                            <div class="category dropdown-menu dropdown-menu-right mt-1" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="/products/posted/0"><b>Tất cả</b></a>
+                                <hr class="m-0">
+                                <a class="dropdown-item" href="/products/posted/1"><b>Có thể đấu giá</b></a>
+
+                            </div>
+
+                        </div>
+                    {{/if}}
                 </div>
                 <div class="card-body">
                     <div class="dropdown text-right">
