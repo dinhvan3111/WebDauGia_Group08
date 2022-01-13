@@ -65,6 +65,27 @@
             object-fit: cover;
             margin-bottom: 10px;
         }
+
+        .shortenDes{
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            max-width: 840.7px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 110.5px;
+        }
+        #expandDes{
+            background: none!important;
+            border: none;
+            padding: 0!important;
+            color: #0093e0;
+            cursor: pointer;
+        }
+        #expandDes:hover{
+            text-decoration: underline;
+        }
+
         #confirmBiddingBtn, #confirmreBiddingBtn {
             display: none;
         }
@@ -348,9 +369,10 @@
                         </div>
                     </div>
                     <br>
-                    <div class=" mt-2"><span class="font-weight-bold">Mô tả</span>
+                    <div id="productDes" class="shortenDes mt-2"><span class="font-weight-bold">Mô tả</span>
                         <p>{{{product.description}}}</p>
                     </div>
+                    <button id="expandDes">Xem thêm</button>
                     <div class="bid-history card mt-5">
                         <div class="card-header bg-dark text-white">
                             <h5>Lịch sử đấu giá của sản phẩm</h5>
@@ -477,7 +499,7 @@
                         {{#each relativeProducts}}
                             <div class="top-product-item col-sm-6 mt-3 col-lg-3 col-xl">
                                 <a class="link-relative-product" href="{{id}}">
-                                    <div class="card relative-product">
+                                    <div class="card relative-product border">
 
                                         {{#if isNew}}
                                             <div class="new-product text-white"><i class="fa fa-fire"
@@ -687,7 +709,7 @@
                         <input type="text" name="max_bid_price"
                                id="max_bid_price"
                                placeholder="(VNĐ) {{format_number
-                                       product.price}}"
+                                       suggestPrice}}"
                                data-type="currency" value required>
                         <input hidden type="text" name="id_product"
                                id="id_product" value="{{product.id}}"
@@ -961,4 +983,16 @@
             $('#txtLike').val(id);
             $('#frmLike').submit();
         });
+        $('#expandDes').on('click',function (){
+            const productDes = $('#productDes')[0];
+            if($(this)[0].innerText === 'Xem thêm'){
+                productDes.classList.remove('shortenDes');
+                $(this)[0].innerText = 'Thu gọn';
+            }
+            else{
+                productDes.classList.add('shortenDes');
+                $(this)[0].innerText = 'Xem thêm';
+            }
+        })
+    </script>
 {{/section}}
