@@ -1,5 +1,6 @@
 import express from 'express';
 import accountModel from '../models/account.model.js';
+import pagingInfo from '../utils/paging.helper.js';
 import fetch from 'node-fetch';
 import bcrypt from 'bcrypt';
 import moment from 'moment';
@@ -109,7 +110,7 @@ router.get('/login', checkPermission.isLogon, function(req, res){
 	if(typeof(req.session.forgotPwd) !== 'undefined' &&
 		req.session.forgotPwd === true){
 		delete req.session.forgotPwd;
-		return res.render('vwAccount/login', {layout: false, err_message: 'Đổi mật khẩu thành công'});
+		return res.render('vwAccount/login', {layout: false, success_message: 'Đổi mật khẩu thành công'});
 	}
 
 	var loginFailed = false;
@@ -177,7 +178,13 @@ router.get('/profile', checkPermission.notLogin, async function(req, res){
 	user.total_rate = userRatio.total_rate;
 	user.starPercentage = await accountModel.starPercentage(userRatio.ratio);
 	user.starPercentageRounded = await accountModel.starPercentageRounded(userRatio.ratio);
-	console.log(user);
+	if(user.dob == 'Invalid date'){
+		user.dob = 'Chưa cập nhật'
+	}
+	if(user.addr == null){
+		user.addr = 'Chưa cập nhật'
+	}
+	console.log(user)
 	res.render('vwAccount/profile',{
 		layout: 'non_sidebar.hbs',
 		isBidder,
@@ -222,12 +229,21 @@ router.get('/profile/:id', async function(req, res, next){
 				return res.redirect('/profile');
 			}
 		}
+		if(user.dob == null){
+			user.dob = 'Chưa cập nhật'
+		}else{
+
+			user.dob = moment(user.dob, 'YYYY/MM/DD').format('DD-MM-YYYY')
+		}
+		if(user.addr == null){
+			user.addr = 'Chưa cập nhật'
+		}
 		const user_info = {
 			id: id,
 			username: user.username,
 			name: user.name,
 			email: user.email,
-			dob: moment(user.dob, 'YYYY/MM/DD').format('DD-MM-YYYY'),
+			dob: user.dob,
 			addr: user.addr,
 			starPercentage: user.starPercentage,
 			starPercentageRounded: user.starPercentageRounded,
@@ -256,13 +272,27 @@ router.get('/rating/:id', async function(req, res){
 				rateHistoryAndProduct[i].mark = false;
 			}
 		}
-		console.log(rateHistoryAndProduct)
-		res.render('vwAccount/rating',{
-			layout: 'non_sidebar.hbs',
-			rate:rateHistoryAndProduct,
-			fullName:user.name,
-			id_acc: id
-		});
+
+	const limit = 8;
+	const page = req.query.page || 1;
+	const offset = (page - 1) * limit;
+
+	var total = await accountModel.countRating(id);
+	total = total.amount;
+	const paging = pagingInfo.getPagingInfo(limit, page, total);
+	res.render('vwAccount/rating',{
+		layout: 'non_sidebar.hbs',
+		rate:rateHistoryAndProduct,
+		fullName:user.name,
+		id_acc: id,
+		page,
+		nextPage: paging.nextPage,
+		prePage: paging.prePage,
+		disableNext: paging.disableNext,
+		disablePre: paging.disablePre,
+		pageNumber: paging.pageNumber,
+		totalPage: paging.totalPage,
+	});
 	// }
 });
 // router.get('/edit_profile', checkPermission.notLogin, async function(req, res){

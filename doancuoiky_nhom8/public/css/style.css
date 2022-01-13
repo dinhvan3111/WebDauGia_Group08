@@ -194,26 +194,35 @@ nav .search-for-lg {
     margin-bottom: 10px;
 }
 
-.new-product{
+.new-product,.holder-product{
     text-align: center;
     position: relative;
-    background: #44d744;
+    /*background: #44d744;*/
     width: 45%;
     font-size: 15px;
     /*font-size: 0.7em;*/
     font-weight: bold;
     border-radius: 5px;
-    right: 0;
+
     top: -7px;
+}
+.new-product{
+    background: #44d744;
+    left: 0;
+
+}
+.holder-product{
+    background: orangered;
+    right: 0;
 }
 
 @media (max-width: 1381px) {
-    .new-product{
+    .new-product,.holder-product{
         width: 50%;
     }
 }
 @media (max-width: 1151px) {
-    .new-product{
+    .new-product,.holder-product{
         width: 55%;
         font-size: 13px;
     }

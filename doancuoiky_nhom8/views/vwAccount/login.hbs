@@ -187,7 +187,10 @@
             color: red;
             font-style: italic;
         }
-
+        .success_login p{
+            color: green;
+            font-style: italic;
+        }
         .let_register {
             color: #5454ef !important;
         }
@@ -227,7 +230,11 @@
                 <p><i class="fa fa-user-times" aria-hidden="true"></i> {{err_message}}</p>
             </div>
         {{/if}}
-
+        {{#if success_message}}
+            <div class="success_login">
+                <p><i class="fa fa-check-circle" aria-hidden="true"></i> {{success_message}}</p>
+            </div>
+        {{/if}}
         {{#if loginFailed}}
 
             <div class="err_login">

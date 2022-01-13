@@ -71,7 +71,7 @@ router.get('/search_result', async function (req, res) {
 
     const paging = pagingInfo.getPagingInfo(limit, page, total);
 
-    const sort = req.body.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
+    const sort = req.query.sort || '0'; // 1 là theo thời gian kết thúc giảm dần, 2 là giá tăng dần, 0 là không sort
     var search_result = await productModel.searchProduct(cateID, param, limit, offset, sort);
     search_result = await productModel.getProductsDisplayByCard(id,search_result);
     for(let i =0;i< search_result.length;i++) {
@@ -89,7 +89,8 @@ router.get('/search_result', async function (req, res) {
         cateID,
         cateName,
         param,
-        search_result
+        search_result,
+        sort
     });
 });
 
@@ -439,6 +440,7 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
     const page = req.query.page || 1;
     const offset = (page - 1) * limit;
     var total = await productModel.countProductBiddingById(id);
+    console.log(total)
     // console.log('total::::::;', total)
     const paging = pagingInfo.getPagingInfo(limit, page, total);
     const products = await productModel.getProductBiddingById(id, limit, offset);
@@ -449,10 +451,16 @@ router.get('/bidding', checkPermission.notLogin, async function (req, res) {
         for(let i =0;i< result.length;i++) {
             result[i].isNew = productModel.isNew(result[i].real_time_start);
         }
+
+        for(let i =0;i< result.length;i++) {
+            result[i].isHolder = false;
+            if(result[i].id_win_bidder === id){
+
+                result[i].isHolder = true;
+            }
+        }
         // result = products;
     }
-
-
     res.render('vwProduct/products', {
         page,
         nextPage: paging.nextPage,

@@ -1,6 +1,15 @@
 {{#section 'title'}}
     <title>Lịch sử đánh giá {{fullName}}</title>
 {{/section}}
+{{#section 'js'}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+    <script type="text/javascript" src="/js/paging.js"></script>
+
+    <script>
+        paging(Number.parseInt("{{this.totalPage}}"), Number.parseInt("{{this.page}}"),
+                Number.parseInt(("{{this.prePage}}")), Number.parseInt(("{{this.nextPage}}")));
+    </script>
+{{/section}}
 {{#section 'css'}}
     <link rel="stylesheet" href="/css/style.css">
     <style>
@@ -99,33 +108,7 @@
 
     </div>
     <nav style="position: relative;" class="mt-1 mb-2 float-right">
-        <ul class="pagination">
-            {{#if this.disablePre}}
-                <li class="page-item disabled">
-                    <a class="page-link" href="javascript:;" tabindex="-1">Previous</a>
-                </li>
-            {{else}}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{this.prePage}}" tabindex="-1">Previous</a>
-                </li>
-            {{/if}}
-            {{#each this.pageNumber}}
-                {{#if isCurrent}}
-                    <li class="page-item active"><a class="page-link" href="javascript:;">{{value}}</a></li>
-                {{else}}
-                    <li class="page-item"><a class="page-link" href="?page={{value}}">{{value}}</a></li>
-                {{/if}}
-            {{/each}}
-            {{#if this.disableNext}}
-                <li class="page-item disabled">
-                    <a class="page-link" href="javascript:;">Next</a>
-                </li>
-            {{else}}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{this.nextPage}}">Next</a>
-                </li>
-            {{/if}}
-        </ul>
+        <ul id="pagination" class="pagination pagination-sm mt-3 justify-content-end"></ul>
     </nav>
 
 

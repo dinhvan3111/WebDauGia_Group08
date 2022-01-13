@@ -189,7 +189,14 @@ export default{
 			const starPercentageRounded = `${Math.round(starPercentage/10)*10}%`;
 			return starPercentageRounded;
 		},
-
+		async countRating(id) {
+			var search_result = null;
+			search_result = await db.select()
+				.from('rate_history')
+				.where('id_acc', id)
+				.count({amount: 'id_assessor'});
+			return search_result[0];
+		},
 		// Seller
 		async getSellerExpiredDate(seller_id){
 			const info = await db('seller_expired_day').where({id: seller_id});

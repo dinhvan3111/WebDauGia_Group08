@@ -136,10 +136,19 @@
                             {{#each this.result}}
                                 <div class="top-product-item col-sm-6 mt-3 col-md-6 col-lg-4 col-xl-4">
                                     <div class="card h-100">
-                                        {{#if isNew}}
-                                            <div class="new-product text-white"><i class="fa fa-fire" aria-hidden="true"></i>
-                                                Vừa mở đấu giá</div>
-                                        {{/if}}
+                                        <div class="w-100 d-flex">
+                                            {{#if isNew}}
+                                                <span class="float-left new-product text-white"><i class="fa fa-fire" aria-hidden="true"></i>
+                                                    Vừa mở đấu giá</span>
+                                            {{/if}}
+                                            {{#if isHolder}}
+                                                <span class="ml-1 float-right holder-product text-white"><i class="fa fa-trophy" aria-hidden="true"></i>
+                                                    Đang giữ giá</span>
+                                            {{/if}}
+
+
+                                        </div>
+
                                         <div class="card-body">
                                             <a href="/products/{{id}}">
                                                 <img class="product-img-4-sidebar" src="/img/products/{{id}}/thumb/{{img.thumb}}" alt="Sản phẩm">

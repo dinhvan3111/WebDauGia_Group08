@@ -286,7 +286,7 @@ export default {
         return res[0];
     },
     async topProductsHighestPrice(numOfProducts) {
-        const res = await db('products').orderBy('price', 'desc')
+        const res = await db('products').orderBy('price', 'desc').whereRaw('time_end > now()')
             .limit(numOfProducts)
             .where({not_sold: 1});
         if (res.length == 0) {
@@ -870,12 +870,13 @@ export default {
         return raw[0];
     },
     async countProductBiddingById(id_acc) {
-        const sql = `SELECT count(*)
-                     from products as p
-                     where p.id_win_bidder = ${id_acc}
-                       and p.time_end > now()`;
+        const sql = `SELECT count(distinct(p.id)) as totalBidding
+                     from products as p, bid_history as b
+                     where p.id = b.id_product
+                       and p.time_end > now()
+                       and b.id_acc = ${id_acc}`;
         const raw = await db.raw(sql);
-        return raw[0][0]['count(*)'];
+        return raw[0][0]['totalBidding'];
     },
     async getSoldProductByIdAcc(id_acc, limit, offset) {
         const sql = `SELECT *
